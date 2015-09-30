@@ -102,7 +102,8 @@ public class EventCard {
         /*typechecking*/
         switch(action_type)
         {
-            case GOTOJAIL:
+            case JAILFREECARD:
+			case GOTOJAIL:
                 this.action_type = action_type;
                 this.title = title;
                 this.desc = desc;
