@@ -14,6 +14,8 @@ public class Dice {
     
     public Dice() {
         r = new Random();
+        roll1=1;
+        roll2=1;
     }
     
     public int getRoll(){
@@ -25,5 +27,13 @@ public class Dice {
     
     private int roll(){
         return r.nextInt(6) + 1;
+    }
+    
+    public int getRoll1() {
+        return roll1;
+    }
+    
+    public int getRoll2() {
+        return roll2;
     }
 }
