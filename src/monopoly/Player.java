@@ -9,6 +9,8 @@ public class Player {
     int money;              //How much money does the player have?
     int location;           //Which grid is the player on right now?
     int jail_free_cards;    //How many get-out-of-jail-free cards does this player have?
+    boolean in_jail;       //Is player in jail?
+   
     
     
     /*New Player constructor*/
@@ -19,36 +21,42 @@ public class Player {
         this.money = 1500; 
         this.jail_free_cards = 0;
         this.location = 0;
+        this.in_jail = false;
     }
     
      /*Add more class methods below?*/
     
-    public String getPlayerName()
+    public String getName()
     {
         return this.name;
     }
     
-    public void setPlayerName(String name)
+    public void setName(String name)
     {
         this.name = name;
     }
     
-    public int getPlayerMoney()
+    public int getMoney()
     {
         return this.money;
     }
     
-    public void setPlayerMoney(int money)
+    public void setMoney(int money)
     {
         this.money = money;
     }
     
-    public int getPlayerLocation()
+    public void addMoney(int money)
+    {
+        this.money += money;
+    }
+    
+    public int getLocation()
     {
         return this.location;
     }
     
-    public void setPlayerLocation(int location)
+    public void setLocation(int location)
     {
         this.location = location;
     }
@@ -63,5 +71,14 @@ public class Player {
         this.jail_free_cards = jail_free_cards;
     }
     
+    public boolean isInJail()
+    {
+        return this.in_jail;
+    }
+    
+    public void setJailStatus(boolean in_jail)
+    {
+        this.in_jail = in_jail;
+    }
     
 }

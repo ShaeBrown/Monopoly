@@ -7,7 +7,7 @@ package monopoly;
 
 public class BuyablePropertyClass {
     
-    enum PropertyGroup {RED, YELLOW, GREEN, BLUE, BROWN, LIGHTBLUE, MAGENTA, ORANGE, UTILITY, RAILROAD;}
+    enum PropertyGroup {RED, YELLOW, GREEN, BLUE, BROWN, LIGHTBLUE, MAGENTA, ORANGE, UTILITY, RAILROAD}
     
     Player owner;                   //Which player owns this?
     PropertyGroup property_group;   //Which property group does this belongs to?
@@ -50,32 +50,32 @@ public class BuyablePropertyClass {
         this.property_group = property_group;
     }
     
-    public String getPropertyName()
+    public String getName()
     {
         return this.property_name;
     }
     
-    public void setPropertyName(String property_name)
+    public void setName(String property_name)
     {
         this.property_name = property_name;
     }
     
-    public int getPropertyPrice()
+    public int getPrice()
     {
         return this.property_price;
     }
     
-    public void setPropertyPrice(int property_price)
+    public void setPrice(int property_price)
     {
         this.property_price = property_price;
     }
     
-    public int getPropertyMortgage()
+    public int getMortgage()
     {
         return this.property_mortgage;
     }
     
-    public void setPropertyMortgage(int property_mortgage)
+    public void setMortgage(int property_mortgage)
     {
         this.property_mortgage = property_mortgage;
     }

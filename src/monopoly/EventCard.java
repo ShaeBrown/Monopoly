@@ -159,37 +159,37 @@ public class EventCard {
     }
     
     /*What effect does a GAINMONEY card have on a player?*/
-    public void gainmoney_effect(Player player)
+    private void gainmoney_effect(Player player)
     {
         player.money += this.amount;
     }
     
     /*What effect does a LOSEMONEY card have on a player?*/
-    public void losemoney_effect(Player player)
+    private void losemoney_effect(Player player)
     {
         player.money -= this.amount;
     }
     
     /*What effect does a GAINMONEY_FROMEVERYONE card have on a player?*/
-    public void gaminmoney_fromeveryone_effect(Player player)
+    private void gaminmoney_fromeveryone_effect(Player player)
     {
         
     }
     
     /*What effect does a LOSEMONEY_TOEVERYONE card have on a player?*/
-    public void losemoney_toeveryone_effect(Player player)
+    private void losemoney_toeveryone_effect(Player player)
     {
         
     }
     
     /*What effect does a MOVETO card have on a player?*/
-    public void moveto_effect(Player player)
+    private void moveto_effect(Player player)
     {
 
     }
     
     /*What effect does a MOVETO_CLOSEST card have on a player?*/
-    public void moveto_closest_effect(Player player)
+    private void moveto_closest_effect(Player player)
     {
         /*
             for each grid in the gameboard
@@ -200,25 +200,25 @@ public class EventCard {
     }
     
     /*What effect does a GOBACK card have on a player?*/
-    public void goback_effect(Player player)
+    private void goback_effect(Player player)
     {
         
     }
     
     /*What effect does a GOTOJAIL card have on a player?*/
-    public void gotojail_effect(Player player)
+    private void gotojail_effect(Player player)
     {
         
     }
     
     /*What effect does a JAILFREECARD card have on a player?*/
-    public void jailfreecard_effect(Player player)
+    private void jailfreecard_effect(Player player)
     {
         player.jail_free_cards++;
     }
     
     /*What effect does a HOUSEREPAIR card have on a player?*/
-    public void houserepair_effect(Player player)
+    private void houserepair_effect(Player player)
     {
         
     }

@@ -3,6 +3,7 @@
 */
 
 package monopoly;
+import java.util.*;
 
 /*Imports all the custom enum datatypes*/
 import monopoly.Grid.GridType;                          
@@ -17,26 +18,18 @@ public class Game {
     final int CHANCECOUNT = 16;         //How many chance cards are in the game
     final int COMCHESTCOUNT = 17;       //How many community chest cards are in the game
     
+    //enum GameState {LOBBY, PLAYING, ENDED}      //do we really need this?
+    
     Grid[] board_grids;                 //Array of Grid to represent a gameboard
-    Player[] player_list;               //Array of Player to represent all the players of the game. Maybe we should switch to a dynamic type like ArrayList instead??
     EventCard[] chance_cards;           //Array of EventCard that functions as a deck of chance cards
     EventCard[] comchest_cards;         //Array of EventCard that functions as a deck of community chest cards
+    List<Player> player_list;           //ArrayList of Player to represent all the players of the game.
     
     /*Constructor for creating a new game*/
     public Game()
     {
         this.board_grids = new Grid[BOARDSIZE];
-        player_list = new Player[MAXPLAYERS];
-        chance_cards = new EventCard[CHANCECOUNT];
-        comchest_cards = new EventCard[COMCHESTCOUNT];
-        initializeGame();
-    }
-    
-    /*Constructor for creating a new game with a player list*/
-    public Game(Player[] player_list)
-    {
-        this.board_grids = new Grid[40];
-        this.player_list = player_list;
+        player_list = new ArrayList<Player>();
         chance_cards = new EventCard[CHANCECOUNT];
         comchest_cards = new EventCard[COMCHESTCOUNT];
         initializeGame();
@@ -45,11 +38,12 @@ public class Game {
     /*insert more methods below*/
     
     /*Sets up all game related tasks*/
-    private void initializeGame()
+    public void initializeGame()
     {
         initializeGrids();
         initializeChance();
         initializeComChest();
+        waitForPlayers();
     }
     
     /*Fill all grids of the board with appropriate play data*/
@@ -93,11 +87,190 @@ public class Game {
         /*fill more...*/
     }
     
-    private void addPlayer(Player player)
+    /*Text based implementation of creating a list of players for the game*/
+    private void waitForPlayers()
     {
+       
+        boolean DOG = false, BATTLESHIP= false, AUTOMOBILE = false, TOPHAT = false, THIMBLE = false, BOOT = false, WHEELBARROW = false, CAT = false;    //Keeps track of which token has been used
+        Scanner scanner = new Scanner(System.in);                           
         
+        //Gets new players as console input for now
+        while(player_list.size() < MAXPLAYERS)
+        {
+            String new_player_name = null;
+            PlayerToken new_player_token = null;
+            
+            System.out.println("========================================================================");
+             System.out.println("Creating a new player for the game.");
+            System.out.println("Enter 'STARTGAME' as a player's name to start game immediately");
+            System.out.println("Game will also start automatically if MAXPLAYERS are met");
+            System.out.println("There are currently " +player_list.size() +" players in the game. \nPlease enter the a new player's info below.");
+            System.out.println("========================================================================");
+            
+            /*Ask for player's name*/
+            System.out.println("Player name:\n");
+            new_player_name = scanner.next();
+            
+            /*Start game??*/
+            if(new_player_name.equals("STARTGAME"))
+                if(player_list.size() < 1)
+                {
+                    System.out.println("The game requires at least 1 player to start\n");
+                    continue;
+                }
+                else
+                    break;
+            
+            /*Ask for a token choice*/
+            System.out.println("Player Token:\n");
+            System.out.println("1 = DOG\n2 = BATTLESHIP\n3 = AUTOMOBILE\n4 = TOPHAT\n5 = THIMBLE\n6 = BOOT\n7 = WHEELBARROW\n8 = CAT\n");
+            
+            /*Determine which token the player wanted*/
+            switch(scanner.nextInt())
+            {
+                case(1):
+                    if(DOG)
+                        System.out.println("The DOG token has been used already!");
+                    else
+                    {
+                        new_player_token = PlayerToken.DOG;
+                        DOG = true;
+                    }
+                    break;
+                case(2):
+                    if(BATTLESHIP)
+                        System.out.println("The BATTLESHIP token has been used already!");
+                    else
+                    {
+                        new_player_token = PlayerToken.BATTLESHIP;
+                        BATTLESHIP = true;
+                    }
+                    break;
+                case(3):
+                    if(AUTOMOBILE)
+                        System.out.println("The AUTOMOBILE token has been used already!");
+                    else
+                    {
+                        new_player_token = PlayerToken.AUTOMOBILE;
+                        AUTOMOBILE = true;
+                    }
+                    break;
+                case(4):
+                    if(TOPHAT)
+                        System.out.println("The TOPHAT token has been used already!");
+                    else
+                    {
+                        new_player_token = PlayerToken.TOPHAT;
+                        TOPHAT = true;
+                    }
+                    break;
+                case(5):
+                    if(THIMBLE)
+                        System.out.println("The THIMBLE token has been used already!");
+                    else
+                    {
+                        new_player_token = PlayerToken.THIMBLE;
+                        THIMBLE = true;
+                    }
+                    break;
+                case(6):
+                    if(BOOT)
+                        System.out.println("The BOOT token has been used already!");
+                    else
+                    {
+                        new_player_token = PlayerToken.BOOT;
+                        BOOT = true;
+                    }
+                    break;
+                    
+                case(7):
+                    if(WHEELBARROW)
+                        System.out.println("The WHEELBARROW token has been used already!");
+                    else
+                    {
+                        new_player_token = PlayerToken.WHEELBARROW;
+                        WHEELBARROW = true;
+                    }
+                    break;  
+                    
+                case(8):
+                    if(CAT)
+                        System.out.println("The CAT token has been used already!");
+                    else
+                    {
+                        new_player_token = PlayerToken.CAT;
+                        CAT = true;
+                    }
+                    break;
+                default:
+                    System.out.println("Invalid Token selection");
+                    break;
+            }
+            
+            /*Make sure the selected token was valid*/
+            if(new_player_token == null)
+            {
+                System.out.println("Player not created!");
+                continue;
+            }
+            
+            /*Create the player object using the new data*/
+            player_list.add(new Player(new_player_name, new_player_token));
+            System.out.println("\nNew player created! Name: " +new_player_name +" Token: " +new_player_token.toString() +"\n");
+        }
+        
+        /*Start the game, we have enough players*/
+        startGame();
+    }
+    
+    /*Start the actual game here*/
+    private void startGame()
+    {
+        System.out.println("=============");
+        System.out.println("GAME STARTED!");
+        System.out.println("=============");
+        
+        /*The only point of this outer infinite loop is to reset the player iterator*/
+        for(;;)
+        {
+            /*For each Player in player_list, where rolling_player is the current player, it's rolling_playher's turn to roll the dice*/
+            for(Player rolling_player : player_list)
+            {
+                System.out.println("Enter ANY text (other than blank) and Player " +rolling_player.getName() +" will roll and move.");
+                (new Scanner(System.in)).next();
+                playerRollDiceAndMove(rolling_player);
+                
+            }
+        }
+        //System.exit(0);
     }
     
     
+    /*Roll dices for a player, and move the palyer forward that many spots*/
+    public int playerRollDiceAndMove(Player player)
+    {
+        Dice dice = new Dice();
+        
+        int diceroll = dice.getRoll();
+        int new_location = player.getLocation() + diceroll;
+        
+        /*Should also add logic to get a player out of jail here*/
+        
+        /*Did the rolling player "overflow" and passed GO?*/
+        if(new_location > (BOARDSIZE - 1))
+        {
+            player.setLocation(new_location - (BOARDSIZE - 1));
+            player.addMoney(200);
+        }
+        else
+            player.setLocation(new_location);
+        
+        
+        
+        System.out.println("Player " +player.getName() +" rolled " +diceroll +" and is now on grid " +player.getLocation() +" with $" +player.getMoney() +"\n");
+        
+        /*Return the player's new grid location*/
+        return player.getLocation();
+    }
     
 }

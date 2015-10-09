@@ -50,7 +50,7 @@ public class Grid {
     public Grid(PropertyGrid property)
     {
         this.grid_type = GridType.PROPERTY;
-        this.name = property.getPropertyName();
+        this.name = property.getName();
         this.property = property;
     }
     
@@ -58,7 +58,7 @@ public class Grid {
     public Grid(RailroadGrid railroad)
     {
         this.grid_type = GridType.RAILROAD;
-        this.name = railroad.getPropertyName();
+        this.name = railroad.getName();
         this.railroad = railroad;
     }
     
@@ -66,7 +66,7 @@ public class Grid {
     public Grid(UtilityGrid utility)
     {
         this.grid_type = GridType.UTILITY;
-        this.name = utility.getPropertyName();
+        this.name = utility.getName();
         this.utility = utility;
     }
     
@@ -120,11 +120,18 @@ public class Grid {
             case TAX:
                 tax.landingFunction(player);
                 break;
-            
-            /*TODO: Implement all other grid_types (CHANCE, COMCEST, GOTOJAIL), EXCEPT for generic*/
-            
+            case CHANCE:
+                /*implement me*/
+                break;
+            case COMCHEST:
+                /*implement me*/
+                break;
+            case GOTOJAIL:
+                /*implement me*/
+                break;
             default:
                 /*GENERIC TYPE: do nothing?*/
+                System.out.println("This is a generic grid. Landing function is undefined.");
                 break;  
         }
     }
