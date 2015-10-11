@@ -9,7 +9,7 @@ import java.util.Random;
 public class Dice {
     
     int roll1, roll2;
-    boolean getOutOfJail;
+    boolean doubles;
     private Random r;
     
     public Dice() {
@@ -21,7 +21,7 @@ public class Dice {
     public int getRoll(){
         roll1 = roll();
         roll2 = roll();
-        getOutOfJail = roll1 == roll2;
+        doubles = roll1 == roll2;
         return roll1 + roll2;
     }
     
