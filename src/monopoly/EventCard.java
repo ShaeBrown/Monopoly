@@ -6,6 +6,7 @@
     -LOSEMONEY type deducts a fixed amount from a player's bank (defined by the variable "amount").
     -GAINMONEY_FROMEVERYONE type collects a fixed amount for every other player in the game (defined by the variable "amount"), and adds the total to the using player's bank.
     -LOSEMONEY_TOEVERYONE type deducts a fixed amount from the using player's bank (defined by the variable "amount"), and give it to every other player in the game
+    -LOSEMONEYPROPERTY type deducts an amount based on the number houses and hotels the player has.
     -MOVETO type "teleports" a player to another grid on the board
         -An example card is "Advance to GO" (defined by the variable "amount" as an array index to the location).
     -MOVETO_CLOSEST type "teleports" a player to the closest grid of type PropertyGroup (defined by the variable property_group). 
@@ -24,7 +25,7 @@ import monopoly.BuyablePropertyClass.PropertyGroup;
 
 public class EventCard {
     
-    enum ActionType {GAINMONEY, LOSEMONEY, GAINMONEY_FROMEVERYONE, LOSEMONEY_TOEVERYONE, MOVETO, MOVETO_CLOSEST, GOBACK, GOTOJAIL, JAILFREECARD, HOUSEREPAIR}
+    enum ActionType {GAINMONEY, LOSEMONEY, GAINMONEY_FROMEVERYONE, LOSEMONEY_TOEVERYONE, LOSEMONEYPROPERTY, MOVETO, MOVETO_CLOSEST, GOBACK, GOTOJAIL, JAILFREECARD, HOUSEREPAIR}
     
     ActionType action_type;                 //What kind of action will be performed by this card?
     String title, desc;                     //Title and description of the card
@@ -44,6 +45,7 @@ public class EventCard {
             case LOSEMONEY:
             case GAINMONEY_FROMEVERYONE:
             case LOSEMONEY_TOEVERYONE:
+            case LOSEMONEYPROPERTY:
             case MOVETO:
             case GOBACK:
                 this.action_type = action_type;
@@ -134,6 +136,9 @@ public class EventCard {
             case LOSEMONEY_TOEVERYONE:
                 losemoney_toeveryone_effect(player);
                 break;
+            case LOSEMONEYPROPERTY:
+              losemoney_property(player);
+              break;
             case MOVETO:
                 moveto_effect(player);
                 break;
@@ -182,10 +187,15 @@ public class EventCard {
         
     }
     
+    private void losemoney_property(Player player)
+    {
+    	// Subtract $25 for each house, $100 for each hotel
+    }
+    
     /*What effect does a MOVETO card have on a player?*/
     private void moveto_effect(Player player)
     {
-
+    	// Move player to tile Player.amount and if they pass go they collect $200
     }
     
     /*What effect does a MOVETO_CLOSEST card have on a player?*/

@@ -9,20 +9,37 @@ import java.util.*;
 import monopoly.Grid.GridType;                          
 import monopoly.BuyablePropertyClass.PropertyGroup;
 import monopoly.Player.PlayerToken;
-import monopoly.EventCard.ActionType;
+import monopoly.Deck;
 
 public class Game {
-    
+		public enum GRIDNUM{
+			GO(0), MediterraneanAve(1), CommunityChest1(2), BalticAve(3), IncomeTax(4),
+			ReadingRailroad(5),	OrientalAve(6),	Chance1(7),	VermontAve(8), Connecticut(9),
+			Jail(10),	StCharlesPlace(11),	ElectricCompany(12), StatesAve(13), VirginiaAve(14),
+			PennsylvaniaRailroad(15), StJamesPlace(16), CommunityChest2(17), TennesseeAve(18), NewYorkAve(19),
+			FreeParking(20), KentuckyAve(21),	Chance2(22), IndianaAve(23), IllinoisAve(24),
+			BORailroad(25), AtlanticAve(26), VentnorAve(27), WaterWorks(28),	MarvinGardens(29),
+			GoToJail(30), PacificAve(31), NorthCarolina(32), CommunityChest3(33), PennsylvaniaAve(34),
+			ShortLineRailroad(35), Chance3(36), ParkPlace(37), LuxuryTax(38), Boardwalk(39);		
+			
+			private final int num;
+			
+			GRIDNUM(final int value) {
+				num = value;
+			}
+			
+			public int getNum() {
+				return num;
+			}
+		}
+	
     final int MAXPLAYERS = 8;           //Maximum number of players supported by the game
     final int BOARDSIZE = 40;           //How many grids are on the board
-    final int CHANCECOUNT = 16;         //How many chance cards are in the game
-    final int COMCHESTCOUNT = 17;       //How many community chest cards are in the game
     
     //enum GameState {LOBBY, PLAYING, ENDED}      //do we really need this?
     
     Grid[] board_grids;                 //Array of Grid to represent a gameboard
-    EventCard[] chance_cards;           //Array of EventCard that functions as a deck of chance cards
-    EventCard[] comchest_cards;         //Array of EventCard that functions as a deck of community chest cards
+    Deck deck;													//Two stacks representing chance and community chest decks.
     List<Player> player_list;           //ArrayList of Player to represent all the players of the game.
     
     /*Constructor for creating a new game*/
@@ -30,8 +47,7 @@ public class Game {
     {
         this.board_grids = new Grid[BOARDSIZE];
         player_list = new ArrayList<Player>();
-        chance_cards = new EventCard[CHANCECOUNT];
-        comchest_cards = new EventCard[COMCHESTCOUNT];
+        deck = new Deck();		// Initialize both chance deck and community chest deck.
         initializeGame();
     }
     
@@ -41,8 +57,6 @@ public class Game {
     public void initializeGame()
     {
         initializeGrids();
-        initializeChance();
-        initializeComChest();
         waitForPlayers();
     }
     
@@ -50,11 +64,10 @@ public class Game {
     private void initializeGrids()
     {
         /*http://ecx.images-amazon.com/images/I/81oC5pYhh2L._SL1500_.jpg*/
-        
         board_grids[0] = new Grid(GridType.GENERIC, "GO");
-        board_grids[1] = new Grid(new PropertyGrid(PropertyGroup.BROWN, "Mediterranean Ave", 60, 30, 50, (new int[] {10, 30, 90, 160, 250})));
+        board_grids[1] = new Grid(new PropertyGrid(PropertyGroup.BROWN, "Mediterranean Ave", 60, 30, 50, (new int[] {2, 10, 30, 90, 160, 250})));
         board_grids[2] = new Grid(GridType.COMCHEST);
-        board_grids[3] = new Grid(new PropertyGrid(PropertyGroup.BROWN, "Baltic Ave", 60, 30, 50, (new int[] {20, 60, 180, 320, 450})));
+        board_grids[3] = new Grid(new PropertyGrid(PropertyGroup.BROWN, "Baltic Ave", 60, 30, 50, (new int[] {4, 20, 60, 180, 320, 450})));
         board_grids[4] = new Grid(new TaxGrid("Income Tax", 200));
         board_grids[5] = new Grid(new RailroadGrid("Reading Railroad", 200, 100));
         /*fill more...*/
@@ -62,28 +75,13 @@ public class Game {
         /*fill more...*/
         board_grids[10] = new Grid(GridType.GENERIC, "IN JAIL/JUST VISITING");
         /*fill more...*/
+        board_grids[11] = new Grid(new PropertyGrid(PropertyGroup.MAGENTA, "St. Charles Place", 140, 70, 100, (new int[] {10, 50, 150, 450, 625, 750})));
         board_grids[12] = new Grid(new UtilityGrid("Electric Company", 150, 75));
         /*fill more...*/
         board_grids[20] = new Grid(GridType.GENERIC, "Free Parking");
+        board_grids[24] = new Grid(new PropertyGrid(PropertyGroup.RED, "Illinois Ave", 240, 120, 150, (new int[] {20, 100, 300, 750, 925, 1100})));
         /*fill more...*/
         board_grids[30] = new Grid(GridType.GOTOJAIL);
-        /*fill more...*/
-    }
-    
-    private void initializeChance()
-    {
-        /*http://monopoly.wikia.com/wiki/Chance*/
-        
-        chance_cards[0] = new EventCard("Advance to Go", "Collect $200" ,ActionType.MOVETO, 0);
-        /*fill more...*/
-        
-    }
-    
-    private void initializeComChest()
-    {
-        /*http://monopoly.wikia.com/wiki/Community_Chest*/
-        
-        comchest_cards[0] = new EventCard("Advance to Go", "Collect $200" ,ActionType.MOVETO, 0);
         /*fill more...*/
     }
     
