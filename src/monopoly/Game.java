@@ -9,7 +9,7 @@ import java.util.*;
 import monopoly.Grid.GridType;                          
 import monopoly.BuyablePropertyClass.PropertyGroup;
 import monopoly.Player.PlayerToken;
-import monopoly.Deck;
+import monopoly.gui.Board;
 
 public class Game {
 		public enum GRIDNUM{
@@ -41,13 +41,15 @@ public class Game {
     Grid[] board_grids;                 //Array of Grid to represent a gameboard
     Deck deck;													//Two stacks representing chance and community chest decks.
     List<Player> player_list;           //ArrayList of Player to represent all the players of the game.
-    
+    Board board;
+    Dice dice;
     /*Constructor for creating a new game*/
     public Game()
     {
         this.board_grids = new Grid[BOARDSIZE];
         player_list = new ArrayList<Player>();
         deck = new Deck();		// Initialize both chance deck and community chest deck.
+        dice = new Dice();
         initializeGame();
     }
     
@@ -228,6 +230,8 @@ public class Game {
         System.out.println("GAME STARTED!");
         System.out.println("=============");
         
+        board = new Board(dice,player_list);
+        board.run();
         /*The only point of this outer infinite loop is to reset the player iterator*/
         for(;;)
         {
@@ -247,7 +251,6 @@ public class Game {
     /*Roll dices for a player, and move the palyer forward that many spots*/
     public int playerRollDiceAndMove(Player player)
     {
-        Dice dice = new Dice();
         
         int diceroll = dice.getRoll();
         int new_location = player.getLocation() + diceroll;

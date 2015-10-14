@@ -4,20 +4,19 @@
  * and open the template in the editor.
  */
 package monopoly.gui;
+
 import javax.swing.*;
 import monopoly.Dice;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-/**
- *
- * @author shaebrown
- */
+
 public class DiceController implements ActionListener {
     
     ImageIcon[] die = new ImageIcon[6];
     Dice d;
     JButton b1,b2;
+    boolean enabled;
     
     public DiceController(Dice d, JButton b1, JButton b2) {
         this.d = d;
@@ -28,13 +27,21 @@ public class DiceController implements ActionListener {
         }
         b1.setIcon(die[0]);
         b2.setIcon(die[0]);
+        enabled = true;
     }
     
     @Override
     public void actionPerformed(ActionEvent event) {
-        d.getRoll();
-        b1.setIcon(getDiceImage1(d));
-        b2.setIcon(getDiceImage2(d));
+        if (enabled) {
+            d.getRoll();
+            b1.setIcon(getDiceImage1(d));
+            b2.setIcon(getDiceImage2(d));
+            enabled = false;
+        }
+    }
+    
+    public void enable() {
+        enabled = true;
     }
    
     public ImageIcon getDiceImage1(Dice d){

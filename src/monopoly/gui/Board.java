@@ -5,8 +5,9 @@
  */
 package monopoly.gui;
 
-import monopoly.Dice;
-
+import java.util.List;
+import monopoly.*;
+import javax.swing.*;
 /**
  *
  * @author shaebrown
@@ -16,17 +17,21 @@ public class Board extends javax.swing.JFrame {
     /**
      * Creates new form board
      */
-    public Board() {
+    public Board(Dice d, List<Player> players) {
         initComponents();
-        initDie();
+        initDie(d);
+        initPlayers(players);
     }
     
-    private void initDie() {
-        Dice d = new Dice();
-        DiceController dv = new DiceController(d, Die1, Die2);
+    private void initDie(Dice d) {
+        DiceController dv = new DiceController(d,Die1,Die2);
         Die1.addActionListener(dv);
         Die2.addActionListener(dv);
-        
+    }
+    
+    private void initPlayers(List<Player> p) {
+        PlayerController player_controller = new PlayerController(p);
+        player_controller.initPlayers(Objects);
     }
   
     /**
@@ -39,18 +44,23 @@ public class Board extends javax.swing.JFrame {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        north = new javax.swing.JPanel();
-        FreeParking = new javax.swing.JButton();
-        GoToJail = new javax.swing.JButton();
-        Kentucky = new javax.swing.JButton();
-        Chance2 = new javax.swing.JButton();
-        Indiana = new javax.swing.JButton();
-        Illonois = new javax.swing.JButton();
-        BO = new javax.swing.JButton();
-        Atlantic = new javax.swing.JButton();
-        Marvin = new javax.swing.JButton();
-        WaterWorks = new javax.swing.JButton();
-        Ventinor = new javax.swing.JButton();
+        Layers = new javax.swing.JLayeredPane();
+        Objects = new javax.swing.JPanel();
+        Die2 = new javax.swing.JButton();
+        Die1 = new javax.swing.JButton();
+        Board = new javax.swing.JPanel();
+        south = new javax.swing.JPanel();
+        Jail = new javax.swing.JButton();
+        Go = new javax.swing.JButton();
+        Mediterranean = new javax.swing.JButton();
+        CommunityChest1 = new javax.swing.JButton();
+        Baltic = new javax.swing.JButton();
+        IncomeTax = new javax.swing.JButton();
+        Reading = new javax.swing.JButton();
+        Oriental = new javax.swing.JButton();
+        Chance1 = new javax.swing.JButton();
+        Vermont = new javax.swing.JButton();
+        Connecticut = new javax.swing.JButton();
         west = new javax.swing.JPanel();
         Tenessee = new javax.swing.JButton();
         CommunityChest2 = new javax.swing.JButton();
@@ -71,23 +81,20 @@ public class Board extends javax.swing.JFrame {
         ParkPlace = new javax.swing.JButton();
         LuxuryTax = new javax.swing.JButton();
         Boardwalk = new javax.swing.JButton();
-        south = new javax.swing.JPanel();
-        Jail = new javax.swing.JButton();
-        Go = new javax.swing.JButton();
-        Mediterranean = new javax.swing.JButton();
-        CommunityChest1 = new javax.swing.JButton();
-        Baltic = new javax.swing.JButton();
-        IncomeTax = new javax.swing.JButton();
-        Reading = new javax.swing.JButton();
-        Oriental = new javax.swing.JButton();
-        Chance1 = new javax.swing.JButton();
-        Vermont = new javax.swing.JButton();
-        Connecticut = new javax.swing.JButton();
         center = new javax.swing.JPanel();
-        jLayeredPane1 = new javax.swing.JLayeredPane();
-        Die2 = new javax.swing.JButton();
-        Die1 = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
+        centerBoard = new javax.swing.JLabel();
+        north = new javax.swing.JPanel();
+        FreeParking = new javax.swing.JButton();
+        GoToJail = new javax.swing.JButton();
+        Kentucky = new javax.swing.JButton();
+        Chance2 = new javax.swing.JButton();
+        Indiana = new javax.swing.JButton();
+        Illonois = new javax.swing.JButton();
+        BO = new javax.swing.JButton();
+        Atlantic = new javax.swing.JButton();
+        Marvin = new javax.swing.JButton();
+        WaterWorks = new javax.swing.JButton();
+        Ventinor = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -95,288 +102,36 @@ public class Board extends javax.swing.JFrame {
         setMinimumSize(new java.awt.Dimension(1020, 1020));
         setPreferredSize(new java.awt.Dimension(1021, 1021));
 
-        north.setBackground(java.awt.Color.darkGray);
-        north.setBorder(null);
-        north.setPreferredSize(new java.awt.Dimension(1020, 150));
-        north.setLayout(new java.awt.GridBagLayout());
+        Layers.setPreferredSize(new java.awt.Dimension(1020, 1020));
 
-        FreeParking.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/freeparking.jpg"))); // NOI18N
-        FreeParking.setBorder(null);
-        FreeParking.setBorderPainted(false);
-        FreeParking.setMaximumSize(new java.awt.Dimension(150, 150));
-        FreeParking.setMinimumSize(new java.awt.Dimension(150, 150));
-        FreeParking.setPreferredSize(new java.awt.Dimension(150, 150));
-        FreeParking.addActionListener(new java.awt.event.ActionListener() {
+        Objects.setOpaque(false);
+        Objects.setPreferredSize(new java.awt.Dimension(1020, 1020));
+        Objects.setLayout(null);
+
+        Die2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/dice/dice1.png"))); // NOI18N
+        Die2.setBorder(null);
+        Die2.setBorderPainted(false);
+        Die2.setContentAreaFilled(false);
+        Die2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                FreeParkingActionPerformed(evt);
+                Die2ActionPerformed(evt);
             }
         });
-        north.add(FreeParking, new java.awt.GridBagConstraints());
+        Objects.add(Die2);
+        Die2.setBounds(390, 470, 100, 110);
 
-        GoToJail.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/gotojail.jpg"))); // NOI18N
-        GoToJail.setBorder(null);
-        GoToJail.setBorderPainted(false);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 10;
-        gridBagConstraints.gridy = 0;
-        north.add(GoToJail, gridBagConstraints);
+        Die1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/dice/dice1.png"))); // NOI18N
+        Die1.setBorder(null);
+        Die1.setBorderPainted(false);
+        Die1.setContentAreaFilled(false);
+        Objects.add(Die1);
+        Die1.setBounds(510, 470, 100, 110);
 
-        Kentucky.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/kentucky.jpg"))); // NOI18N
-        Kentucky.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        Kentucky.setPreferredSize(new java.awt.Dimension(80, 150));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        north.add(Kentucky, gridBagConstraints);
+        Layers.add(Objects);
+        Objects.setBounds(0, 0, 1020, 1020);
+        Layers.setLayer(Objects, javax.swing.JLayeredPane.PALETTE_LAYER);
 
-        Chance2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/chancenorth.jpg"))); // NOI18N
-        Chance2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        Chance2.setPreferredSize(new java.awt.Dimension(80, 150));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        north.add(Chance2, gridBagConstraints);
-
-        Indiana.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/indiana.jpg"))); // NOI18N
-        Indiana.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        Indiana.setPreferredSize(new java.awt.Dimension(80, 150));
-        north.add(Indiana, new java.awt.GridBagConstraints());
-
-        Illonois.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/illonios.jpg"))); // NOI18N
-        Illonois.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        Illonois.setPreferredSize(new java.awt.Dimension(80, 150));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 0;
-        north.add(Illonois, gridBagConstraints);
-
-        BO.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/bo.jpg"))); // NOI18N
-        BO.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        BO.setPreferredSize(new java.awt.Dimension(80, 150));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 0;
-        north.add(BO, gridBagConstraints);
-
-        Atlantic.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/atlantic.jpg"))); // NOI18N
-        Atlantic.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        Atlantic.setPreferredSize(new java.awt.Dimension(80, 150));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 0;
-        north.add(Atlantic, gridBagConstraints);
-
-        Marvin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/marvin.jpg"))); // NOI18N
-        Marvin.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        Marvin.setPreferredSize(new java.awt.Dimension(80, 150));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 9;
-        gridBagConstraints.gridy = 0;
-        north.add(Marvin, gridBagConstraints);
-
-        WaterWorks.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/waterworks.jpg"))); // NOI18N
-        WaterWorks.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        WaterWorks.setPreferredSize(new java.awt.Dimension(80, 150));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 8;
-        gridBagConstraints.gridy = 0;
-        north.add(WaterWorks, gridBagConstraints);
-
-        Ventinor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/ventinor.jpg"))); // NOI18N
-        Ventinor.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        Ventinor.setPreferredSize(new java.awt.Dimension(80, 150));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 7;
-        gridBagConstraints.gridy = 0;
-        north.add(Ventinor, gridBagConstraints);
-
-        getContentPane().add(north, java.awt.BorderLayout.PAGE_START);
-
-        west.setBackground(java.awt.Color.darkGray);
-        west.setBorder(null);
-        west.setMaximumSize(new java.awt.Dimension(175, 870));
-        west.setPreferredSize(new java.awt.Dimension(150, 720));
-        west.setLayout(new java.awt.GridBagLayout());
-
-        Tenessee.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/tenessee.jpg"))); // NOI18N
-        Tenessee.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        Tenessee.setMaximumSize(new java.awt.Dimension(150, 78));
-        Tenessee.setMinimumSize(new java.awt.Dimension(150, 78));
-        Tenessee.setPreferredSize(new java.awt.Dimension(150, 80));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        west.add(Tenessee, gridBagConstraints);
-
-        CommunityChest2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/communitychesteast.jpg"))); // NOI18N
-        CommunityChest2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        CommunityChest2.setMaximumSize(new java.awt.Dimension(150, 78));
-        CommunityChest2.setMinimumSize(new java.awt.Dimension(150, 78));
-        CommunityChest2.setPreferredSize(new java.awt.Dimension(150, 80));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        west.add(CommunityChest2, gridBagConstraints);
-
-        James.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/james.jpg"))); // NOI18N
-        James.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        James.setMaximumSize(new java.awt.Dimension(150, 78));
-        James.setMinimumSize(new java.awt.Dimension(150, 78));
-        James.setPreferredSize(new java.awt.Dimension(150, 80));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        west.add(James, gridBagConstraints);
-
-        Pennsylvania.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/pennsylvania.jpg"))); // NOI18N
-        Pennsylvania.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        Pennsylvania.setMaximumSize(new java.awt.Dimension(150, 78));
-        Pennsylvania.setMinimumSize(new java.awt.Dimension(150, 78));
-        Pennsylvania.setPreferredSize(new java.awt.Dimension(150, 80));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
-        west.add(Pennsylvania, gridBagConstraints);
-
-        Virginia.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/virginia.jpg"))); // NOI18N
-        Virginia.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        Virginia.setMaximumSize(new java.awt.Dimension(150, 78));
-        Virginia.setMinimumSize(new java.awt.Dimension(150, 78));
-        Virginia.setPreferredSize(new java.awt.Dimension(150, 80));
-        Virginia.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                VirginiaActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
-        west.add(Virginia, gridBagConstraints);
-
-        States.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/states.jpg"))); // NOI18N
-        States.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        States.setMaximumSize(new java.awt.Dimension(150, 78));
-        States.setMinimumSize(new java.awt.Dimension(150, 78));
-        States.setPreferredSize(new java.awt.Dimension(150, 80));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
-        west.add(States, gridBagConstraints);
-
-        Electric.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/electric.jpg"))); // NOI18N
-        Electric.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        Electric.setMaximumSize(new java.awt.Dimension(150, 78));
-        Electric.setMinimumSize(new java.awt.Dimension(150, 78));
-        Electric.setPreferredSize(new java.awt.Dimension(150, 80));
-        Electric.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ElectricActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
-        west.add(Electric, gridBagConstraints);
-
-        Charles.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/charles.jpg"))); // NOI18N
-        Charles.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        Charles.setMaximumSize(new java.awt.Dimension(150, 78));
-        Charles.setMinimumSize(new java.awt.Dimension(150, 78));
-        Charles.setPreferredSize(new java.awt.Dimension(150, 80));
-        Charles.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                CharlesActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
-        west.add(Charles, gridBagConstraints);
-
-        NewYork.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/newyork.jpg"))); // NOI18N
-        NewYork.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        NewYork.setMaximumSize(new java.awt.Dimension(150, 78));
-        NewYork.setMinimumSize(new java.awt.Dimension(150, 78));
-        NewYork.setPreferredSize(new java.awt.Dimension(150, 80));
-        west.add(NewYork, new java.awt.GridBagConstraints());
-
-        getContentPane().add(west, java.awt.BorderLayout.WEST);
-
-        east.setBackground(java.awt.Color.darkGray);
-        east.setPreferredSize(new java.awt.Dimension(150, 720));
-        east.setRequestFocusEnabled(false);
-        east.setLayout(new java.awt.GridBagLayout());
-
-        Pacific.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/pacific.jpg"))); // NOI18N
-        Pacific.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        Pacific.setPreferredSize(new java.awt.Dimension(150, 80));
-        east.add(Pacific, new java.awt.GridBagConstraints());
-
-        NorthCarolina.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/ncarolina.jpg"))); // NOI18N
-        NorthCarolina.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        NorthCarolina.setPreferredSize(new java.awt.Dimension(150, 80));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        east.add(NorthCarolina, gridBagConstraints);
-
-        CommunityChest3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/communitychestwest.jpg"))); // NOI18N
-        CommunityChest3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        CommunityChest3.setPreferredSize(new java.awt.Dimension(150, 80));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        east.add(CommunityChest3, gridBagConstraints);
-
-        Pennisylvania.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/pennisylviania.jpg"))); // NOI18N
-        Pennisylvania.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        Pennisylvania.setPreferredSize(new java.awt.Dimension(150, 80));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        east.add(Pennisylvania, gridBagConstraints);
-
-        Short.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/sortline.jpg"))); // NOI18N
-        Short.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        Short.setPreferredSize(new java.awt.Dimension(150, 80));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
-        east.add(Short, gridBagConstraints);
-
-        Chance3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/chancewest.jpg"))); // NOI18N
-        Chance3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        Chance3.setPreferredSize(new java.awt.Dimension(150, 80));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
-        east.add(Chance3, gridBagConstraints);
-
-        ParkPlace.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/parkplace.jpg"))); // NOI18N
-        ParkPlace.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        ParkPlace.setPreferredSize(new java.awt.Dimension(150, 80));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
-        east.add(ParkPlace, gridBagConstraints);
-
-        LuxuryTax.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/tax.jpg"))); // NOI18N
-        LuxuryTax.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        LuxuryTax.setPreferredSize(new java.awt.Dimension(150, 80));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
-        east.add(LuxuryTax, gridBagConstraints);
-
-        Boardwalk.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/boardwalk.jpg"))); // NOI18N
-        Boardwalk.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        Boardwalk.setPreferredSize(new java.awt.Dimension(150, 80));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
-        east.add(Boardwalk, gridBagConstraints);
-
-        getContentPane().add(east, java.awt.BorderLayout.LINE_END);
+        Board.setLayout(new java.awt.BorderLayout());
 
         south.setBackground(java.awt.Color.darkGray);
         south.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
@@ -497,28 +252,302 @@ public class Board extends javax.swing.JFrame {
         gridBagConstraints.gridy = 0;
         south.add(Connecticut, gridBagConstraints);
 
-        getContentPane().add(south, java.awt.BorderLayout.PAGE_END);
+        Board.add(south, java.awt.BorderLayout.PAGE_END);
 
-        center.setLayout(new javax.swing.BoxLayout(center, javax.swing.BoxLayout.LINE_AXIS));
+        west.setBackground(java.awt.Color.darkGray);
+        west.setBorder(null);
+        west.setMaximumSize(new java.awt.Dimension(175, 870));
+        west.setPreferredSize(new java.awt.Dimension(150, 720));
+        west.setLayout(new java.awt.GridBagLayout());
 
-        Die2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/dice/dice1.png"))); // NOI18N
-        Die2.setBorder(null);
-        jLayeredPane1.add(Die2);
-        Die2.setBounds(250, 340, 100, 110);
+        Tenessee.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/tenessee.jpg"))); // NOI18N
+        Tenessee.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        Tenessee.setMaximumSize(new java.awt.Dimension(150, 78));
+        Tenessee.setMinimumSize(new java.awt.Dimension(150, 78));
+        Tenessee.setPreferredSize(new java.awt.Dimension(150, 80));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        west.add(Tenessee, gridBagConstraints);
 
-        Die1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/dice/dice1.png"))); // NOI18N
-        Die1.setBorder(null);
-        jLayeredPane1.add(Die1);
-        Die1.setBounds(350, 340, 100, 110);
+        CommunityChest2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/communitychesteast.jpg"))); // NOI18N
+        CommunityChest2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        CommunityChest2.setMaximumSize(new java.awt.Dimension(150, 78));
+        CommunityChest2.setMinimumSize(new java.awt.Dimension(150, 78));
+        CommunityChest2.setPreferredSize(new java.awt.Dimension(150, 80));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        west.add(CommunityChest2, gridBagConstraints);
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/monopoly.jpg"))); // NOI18N
-        jLabel1.setText("jLabel1");
-        jLayeredPane1.add(jLabel1);
-        jLabel1.setBounds(0, 0, 720, 720);
+        James.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/james.jpg"))); // NOI18N
+        James.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        James.setMaximumSize(new java.awt.Dimension(150, 78));
+        James.setMinimumSize(new java.awt.Dimension(150, 78));
+        James.setPreferredSize(new java.awt.Dimension(150, 80));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        west.add(James, gridBagConstraints);
 
-        center.add(jLayeredPane1);
+        Pennsylvania.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/pennsylvania.jpg"))); // NOI18N
+        Pennsylvania.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        Pennsylvania.setMaximumSize(new java.awt.Dimension(150, 78));
+        Pennsylvania.setMinimumSize(new java.awt.Dimension(150, 78));
+        Pennsylvania.setPreferredSize(new java.awt.Dimension(150, 80));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        west.add(Pennsylvania, gridBagConstraints);
 
-        getContentPane().add(center, java.awt.BorderLayout.CENTER);
+        Virginia.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/virginia.jpg"))); // NOI18N
+        Virginia.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        Virginia.setMaximumSize(new java.awt.Dimension(150, 78));
+        Virginia.setMinimumSize(new java.awt.Dimension(150, 78));
+        Virginia.setPreferredSize(new java.awt.Dimension(150, 80));
+        Virginia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                VirginiaActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        west.add(Virginia, gridBagConstraints);
+
+        States.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/states.jpg"))); // NOI18N
+        States.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        States.setMaximumSize(new java.awt.Dimension(150, 78));
+        States.setMinimumSize(new java.awt.Dimension(150, 78));
+        States.setPreferredSize(new java.awt.Dimension(150, 80));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        west.add(States, gridBagConstraints);
+
+        Electric.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/electric.jpg"))); // NOI18N
+        Electric.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        Electric.setMaximumSize(new java.awt.Dimension(150, 78));
+        Electric.setMinimumSize(new java.awt.Dimension(150, 78));
+        Electric.setPreferredSize(new java.awt.Dimension(150, 80));
+        Electric.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ElectricActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 7;
+        west.add(Electric, gridBagConstraints);
+
+        Charles.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/charles.jpg"))); // NOI18N
+        Charles.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        Charles.setMaximumSize(new java.awt.Dimension(150, 78));
+        Charles.setMinimumSize(new java.awt.Dimension(150, 78));
+        Charles.setPreferredSize(new java.awt.Dimension(150, 80));
+        Charles.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CharlesActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 8;
+        west.add(Charles, gridBagConstraints);
+
+        NewYork.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/newyork.jpg"))); // NOI18N
+        NewYork.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        NewYork.setMaximumSize(new java.awt.Dimension(150, 78));
+        NewYork.setMinimumSize(new java.awt.Dimension(150, 78));
+        NewYork.setPreferredSize(new java.awt.Dimension(150, 80));
+        west.add(NewYork, new java.awt.GridBagConstraints());
+
+        Board.add(west, java.awt.BorderLayout.WEST);
+
+        east.setBackground(java.awt.Color.darkGray);
+        east.setPreferredSize(new java.awt.Dimension(150, 720));
+        east.setRequestFocusEnabled(false);
+        east.setLayout(new java.awt.GridBagLayout());
+
+        Pacific.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/pacific.jpg"))); // NOI18N
+        Pacific.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        Pacific.setPreferredSize(new java.awt.Dimension(150, 80));
+        east.add(Pacific, new java.awt.GridBagConstraints());
+
+        NorthCarolina.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/ncarolina.jpg"))); // NOI18N
+        NorthCarolina.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        NorthCarolina.setPreferredSize(new java.awt.Dimension(150, 80));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        east.add(NorthCarolina, gridBagConstraints);
+
+        CommunityChest3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/communitychestwest.jpg"))); // NOI18N
+        CommunityChest3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        CommunityChest3.setPreferredSize(new java.awt.Dimension(150, 80));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        east.add(CommunityChest3, gridBagConstraints);
+
+        Pennisylvania.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/pennisylviania.jpg"))); // NOI18N
+        Pennisylvania.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        Pennisylvania.setPreferredSize(new java.awt.Dimension(150, 80));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        east.add(Pennisylvania, gridBagConstraints);
+
+        Short.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/sortline.jpg"))); // NOI18N
+        Short.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        Short.setPreferredSize(new java.awt.Dimension(150, 80));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        east.add(Short, gridBagConstraints);
+
+        Chance3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/chancewest.jpg"))); // NOI18N
+        Chance3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        Chance3.setPreferredSize(new java.awt.Dimension(150, 80));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        east.add(Chance3, gridBagConstraints);
+
+        ParkPlace.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/parkplace.jpg"))); // NOI18N
+        ParkPlace.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        ParkPlace.setPreferredSize(new java.awt.Dimension(150, 80));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        east.add(ParkPlace, gridBagConstraints);
+
+        LuxuryTax.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/tax.jpg"))); // NOI18N
+        LuxuryTax.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        LuxuryTax.setPreferredSize(new java.awt.Dimension(150, 80));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 7;
+        east.add(LuxuryTax, gridBagConstraints);
+
+        Boardwalk.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/boardwalk.jpg"))); // NOI18N
+        Boardwalk.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        Boardwalk.setPreferredSize(new java.awt.Dimension(150, 80));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 8;
+        east.add(Boardwalk, gridBagConstraints);
+
+        Board.add(east, java.awt.BorderLayout.LINE_END);
+
+        center.setLayout(new java.awt.CardLayout());
+
+        centerBoard.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/monopoly.jpg"))); // NOI18N
+        center.add(centerBoard, "card2");
+
+        Board.add(center, java.awt.BorderLayout.CENTER);
+
+        north.setBackground(java.awt.Color.darkGray);
+        north.setBorder(null);
+        north.setPreferredSize(new java.awt.Dimension(1020, 150));
+        north.setLayout(new java.awt.GridBagLayout());
+
+        FreeParking.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/freeparking.jpg"))); // NOI18N
+        FreeParking.setBorder(null);
+        FreeParking.setBorderPainted(false);
+        FreeParking.setMaximumSize(new java.awt.Dimension(150, 150));
+        FreeParking.setMinimumSize(new java.awt.Dimension(150, 150));
+        FreeParking.setPreferredSize(new java.awt.Dimension(150, 150));
+        FreeParking.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                FreeParkingActionPerformed(evt);
+            }
+        });
+        north.add(FreeParking, new java.awt.GridBagConstraints());
+
+        GoToJail.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/gotojail.jpg"))); // NOI18N
+        GoToJail.setBorder(null);
+        GoToJail.setBorderPainted(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 10;
+        gridBagConstraints.gridy = 0;
+        north.add(GoToJail, gridBagConstraints);
+
+        Kentucky.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/kentucky.jpg"))); // NOI18N
+        Kentucky.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        Kentucky.setPreferredSize(new java.awt.Dimension(80, 150));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        north.add(Kentucky, gridBagConstraints);
+
+        Chance2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/chancenorth.jpg"))); // NOI18N
+        Chance2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        Chance2.setPreferredSize(new java.awt.Dimension(80, 150));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        north.add(Chance2, gridBagConstraints);
+
+        Indiana.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/indiana.jpg"))); // NOI18N
+        Indiana.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        Indiana.setPreferredSize(new java.awt.Dimension(80, 150));
+        north.add(Indiana, new java.awt.GridBagConstraints());
+
+        Illonois.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/illonios.jpg"))); // NOI18N
+        Illonois.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        Illonois.setPreferredSize(new java.awt.Dimension(80, 150));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
+        north.add(Illonois, gridBagConstraints);
+
+        BO.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/bo.jpg"))); // NOI18N
+        BO.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        BO.setPreferredSize(new java.awt.Dimension(80, 150));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 0;
+        north.add(BO, gridBagConstraints);
+
+        Atlantic.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/atlantic.jpg"))); // NOI18N
+        Atlantic.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        Atlantic.setPreferredSize(new java.awt.Dimension(80, 150));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 0;
+        north.add(Atlantic, gridBagConstraints);
+
+        Marvin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/marvin.jpg"))); // NOI18N
+        Marvin.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        Marvin.setPreferredSize(new java.awt.Dimension(80, 150));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 9;
+        gridBagConstraints.gridy = 0;
+        north.add(Marvin, gridBagConstraints);
+
+        WaterWorks.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/waterworks.jpg"))); // NOI18N
+        WaterWorks.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        WaterWorks.setPreferredSize(new java.awt.Dimension(80, 150));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 0;
+        north.add(WaterWorks, gridBagConstraints);
+
+        Ventinor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/ventinor.jpg"))); // NOI18N
+        Ventinor.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        Ventinor.setPreferredSize(new java.awt.Dimension(80, 150));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 0;
+        north.add(Ventinor, gridBagConstraints);
+
+        Board.add(north, java.awt.BorderLayout.PAGE_START);
+
+        Layers.add(Board);
+        Board.setBounds(0, 0, 1020, 1020);
+
+        getContentPane().add(Layers, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -543,10 +572,14 @@ public class Board extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_VirginiaActionPerformed
 
+    private void Die2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Die2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Die2ActionPerformed
+
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public void run() {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -574,7 +607,7 @@ public class Board extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Board().setVisible(true);
+                setVisible(true);
             }
         });
     }
@@ -583,6 +616,7 @@ public class Board extends javax.swing.JFrame {
     private javax.swing.JButton Atlantic;
     private javax.swing.JButton BO;
     private javax.swing.JButton Baltic;
+    private javax.swing.JPanel Board;
     private javax.swing.JButton Boardwalk;
     private javax.swing.JButton Chance1;
     private javax.swing.JButton Chance2;
@@ -604,11 +638,13 @@ public class Board extends javax.swing.JFrame {
     private javax.swing.JButton Jail;
     private javax.swing.JButton James;
     private javax.swing.JButton Kentucky;
+    private javax.swing.JLayeredPane Layers;
     private javax.swing.JButton LuxuryTax;
     private javax.swing.JButton Marvin;
     private javax.swing.JButton Mediterranean;
     private javax.swing.JButton NewYork;
     private javax.swing.JButton NorthCarolina;
+    private javax.swing.JPanel Objects;
     private javax.swing.JButton Oriental;
     private javax.swing.JButton Pacific;
     private javax.swing.JButton ParkPlace;
@@ -623,9 +659,8 @@ public class Board extends javax.swing.JFrame {
     private javax.swing.JButton Virginia;
     private javax.swing.JButton WaterWorks;
     private javax.swing.JPanel center;
+    private javax.swing.JLabel centerBoard;
     private javax.swing.JPanel east;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JPanel north;
     private javax.swing.JPanel south;
     private javax.swing.JPanel west;
