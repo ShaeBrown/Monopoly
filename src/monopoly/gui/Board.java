@@ -5,32 +5,35 @@
  */
 package monopoly.gui;
 
-import java.util.List;
-import monopoly.*;
-import javax.swing.*;
+
+
 /**
  *
  * @author shaebrown
  */
 public class Board extends javax.swing.JFrame {
+    
+    PlayerController player_controller;
+    DiceController dice_controller;
 
     /**
      * Creates new form board
      */
-    public Board(Dice d, List<Player> players) {
+    public Board(DiceController dc, PlayerController pc) {
         initComponents();
-        initDie(d);
-        initPlayers(players);
+        this.player_controller = pc;
+        this.dice_controller = dc;
+        initDie();
+        initPlayers();
     }
     
-    private void initDie(Dice d) {
-        DiceController dv = new DiceController(d,Die1,Die2);
-        Die1.addActionListener(dv);
-        Die2.addActionListener(dv);
+    private void initDie() {
+        dice_controller.addButtons(Die1,Die2);
+        Die1.addActionListener(dice_controller);
+        Die2.addActionListener(dice_controller);
     }
     
-    private void initPlayers(List<Player> p) {
-        PlayerController player_controller = new PlayerController(p);
+    private void initPlayers() {
         player_controller.initPlayers(Objects);
     }
   

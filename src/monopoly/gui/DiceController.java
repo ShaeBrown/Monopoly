@@ -18,16 +18,17 @@ public class DiceController implements ActionListener {
     JButton b1,b2;
     boolean enabled;
     
-    public DiceController(Dice d, JButton b1, JButton b2) {
+    public DiceController(Dice d) {
         this.d = d;
-        this.b1 = b1;
-        this.b2 = b2;
         for (int i = 0; i < die.length; i++) {
             die[i] = new ImageIcon(getClass().getResource("/monopoly/gui/img/dice/dice" + (i+1) + ".png"));
         }
-        b1.setIcon(die[0]);
-        b2.setIcon(die[0]);
         enabled = true;
+    }
+    
+    public void addButtons(JButton b1, JButton b2) {
+        this.b1 = b1;
+        this.b2 = b2;
     }
     
     @Override
