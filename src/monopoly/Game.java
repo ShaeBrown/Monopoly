@@ -9,9 +9,10 @@ import java.util.*;
 import monopoly.Grid.GridType;                          
 import monopoly.BuyablePropertyClass.PropertyGroup;
 import monopoly.Player.PlayerToken;
-import monopoly.gui.Board;
+import monopoly.gui.*;
 
 public class Game {
+    
 		public enum GRIDNUM{
 			GO(0), MediterraneanAve(1), CommunityChest1(2), BalticAve(3), IncomeTax(4),
 			ReadingRailroad(5),	OrientalAve(6),	Chance1(7),	VermontAve(8), Connecticut(9),
@@ -43,6 +44,10 @@ public class Game {
     List<Player> player_list;           //ArrayList of Player to represent all the players of the game.
     Board board;
     Dice dice;
+    DiceController dice_controller;
+    PlayerController player_controller;
+    GridController grid_controller;
+    
     /*Constructor for creating a new game*/
     public Game()
     {
@@ -226,20 +231,18 @@ public class Game {
     /*Start the actual game here*/
     private void startGame()
     {
+        launchBoard();
         System.out.println("=============");
         System.out.println("GAME STARTED!");
         System.out.println("=============");
         
-        board = new Board(dice,player_list);
-        board.run();
+        
         /*The only point of this outer infinite loop is to reset the player iterator*/
         for(;;)
         {
             /*For each Player in player_list, where rolling_player is the current player, it's rolling_playher's turn to roll the dice*/
             for(Player rolling_player : player_list)
             {
-                System.out.println("Enter ANY text (other than blank) and Player " +rolling_player.getName() +" will roll and move.");
-                (new Scanner(System.in)).next();
                 playerRollDiceAndMove(rolling_player);
                 
             }
@@ -247,12 +250,39 @@ public class Game {
         //System.exit(0);
     }
     
+    private void launchBoard() {
+        this.grid_controller = new GridController(board_grids);
+        this.player_controller = new PlayerController(player_list,grid_controller);
+        this.dice_controller = new DiceController(dice);
+        this.board = new Board(dice_controller,player_controller,grid_controller);
+        board.run();
+    }
     
     /*Roll dices for a player, and move the palyer forward that many spots*/
     public int playerRollDiceAndMove(Player player)
     {
         
-        int diceroll = dice.getRoll();
+        System.out.println("It is now " + player.getName() + "'s turn to roll");
+       
+        
+        /* The code below waits for the rolling player to click the dice buttons
+        Instead of a empty while loop which wasn't working I took a solution from
+        http://stackoverflow.com/questions/8409609/java-empty-while-loops
+        it works okay for now, but please change it if you have a better solution
+        */
+        Object LOCK = new Object(); // just something to lock on
+        dice_controller.addLock(LOCK);
+        synchronized (LOCK) {
+            while (this.dice_controller.isEnabled()) {
+                try { LOCK.wait(); }
+                catch (InterruptedException e) {
+                // treat interrupt as exit request
+                    break;
+                }
+            }
+        }
+        
+        int diceroll = this.dice_controller.getRoll();
         int new_location = player.getLocation() + diceroll;
         
         /*Should also add logic to get a player out of jail here*/
@@ -267,6 +297,8 @@ public class Game {
             player.setLocation(new_location);
         
         
+        this.player_controller.updatePosition(player);
+        this.dice_controller.enable();
         
         System.out.println("Player " +player.getName() +" rolled " +diceroll +" and is now on grid " +player.getLocation() +" with $" +player.getMoney() +"\n");
         

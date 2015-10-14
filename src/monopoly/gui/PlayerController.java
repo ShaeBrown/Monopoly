@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package monopoly.gui;
+import java.awt.Point;
 import java.util.HashMap;
 import java.util.List;
 import javax.swing.*;
@@ -17,10 +18,19 @@ public class PlayerController {
     
     HashMap<Player, JButton> player_buttons;
     List<Player> player_list;
+    GridController grid_controller;
     
-    public PlayerController (List<Player> players) {
+    public PlayerController (List<Player> players, GridController gc) {
         this.player_list = players;
+        this.grid_controller = gc;
         player_buttons = new HashMap<>();
+    }
+    
+    public void updatePosition(Player p) {
+        JButton players_button = player_buttons.get(p);
+        int location = p.getLocation();
+        Point point = grid_controller.getPlayerPosition(location);
+        players_button.setLocation(point);
     }
     
     public void initPlayers(JPanel object_layer) {
@@ -40,6 +50,5 @@ public class PlayerController {
     public ImageIcon getPlayerToken(Player p) {
         return new ImageIcon(getClass().getResource("/monopoly/gui/img/tokens/"+ p.getToken() +".png"));
     }
-    
     
 }

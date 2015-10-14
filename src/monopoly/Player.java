@@ -81,7 +81,7 @@ public class Player {
         this.in_jail = in_jail;
     }
     
-    public PlayerToken getToken() 
+    public PlayerToken getToken()
     {
         return token;
     }

@@ -5,32 +5,94 @@
  */
 package monopoly.gui;
 
-import java.util.List;
-import monopoly.*;
-import javax.swing.*;
+import javax.swing.JButton;
+
+
+
 /**
  *
  * @author shaebrown
  */
 public class Board extends javax.swing.JFrame {
-
+    
+    PlayerController player_controller;
+    DiceController dice_controller;
+    GridController grid_controller;
+    
+    JButton[] grid_buttons;
+    
+    final int BOARDSIZE = 40;
     /**
      * Creates new form board
      */
-    public Board(Dice d, List<Player> players) {
+    public Board(DiceController dc, PlayerController pc, GridController gc) {
         initComponents();
-        initDie(d);
-        initPlayers(players);
+        makeGridButtonsArray();
+        initDie(dc);
+        initPlayers(pc);
+        initGrid(gc);
     }
     
-    private void initDie(Dice d) {
-        DiceController dv = new DiceController(d,Die1,Die2);
-        Die1.addActionListener(dv);
-        Die2.addActionListener(dv);
+    private void initGrid(GridController gc) {
+        this.grid_controller = gc;
+        makeGridButtonsArray();
+        grid_controller.addButtons(grid_buttons);
+        
+    }
+    private void makeGridButtonsArray() {
+        grid_buttons = new JButton[BOARDSIZE];
+        grid_buttons[0] = Go;
+        grid_buttons[1] = Mediterranean;
+        grid_buttons[2] = CommunityChest1;
+        grid_buttons[3] = Baltic;
+        grid_buttons[4] = Reading;
+        grid_buttons[5] = Oriental;
+        grid_buttons[6] = IncomeTax;
+        grid_buttons[7] = Chance1;
+        grid_buttons[8] = Vermont;
+        grid_buttons[9] = Connecticut;
+        grid_buttons[10] = Jail;
+        grid_buttons[11] = Charles;
+        grid_buttons[12] = Electric;
+        grid_buttons[13] = States;
+        grid_buttons[14] = Virginia;
+        grid_buttons[15] = PennisylvaniaRR;
+        grid_buttons[16] = James;
+        grid_buttons[17] = CommunityChest2;
+        grid_buttons[18] = Tenessee;
+        grid_buttons[19] = NewYork;
+        grid_buttons[20] = FreeParking;
+        grid_buttons[21] = Kentucky;
+        grid_buttons[22] = Chance2;
+        grid_buttons[23] = Indiana;
+        grid_buttons[24] = Illonois;
+        grid_buttons[25] = BO;
+        grid_buttons[26] = Atlantic;
+        grid_buttons[27] = Ventinor;
+        grid_buttons[28] = WaterWorks;
+        grid_buttons[29] = Marvin;
+        grid_buttons[30] = GoToJail;
+        grid_buttons[31] = Pacific;
+        grid_buttons[32] = NorthCarolina;
+        grid_buttons[33] = CommunityChest3;
+        grid_buttons[34] = Pennisylvania;
+        grid_buttons[35] = Short;
+        grid_buttons[36] = Chance3;
+        grid_buttons[37] = ParkPlace;
+        grid_buttons[38] = LuxuryTax;
+        grid_buttons[39] = Boardwalk;
+    }
+                
+    
+    private void initDie(DiceController dc) {
+        this.dice_controller = dc;
+        dice_controller.addButtons(Die1,Die2);
+        Die1.addActionListener(dice_controller);
+        Die2.addActionListener(dice_controller);
     }
     
-    private void initPlayers(List<Player> p) {
-        PlayerController player_controller = new PlayerController(p);
+    private void initPlayers(PlayerController pc) {
+        this.player_controller = pc;
         player_controller.initPlayers(Objects);
     }
   
@@ -65,9 +127,9 @@ public class Board extends javax.swing.JFrame {
         Tenessee = new javax.swing.JButton();
         CommunityChest2 = new javax.swing.JButton();
         James = new javax.swing.JButton();
-        Pennsylvania = new javax.swing.JButton();
-        Virginia = new javax.swing.JButton();
+        PennisylvaniaRR = new javax.swing.JButton();
         States = new javax.swing.JButton();
+        Virginia = new javax.swing.JButton();
         Electric = new javax.swing.JButton();
         Charles = new javax.swing.JButton();
         NewYork = new javax.swing.JButton();
@@ -104,6 +166,7 @@ public class Board extends javax.swing.JFrame {
 
         Layers.setPreferredSize(new java.awt.Dimension(1020, 1020));
 
+        Objects.setMaximumSize(new java.awt.Dimension(1020, 1020));
         Objects.setOpaque(false);
         Objects.setPreferredSize(new java.awt.Dimension(1020, 1020));
         Objects.setLayout(null);
@@ -112,11 +175,6 @@ public class Board extends javax.swing.JFrame {
         Die2.setBorder(null);
         Die2.setBorderPainted(false);
         Die2.setContentAreaFilled(false);
-        Die2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Die2ActionPerformed(evt);
-            }
-        });
         Objects.add(Die2);
         Die2.setBounds(390, 470, 100, 110);
 
@@ -141,11 +199,6 @@ public class Board extends javax.swing.JFrame {
         Jail.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/jail.jpg"))); // NOI18N
         Jail.setBorder(null);
         Jail.setPreferredSize(new java.awt.Dimension(150, 150));
-        Jail.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                JailActionPerformed(evt);
-            }
-        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -290,30 +343,15 @@ public class Board extends javax.swing.JFrame {
         gridBagConstraints.gridy = 3;
         west.add(James, gridBagConstraints);
 
-        Pennsylvania.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/pennsylvania.jpg"))); // NOI18N
-        Pennsylvania.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        Pennsylvania.setMaximumSize(new java.awt.Dimension(150, 78));
-        Pennsylvania.setMinimumSize(new java.awt.Dimension(150, 78));
-        Pennsylvania.setPreferredSize(new java.awt.Dimension(150, 80));
+        PennisylvaniaRR.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/pennsylvania.jpg"))); // NOI18N
+        PennisylvaniaRR.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        PennisylvaniaRR.setMaximumSize(new java.awt.Dimension(150, 78));
+        PennisylvaniaRR.setMinimumSize(new java.awt.Dimension(150, 78));
+        PennisylvaniaRR.setPreferredSize(new java.awt.Dimension(150, 80));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
-        west.add(Pennsylvania, gridBagConstraints);
-
-        Virginia.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/virginia.jpg"))); // NOI18N
-        Virginia.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        Virginia.setMaximumSize(new java.awt.Dimension(150, 78));
-        Virginia.setMinimumSize(new java.awt.Dimension(150, 78));
-        Virginia.setPreferredSize(new java.awt.Dimension(150, 80));
-        Virginia.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                VirginiaActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
-        west.add(Virginia, gridBagConstraints);
+        west.add(PennisylvaniaRR, gridBagConstraints);
 
         States.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/states.jpg"))); // NOI18N
         States.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -325,16 +363,21 @@ public class Board extends javax.swing.JFrame {
         gridBagConstraints.gridy = 6;
         west.add(States, gridBagConstraints);
 
+        Virginia.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/virginia.jpg"))); // NOI18N
+        Virginia.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        Virginia.setMaximumSize(new java.awt.Dimension(150, 78));
+        Virginia.setMinimumSize(new java.awt.Dimension(150, 78));
+        Virginia.setPreferredSize(new java.awt.Dimension(150, 80));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        west.add(Virginia, gridBagConstraints);
+
         Electric.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/electric.jpg"))); // NOI18N
         Electric.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         Electric.setMaximumSize(new java.awt.Dimension(150, 78));
         Electric.setMinimumSize(new java.awt.Dimension(150, 78));
         Electric.setPreferredSize(new java.awt.Dimension(150, 80));
-        Electric.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ElectricActionPerformed(evt);
-            }
-        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 7;
@@ -345,11 +388,6 @@ public class Board extends javax.swing.JFrame {
         Charles.setMaximumSize(new java.awt.Dimension(150, 78));
         Charles.setMinimumSize(new java.awt.Dimension(150, 78));
         Charles.setPreferredSize(new java.awt.Dimension(150, 80));
-        Charles.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                CharlesActionPerformed(evt);
-            }
-        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 8;
@@ -458,11 +496,6 @@ public class Board extends javax.swing.JFrame {
         FreeParking.setMaximumSize(new java.awt.Dimension(150, 150));
         FreeParking.setMinimumSize(new java.awt.Dimension(150, 150));
         FreeParking.setPreferredSize(new java.awt.Dimension(150, 150));
-        FreeParking.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                FreeParkingActionPerformed(evt);
-            }
-        });
         north.add(FreeParking, new java.awt.GridBagConstraints());
 
         GoToJail.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/gotojail.jpg"))); // NOI18N
@@ -552,30 +585,6 @@ public class Board extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void FreeParkingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FreeParkingActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_FreeParkingActionPerformed
-
-    private void ElectricActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ElectricActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ElectricActionPerformed
-
-    private void CharlesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CharlesActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_CharlesActionPerformed
-
-    private void JailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JailActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_JailActionPerformed
-
-    private void VirginiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VirginiaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_VirginiaActionPerformed
-
-    private void Die2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Die2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_Die2ActionPerformed
-
     /**
      * @param args the command line arguments
      */
@@ -649,7 +658,7 @@ public class Board extends javax.swing.JFrame {
     private javax.swing.JButton Pacific;
     private javax.swing.JButton ParkPlace;
     private javax.swing.JButton Pennisylvania;
-    private javax.swing.JButton Pennsylvania;
+    private javax.swing.JButton PennisylvaniaRR;
     private javax.swing.JButton Reading;
     private javax.swing.JButton Short;
     private javax.swing.JButton States;
