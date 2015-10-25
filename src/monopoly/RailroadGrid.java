@@ -1,8 +1,9 @@
 package monopoly;
 
-public class RailroadGrid extends BuyablePropertyClass {
+public class RailroadGrid extends BuyableGrid
+{
     
-     int property_rent_base; 
+    int property_rent_base; 
     
     /*Constructor*/
     public RailroadGrid(String property_name, int property_price, int property_mortgage)

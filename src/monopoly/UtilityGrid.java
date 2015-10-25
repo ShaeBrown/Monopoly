@@ -1,6 +1,7 @@
 package monopoly;
 
-public class UtilityGrid extends BuyablePropertyClass {
+public class UtilityGrid extends BuyableGrid
+{
     
     /*Constructor*/
     public UtilityGrid(String property_name, int property_price, int property_mortgage)

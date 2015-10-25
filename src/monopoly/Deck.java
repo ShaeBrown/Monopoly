@@ -9,7 +9,6 @@ package monopoly;
 
 import java.util.Stack;
 
-import monopoly.BuyablePropertyClass.PropertyGroup;
 import monopoly.EventCard.ActionType;
 import monopoly.Game.GRIDNUM;
 
@@ -39,7 +38,7 @@ public class Deck {
     chance_cards[0] = new EventCard("Advance to Go", "Collect $200", ActionType.MOVETO, GRIDNUM.GO.getNum());
     chance_cards[1] = new EventCard("Advance to Illinois Ave.", "If you pass Go, collect $200", ActionType.MOVETO, GRIDNUM.IllinoisAve.getNum());
     chance_cards[2] = new EventCard("Advance to St. Charles Place", "If you pass Go, collect $200", ActionType.MOVETO, GRIDNUM.StCharlesPlace.getNum());
-    chance_cards[3] = 
+    /*chance_cards[3] = 
     		new EventCard("Advance token to nearest Utility", 
     									"If unowned, you may buy it from the Bank. If owned, throw dice and pay owner a total ten times the amount thrown.",
     									ActionType.MOVETO_CLOSEST,
@@ -48,7 +47,7 @@ public class Deck {
     		new EventCard("Advance token to nearest Railroad",
 				    					"If unowned, you may buy it from the Bank. If owned, pay owner twice the rental to which he/she is otherwise entitled.",
 				    					ActionType.MOVETO_CLOSEST,
-				    					PropertyGroup.RAILROAD);
+				    					PropertyGroup.RAILROAD);*/
     chance_cards[5] = new EventCard("Bank pays you divdend of $50", "", ActionType.GAINMONEY, 50);
     chance_cards[6] = new EventCard("Get out of Jail free", "This card may be kept until needed, or traded/sold", ActionType.JAILFREECARD);
     chance_cards[7] = new EventCard("Go Back 3 spaces", "", ActionType.GOBACK, 3);

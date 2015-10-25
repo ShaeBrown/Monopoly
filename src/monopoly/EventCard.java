@@ -21,7 +21,6 @@
 */
 
 package monopoly;
-import monopoly.BuyablePropertyClass.PropertyGroup;
 
 public class EventCard {
     
@@ -31,7 +30,6 @@ public class EventCard {
     String title, desc;                     //Title and description of the card
     int amount;                             //How much to gain, lose, index of grid to moveto, etc...
     int amount_secondary;                   //Used by HOUSEREPAIR only
-    PropertyGroup property_group;           //Used by MOVETO_CLOSEST only.
 
     
     /*Constructor for most action types*/
@@ -57,24 +55,6 @@ public class EventCard {
                 System.out.println("Wrong constructor called. Found: " +action_type +" Expected GAINMONEY, LOSEMONEY... whatever");
                 break;
                 
-        }
-    }
-    
-    /*Constructor for MOVETO_CLOSEST*/
-    public EventCard(String title, String desc, ActionType action_type, PropertyGroup property_group)
-    {
-        /*typechecking*/
-        switch(action_type)
-        {
-            case MOVETO_CLOSEST:
-                this.action_type = action_type;
-                this.title = title;
-                this.desc = desc;
-                this.property_group = property_group;
-                break;
-            default:
-                System.out.println("Wrong constructor called. Found: " +action_type +" Expected MOVETO_CLOSEST");
-                break;
         }
     }
     

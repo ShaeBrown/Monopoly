@@ -1,6 +1,7 @@
 package monopoly;
 
-public class TaxGrid{
+public class TaxGrid extends Grid
+{
     
     String name;        //Name of tax
     int tax_amount;     //How much to tax

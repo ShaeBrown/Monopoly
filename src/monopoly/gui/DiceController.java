@@ -33,11 +33,6 @@ public class DiceController implements ActionListener {
         this.b2 = b2;
     }
     
-    public void addButtons(JButton b1, JButton b2) {
-        this.b1 = b1;
-        this.b2 = b2;
-    }
-    
     @Override
     public void actionPerformed(ActionEvent event) {
         if (enabled) {

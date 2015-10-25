@@ -6,8 +6,8 @@ package monopoly;
 import java.util.*;
 
 /*Imports all the custom enum datatypes*/
-import monopoly.Grid.GridType;                          
-import monopoly.BuyablePropertyClass.PropertyGroup;
+import monopoly.BuyableGrid.PropertyGroup;
+import monopoly.CardGrid.CardType;
 import monopoly.Player.PlayerToken;
 import monopoly.gui.*;
 
@@ -73,24 +73,24 @@ public class Game {
     private void initializeGrids()
     {
         /*http://ecx.images-amazon.com/images/I/81oC5pYhh2L._SL1500_.jpg*/
-        board_grids[0] = new Grid(GridType.GENERIC, "GO");
-        board_grids[1] = new Grid(new PropertyGrid(PropertyGroup.BROWN, "Mediterranean Ave", 60, 30, 50, (new int[] {2, 10, 30, 90, 160, 250})));
-        board_grids[2] = new Grid(GridType.COMCHEST);
-        board_grids[3] = new Grid(new PropertyGrid(PropertyGroup.BROWN, "Baltic Ave", 60, 30, 50, (new int[] {4, 20, 60, 180, 320, 450})));
-        board_grids[4] = new Grid(new TaxGrid("Income Tax", 200));
-        board_grids[5] = new Grid(new RailroadGrid("Reading Railroad", 200, 100));
+        board_grids[0] = new GenericGrid("GO");
+        board_grids[1] = new PropertyGrid(PropertyGroup.BROWN, "Mediterranean Ave", 60, 30, 50, (new int[] {2, 10, 30, 90, 160, 250}));
+        board_grids[2] = new CardGrid(CardType.COMCHEST);
+        board_grids[3] = new PropertyGrid(PropertyGroup.BROWN, "Baltic Ave", 60, 30, 50, (new int[] {4, 20, 60, 180, 320, 450}));
+        board_grids[4] = new TaxGrid("Income Tax", 200);
+        board_grids[5] = new RailroadGrid("Reading Railroad", 200, 100);
         /*fill more...*/
-        board_grids[7] = new Grid(GridType.CHANCE);
+        board_grids[7] = new CardGrid(CardType.CHANCECARD);
         /*fill more...*/
-        board_grids[10] = new Grid(GridType.GENERIC, "IN JAIL/JUST VISITING");
+        board_grids[10] = new GenericGrid("IN JAIL/JUST VISITING");
         /*fill more...*/
-        board_grids[11] = new Grid(new PropertyGrid(PropertyGroup.MAGENTA, "St. Charles Place", 140, 70, 100, (new int[] {10, 50, 150, 450, 625, 750})));
-        board_grids[12] = new Grid(new UtilityGrid("Electric Company", 150, 75));
+        board_grids[11] = new PropertyGrid(PropertyGroup.MAGENTA, "St. Charles Place", 140, 70, 100, (new int[] {10, 50, 150, 450, 625, 750}));
+        board_grids[12] = new UtilityGrid("Electric Company", 150, 75);
         /*fill more...*/
-        board_grids[20] = new Grid(GridType.GENERIC, "Free Parking");
-        board_grids[24] = new Grid(new PropertyGrid(PropertyGroup.RED, "Illinois Ave", 240, 120, 150, (new int[] {20, 100, 300, 750, 925, 1100})));
+        board_grids[20] = new GenericGrid("Free Parking");
+        board_grids[24] = new PropertyGrid(PropertyGroup.RED, "Illinois Ave", 240, 120, 150, (new int[] {20, 100, 300, 750, 925, 1100}));
         /*fill more...*/
-        board_grids[30] = new Grid(GridType.GOTOJAIL);
+        //board_grids[30] = new Grid(GridType.GOTOJAIL);
         /*fill more...*/
     }
     
