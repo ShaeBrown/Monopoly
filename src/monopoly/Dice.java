@@ -10,7 +10,7 @@ public class Dice {
     
     int roll1, roll2;
     boolean doubles;
-    private Random r;
+    private final Random r;
     
     public Dice() {
         r = new Random();

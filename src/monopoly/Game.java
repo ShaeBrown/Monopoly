@@ -46,7 +46,7 @@ public class Game {
     Board board;
     Dice dice;
     DiceController dice_controller;
-    PlayerController player_controller;
+    static PlayerController player_controller;
     GridController grid_controller;
 
 
@@ -289,7 +289,7 @@ public class Game {
     {
         
         System.out.println("It is now " + player.getName() + "'s turn to roll");
-       
+       player_controller.updateMenu(player);
         
         /* The code below waits for the rolling player to click the dice buttons
         Instead of a empty while loop which wasn't working I took a solution from
@@ -308,7 +308,8 @@ public class Game {
             }
         }
         
-        int diceroll = this.dice.getRoll();
+        int diceroll = dice.getRoll();
+        
         int new_location = player.getLocation() + diceroll;
         
         /*Should also add logic to get a player out of jail here*/
@@ -323,6 +324,9 @@ public class Game {
         player.setLocation(new_location);
         
         this.player_controller.updatePosition(player);
+        Grid landing_grid = board_grids[player.getLocation()];
+        landing_grid.landingFunction(player);
+        
         this.dice_controller.enable();
         
         System.out.println("Player " +player.getName() +" rolled " +diceroll +" and is now on grid " +player.getLocation() +" with $" +player.getMoney() +"\n");

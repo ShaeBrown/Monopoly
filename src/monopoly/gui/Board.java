@@ -96,6 +96,7 @@ public class Board extends javax.swing.JFrame {
     
     private void initPlayers(PlayerController pc) {
         this.player_controller = pc;
+        this.player_controller.initMenu(Menu);
     }
   
     /**
@@ -159,11 +160,12 @@ public class Board extends javax.swing.JFrame {
         Marvin = new javax.swing.JButton();
         WaterWorks = new javax.swing.JButton();
         Ventinor = new javax.swing.JButton();
+        Menu = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        setMaximumSize(new java.awt.Dimension(1020, 1020));
-        setMinimumSize(new java.awt.Dimension(1020, 1020));
+        setMaximumSize(new java.awt.Dimension(1320, 1020));
+        setMinimumSize(new java.awt.Dimension(1320, 1020));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         Layers.setPreferredSize(new java.awt.Dimension(1020, 1020));
@@ -589,6 +591,14 @@ public class Board extends javax.swing.JFrame {
         gridBagConstraints.gridy = 0;
         getContentPane().add(Layers, gridBagConstraints);
 
+        Menu.setBackground(new java.awt.Color(223, 233, 229));
+        Menu.setBorder(javax.swing.BorderFactory.createEmptyBorder(50, 50, 50, 50));
+        Menu.setMaximumSize(new java.awt.Dimension(300, 1020));
+        Menu.setMinimumSize(new java.awt.Dimension(300, 1020));
+        Menu.setPreferredSize(new java.awt.Dimension(300, 1020));
+        Menu.setLayout(new java.awt.GridLayout(10, 1, 0, 5));
+        getContentPane().add(Menu, new java.awt.GridBagConstraints());
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -658,6 +668,7 @@ public class Board extends javax.swing.JFrame {
     private javax.swing.JButton LuxuryTax;
     private javax.swing.JButton Marvin;
     private javax.swing.JButton Mediterranean;
+    private javax.swing.JPanel Menu;
     private javax.swing.JButton NewYork;
     private javax.swing.JButton NorthCarolina;
     private javax.swing.JPanel Objects;

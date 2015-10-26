@@ -26,6 +26,10 @@ public class GridController {
         this.grid_buttons = new HashMap();
     }
     
+    public Grid getGrid(int i) {
+        return grid_object[i];
+    }
+    
     public void addLayer(JPanel objects) {
         this.objects = objects;
     }
@@ -60,16 +64,15 @@ public class GridController {
         int x = grid_corner.x;
         int y = grid_corner.y;
         for (JButton b : buttons) {
-                System.out.println(grid_corner);
-                b.setLocation(grid_corner);
-                if (x + offset.x < right_corner.x - b.getWidth()/1.5) {
-                    x += offset.x;
-                }
-                if (y + offset.y < right_corner.y - b.getHeight()/1.5) {
-                    y += offset.y;
-                }
-                grid_corner.setLocation(x,y);
+            b.setLocation(grid_corner);
+            if (x + offset.x < right_corner.x - b.getWidth()/1.5) {
+                x += offset.x;
             }
+            if (y + offset.y < right_corner.y - b.getHeight()/1.5) {
+                y += offset.y;
+            }
+            grid_corner.setLocation(x,y);
+        }
     }
     
 }

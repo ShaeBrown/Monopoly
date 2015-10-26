@@ -5,6 +5,8 @@
  */
 package monopoly;
 
+import monopoly.gui.PlayerController;
+
 /**
  *
  * @author Jacob
@@ -17,7 +19,6 @@ public abstract class BuyableGrid extends Grid
     protected PropertyGroup property_group;   //Which property group does this belongs to?
     protected int property_price;             //Cost to buy the initial property  
     protected int property_mortgage;          //Mortgage value of the property
-    
     /*Constructor*/
     public BuyableGrid(PropertyGroup property_group, String name, int property_price, int property_mortgage)
     {
@@ -39,6 +40,10 @@ public abstract class BuyableGrid extends Grid
         return this.owner == null;
     }
     
+    public String toString() 
+    {
+        return this.name;
+    }
     public void setOwner(Player owner)
     {
         this.owner = owner;

@@ -4,11 +4,14 @@
  * and open the template in the editor.
  */
 package monopoly.gui;
+import java.awt.Component;
 import java.awt.Point;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Vector;
 import javax.swing.*;
+import monopoly.BuyableGrid;
 
 import monopoly.Player;
 /**
@@ -17,16 +20,88 @@ import monopoly.Player;
  */
 public class PlayerController {
     
-    HashMap<Player, JButton> player_buttons;
-    List<Player> player_list;
-    GridController grid_controller;
+    private HashMap<Player, JButton> player_buttons;
+    private HashMap<String, Component> menu_components;
+    private List<Player> player_list;
+    private GridController grid_controller;
+    private JPanel player_menu;
     
     public PlayerController (List<Player> players, GridController gc) {
         this.player_list = players;
         this.grid_controller = gc;
         player_buttons = new HashMap<>();
+        menu_components = new HashMap<>();
     }
     
+    
+    public void updateMenu(Player p) {
+       JLabel name = (JLabel) menu_components.get("Name");
+       name.setText(p.getName());
+       name.setIcon(player_buttons.get(p).getIcon());
+       
+       JLabel money = (JLabel) menu_components.get("Money");
+       money.setText("$" + p.getMoney());
+       
+       JList properties = (JList) menu_components.get("Property");
+       DefaultListModel list = (DefaultListModel) properties.getModel();
+       list.removeAllElements();
+       for (BuyableGrid g: p.getProperties()) {
+           list.addElement(g);
+       }
+    }
+    
+    public void initMenu(JPanel player_menu) {
+        this.player_menu = player_menu;
+        
+        JLabel PlayerName = new JLabel();
+        PlayerName.setHorizontalAlignment(SwingConstants.CENTER);
+        PlayerName.setFont(new java.awt.Font("Ubuntu", 1, 30)); // NOI18N
+        PlayerName.setText("PlayerName");
+
+        player_menu.add(PlayerName);
+        
+        JLabel Money = new JLabel();
+        Money.setFont(new java.awt.Font("Ubuntu", 1, 16));
+        Money.setText("Players Money");
+        
+        player_menu.add(Money);
+
+        DefaultListModel property_list = new DefaultListModel();
+        JList properties = new JList(property_list);
+        JScrollPane scrollPane = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+            JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setViewportView(properties);
+        
+        player_menu.add(scrollPane);
+        
+        
+        JLabel property_info = new JLabel();
+        
+        menu_components.put("Money", Money);
+        menu_components.put("Name", PlayerName);
+        menu_components.put("Property", properties);
+
+        
+        
+    }
+    
+    public void buyProperty(Player p) {
+        BuyableGrid g = (BuyableGrid) grid_controller.getGrid(p.getLocation());
+
+        int buy = JOptionPane.showConfirmDialog(player_menu, "Would you like to buy " + g.getName() + " for $" + g.getPrice() + "?", null,  JOptionPane.YES_NO_OPTION);
+        if (buy == JOptionPane.YES_OPTION) {
+          if (p.getMoney() < g.getPrice()) {
+              
+          }
+          else {
+            p.buyProperty(g);
+          }
+        }
+        else {
+          //auction or nothing?
+        }
+    }
+
     public void updatePosition(Player p) {
         JButton button = player_buttons.get(p);
         int location = p.getLocation();

@@ -38,9 +38,16 @@ public class PropertyGrid extends BuyableGrid
     }
     
     /*Do this when a player lands on this grid*/
+    @Override
     public void landingFunction(Player landed)
     {
-        
+        if (isBuyable()) {
+            // If player has enough money?
+            Game.player_controller.buyProperty(landed);
+        }
+        else {
+            
+        }
     }
     
     public void addHouse()

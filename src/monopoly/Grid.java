@@ -42,6 +42,10 @@ public abstract class Grid {
         occupants.add(p);
     }
     
+    public String getName() {
+        return this.name;
+    }
+    
     public void removeOccupant() {
         try {
             occupants.removeFirst();

@@ -1,5 +1,7 @@
 package monopoly;
 
+import java.util.LinkedList;
+
 public class Player {
     
     enum PlayerToken{DOG, BATTLESHIP, AUTOMOBILE, TOPHAT, THIMBLE, BOOT, WHEELBARROW, CAT}
@@ -10,7 +12,7 @@ public class Player {
     int location;           //Which grid is the player on right now?
     int jail_free_cards;    //How many get-out-of-jail-free cards does this player have?
     boolean in_jail;       //Is player in jail?
-   
+    LinkedList<BuyableGrid> property;
     
     
     /*New Player constructor*/
@@ -23,6 +25,7 @@ public class Player {
         this.location = 0;
         Game.board_grids[0].addOccupant(this);
         this.in_jail = false;
+        property = new LinkedList<>();
     }
     
      /*Add more class methods below?*/
@@ -40,6 +43,11 @@ public class Player {
     public int getMoney()
     {
         return this.money;
+    }
+    
+    public LinkedList<BuyableGrid> getProperties() 
+    {
+        return property;
     }
     
     public void setMoney(int money)
@@ -89,6 +97,12 @@ public class Player {
     public PlayerToken getToken()
     {
         return token;
+    }
+    
+    public void buyProperty(BuyableGrid grid) {
+        property.add(grid);
+        grid.setOwner(this);
+        setMoney(this.money - grid.getPrice());
     }
     
 }
