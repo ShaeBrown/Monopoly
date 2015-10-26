@@ -9,15 +9,31 @@ package monopoly;
  *
  * @author Jacob
  */
+
+
+
 public class GenericGrid extends Grid
 {
-    public GenericGrid(String name)
+    
+    public enum GridType {GO, JAIL, FREEPARKING, GOTOJAIL}
+    
+    private GridType grid_type;
+    
+    public GenericGrid(GridType grid_type)
     {
-        this.name = name;
+        this.grid_type = grid_type;
     }
     
     public void landingFunction(Player player)
     {
-        
+        switch(grid_type) {
+            case GO:
+            
+            case JAIL:
+            
+            case FREEPARKING:
+                
+            case GOTOJAIL:
+        }
     }
 }

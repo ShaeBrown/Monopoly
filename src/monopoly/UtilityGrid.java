@@ -4,9 +4,9 @@ public class UtilityGrid extends BuyableGrid
 {
     
     /*Constructor*/
-    public UtilityGrid(String property_name, int property_price, int property_mortgage)
+    public UtilityGrid(String property_name)
     {
-        super(PropertyGroup.UTILITY, property_name, property_price, property_mortgage);
+        super(PropertyGroup.UTILITY, property_name, 150, 75);
     }
     
     /*Add more class methods below?*/

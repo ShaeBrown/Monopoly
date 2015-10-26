@@ -35,6 +35,10 @@ public abstract class BuyableGrid extends Grid
         return this.owner;
     }
     
+    public boolean isBuyable() {
+        return this.owner == null;
+    }
+    
     public void setOwner(Player owner)
     {
         this.owner = owner;

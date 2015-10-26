@@ -18,10 +18,14 @@ public class Dice {
         roll2=1;
     }
     
-    public int getRoll(){
+    public int newRoll(){
         roll1 = roll();
         roll2 = roll();
         doubles = roll1 == roll2;
+        return roll1 + roll2;
+    }
+    
+    public int getRoll() {
         return roll1 + roll2;
     }
     

@@ -6,9 +6,9 @@ public class RailroadGrid extends BuyableGrid
     int property_rent_base; 
     
     /*Constructor*/
-    public RailroadGrid(String property_name, int property_price, int property_mortgage)
+    public RailroadGrid(String property_name)
     {
-        super(PropertyGroup.RAILROAD, property_name, property_price, property_mortgage);
+        super(PropertyGroup.RAILROAD, property_name, 200, 100);
         this.property_rent_base = 25;
     }
     

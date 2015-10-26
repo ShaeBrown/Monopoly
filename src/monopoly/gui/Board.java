@@ -5,6 +5,7 @@
  */
 package monopoly.gui;
 
+import java.io.PrintStream;
 import javax.swing.JButton;
 
 
@@ -26,17 +27,19 @@ public class Board extends javax.swing.JFrame {
      * Creates new form board
      */
     public Board(DiceController dc, PlayerController pc, GridController gc) {
+        
         initComponents();
         makeGridButtonsArray();
         initDie(dc);
-        initPlayers(pc);
         initGrid(gc);
+        initPlayers(pc);
     }
     
     private void initGrid(GridController gc) {
         this.grid_controller = gc;
         makeGridButtonsArray();
         grid_controller.addButtons(grid_buttons);
+        grid_controller.addLayer(Objects);
         
     }
     private void makeGridButtonsArray() {
@@ -93,7 +96,6 @@ public class Board extends javax.swing.JFrame {
     
     private void initPlayers(PlayerController pc) {
         this.player_controller = pc;
-        player_controller.initPlayers(Objects);
     }
   
     /**
@@ -162,7 +164,7 @@ public class Board extends javax.swing.JFrame {
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setMaximumSize(new java.awt.Dimension(1020, 1020));
         setMinimumSize(new java.awt.Dimension(1020, 1020));
-        setPreferredSize(new java.awt.Dimension(1021, 1021));
+        getContentPane().setLayout(new java.awt.GridBagLayout());
 
         Layers.setPreferredSize(new java.awt.Dimension(1020, 1020));
 
@@ -189,6 +191,8 @@ public class Board extends javax.swing.JFrame {
         Objects.setBounds(0, 0, 1020, 1020);
         Layers.setLayer(Objects, javax.swing.JLayeredPane.PALETTE_LAYER);
 
+        Board.setMaximumSize(new java.awt.Dimension(1020, 1020));
+        Board.setMinimumSize(new java.awt.Dimension(1020, 1020));
         Board.setLayout(new java.awt.BorderLayout());
 
         south.setBackground(java.awt.Color.darkGray);
@@ -580,7 +584,10 @@ public class Board extends javax.swing.JFrame {
         Layers.add(Board);
         Board.setBounds(0, 0, 1020, 1020);
 
-        getContentPane().add(Layers, java.awt.BorderLayout.CENTER);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        getContentPane().add(Layers, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -612,13 +619,13 @@ public class Board extends javax.swing.JFrame {
         }
         //</editor-fold>
         //</editor-fold>
-
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 setVisible(true);
             }
         });
+        player_controller.initPlayers(Objects);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

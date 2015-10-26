@@ -21,6 +21,7 @@ public class Player {
         this.money = 1500; 
         this.jail_free_cards = 0;
         this.location = 0;
+        Game.board_grids[0].addOccupant(this);
         this.in_jail = false;
     }
     
@@ -58,6 +59,10 @@ public class Player {
     
     public void setLocation(int location)
     {
+        //this keeps track of how many players are on each grid, this is needed
+        //to space out the players on the GUI
+        Game.board_grids[this.location].removeOccupant();
+        Game.board_grids[location].addOccupant(this);
         this.location = location;
     }
     

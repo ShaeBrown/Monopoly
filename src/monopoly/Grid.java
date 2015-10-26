@@ -23,12 +23,29 @@
 */
 package monopoly;
 
+import java.util.LinkedList;
+
 public abstract class Grid {
     
     protected String name;
-    
+    LinkedList<Player> occupants = new LinkedList();
     /*Add more class methods below?*/
     
     /*Calls an appropriate player landing function depending on the type of the grid*/
     abstract void landingFunction(Player player); 
+    
+    public LinkedList<Player> getOccupants() {
+       return this.occupants;
+    }
+    
+    public void addOccupant(Player p) {
+        occupants.add(p);
+    }
+    
+    public void removeOccupant() {
+        try {
+            occupants.removeFirst();
+        }
+        catch(Exception e) {}
+    }
 }

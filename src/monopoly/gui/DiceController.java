@@ -17,7 +17,6 @@ public class DiceController implements ActionListener {
     Dice d;
     public JButton b1,b2;
     public boolean enabled;
-    int roll;
     Object LOCK;
     
     public DiceController(Dice d) {
@@ -36,7 +35,7 @@ public class DiceController implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent event) {
         if (enabled) {
-            this.roll = d.getRoll();
+            d.newRoll();
             b1.setIcon(getDiceImage1(d));
             b2.setIcon(getDiceImage2(d));
             enabled = false;
@@ -46,9 +45,6 @@ public class DiceController implements ActionListener {
         }
     }
     
-    public int getRoll() {
-        return roll;
-    }
     
     public void enable() {
         enabled = true;

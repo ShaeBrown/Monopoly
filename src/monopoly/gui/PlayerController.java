@@ -6,6 +6,7 @@
 package monopoly.gui;
 import java.awt.Point;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import javax.swing.*;
 
@@ -27,10 +28,24 @@ public class PlayerController {
     }
     
     public void updatePosition(Player p) {
-        JButton players_button = player_buttons.get(p);
+        JButton button = player_buttons.get(p);
         int location = p.getLocation();
-        Point point = grid_controller.getPlayerPosition(location);
-        players_button.setLocation(point);
+        LinkedList<Player> occupants = grid_controller.getOccupants(location);
+        if (occupants.size() == 1) {
+            Point point = grid_controller.setPlayerPosition(location);
+            button.setLocation(point);
+        }
+        else {
+            updatePositions(occupants);
+        }
+    }
+    
+    private void updatePositions(LinkedList<Player> players) {
+        JButton[] buttons = new JButton[players.size()];
+        for (int i = 0 ; i < buttons.length; i ++) {
+            buttons[i] = player_buttons.get(players.get(i));
+        }
+        grid_controller.setPlayersPositions(buttons, players.get(0).getLocation());
     }
     
     public void initPlayers(JPanel object_layer) {
@@ -46,6 +61,7 @@ public class PlayerController {
             object_layer.add(button, 1);
             player_buttons.put(p, button);
         }
+        updatePositions(new LinkedList(player_list));
     }
     public ImageIcon getPlayerToken(Player p) {
         return new ImageIcon(getClass().getResource("/monopoly/gui/img/tokens/"+ p.getToken() +".png"));
