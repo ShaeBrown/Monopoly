@@ -46,16 +46,16 @@ public class Game {
     Board board;
     Dice dice;
     DiceController dice_controller;
-    static PlayerController player_controller;
-    GridController grid_controller;
+    public static PlayerController player_controller;
+    public static GridController grid_controller;
 
 
     
     /*Constructor for creating a new game*/
     public Game()
     {
-        this.board_grids = new Grid[BOARDSIZE];
-        player_list = new ArrayList<Player>();
+        Game.board_grids = new Grid[BOARDSIZE];
+        player_list = new ArrayList<>();
         deck = new Deck();		// Initialize both chance deck and community chest deck.
         dice = new Dice();
         initializeGame();
@@ -277,8 +277,8 @@ public class Game {
     }
     
     private void launchBoard() {
-        this.grid_controller = new GridController(board_grids);
-        this.player_controller = new PlayerController(player_list,grid_controller);
+        Game.grid_controller = new GridController(board_grids);
+        Game.player_controller = new PlayerController(player_list,grid_controller);
         this.dice_controller = new DiceController(dice);
         this.board = new Board(dice_controller,player_controller,grid_controller);
         board.run();
@@ -289,7 +289,7 @@ public class Game {
     {
         
         System.out.println("It is now " + player.getName() + "'s turn to roll");
-       player_controller.updateMenu(player);
+        player_controller.updateMenu(player);
         
         /* The code below waits for the rolling player to click the dice buttons
         Instead of a empty while loop which wasn't working I took a solution from
@@ -323,7 +323,7 @@ public class Game {
         
         player.setLocation(new_location);
         
-        this.player_controller.updatePosition(player);
+        Game.player_controller.updatePosition(player);
         Grid landing_grid = board_grids[player.getLocation()];
         landing_grid.landingFunction(player);
         

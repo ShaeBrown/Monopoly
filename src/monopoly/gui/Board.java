@@ -48,9 +48,9 @@ public class Board extends javax.swing.JFrame {
         grid_buttons[1] = Mediterranean;
         grid_buttons[2] = CommunityChest1;
         grid_buttons[3] = Baltic;
-        grid_buttons[4] = Reading;
-        grid_buttons[5] = Oriental;
-        grid_buttons[6] = IncomeTax;
+        grid_buttons[4] = IncomeTax;
+        grid_buttons[5] = Reading;
+        grid_buttons[6] = Oriental;
         grid_buttons[7] = Chance1;
         grid_buttons[8] = Vermont;
         grid_buttons[9] = Connecticut;
@@ -84,6 +84,9 @@ public class Board extends javax.swing.JFrame {
         grid_buttons[37] = ParkPlace;
         grid_buttons[38] = LuxuryTax;
         grid_buttons[39] = Boardwalk;
+        for (JButton b: grid_buttons) {
+            b.addActionListener(grid_controller);
+        }
     }
                 
     
@@ -592,11 +595,13 @@ public class Board extends javax.swing.JFrame {
         getContentPane().add(Layers, gridBagConstraints);
 
         Menu.setBackground(new java.awt.Color(223, 233, 229));
-        Menu.setBorder(javax.swing.BorderFactory.createEmptyBorder(50, 50, 50, 50));
+        Menu.setBorder(javax.swing.BorderFactory.createEmptyBorder(25, 25, 25, 25));
         Menu.setMaximumSize(new java.awt.Dimension(300, 1020));
         Menu.setMinimumSize(new java.awt.Dimension(300, 1020));
         Menu.setPreferredSize(new java.awt.Dimension(300, 1020));
-        Menu.setLayout(new java.awt.GridLayout(10, 1, 0, 5));
+        java.awt.FlowLayout flowLayout1 = new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 20);
+        flowLayout1.setAlignOnBaseline(true);
+        Menu.setLayout(flowLayout1);
         getContentPane().add(Menu, new java.awt.GridBagConstraints());
 
         pack();

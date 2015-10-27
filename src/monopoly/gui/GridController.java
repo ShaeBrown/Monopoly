@@ -5,25 +5,33 @@
  */
 package monopoly.gui;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.LinkedList;
+import javax.swing.ImageIcon;
 import monopoly.Grid;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import monopoly.BuyableGrid;
+import monopoly.Game;
 import monopoly.Player;
 
-public class GridController {
+public final class GridController implements ActionListener {
     
     final int PANELSIZE = 1020;
     Grid[] grid_object;
-    HashMap<Grid,JButton> grid_buttons;
+    HashMap<JButton,Grid> grid_buttons;
+    HashMap<BuyableGrid, ImageIcon> property_cards;
     JButton[] grid_button;
     JPanel board, objects;
     
     public GridController(Grid[] g) {
         this.grid_object = g;
         this.grid_buttons = new HashMap();
+        this.property_cards = new HashMap();
+        setPropertyCards();
     }
     
     public Grid getGrid(int i) {
@@ -37,7 +45,39 @@ public class GridController {
     public void addButtons(JButton[] buttons) {
         this.grid_button = buttons;
         for (int i = 0 ; i < buttons.length; i++) {
-            grid_buttons.put(grid_object[i], buttons[i]);
+            grid_buttons.put(buttons[i],grid_object[i]);
+        }
+    }
+    
+    @Override
+    public void actionPerformed(ActionEvent event) {
+        JButton pressed = (JButton) event.getSource();
+        BuyableGrid grid = (BuyableGrid)grid_buttons.get(pressed);
+        changeProperty(grid);
+    }
+    
+    public void changeProperty(BuyableGrid grid) {
+        ImageIcon i = getPropertyCard(grid);
+        String owner;
+        if (grid.isBuyable()) {
+            owner = "Unowned";
+        }
+        else {
+            owner = "Owner: " + grid.getOwner().getName();
+        }
+        Game.player_controller.setProperty(i,owner);
+    }
+    
+    public ImageIcon getPropertyCard(BuyableGrid g) {
+        return property_cards.get(g);
+    }
+    
+    public void setPropertyCards(){
+        for (int i = 0; i < grid_object.length; i ++) {
+            if (grid_object[i] instanceof BuyableGrid) {
+                ImageIcon image = new ImageIcon(getClass().getResource("/monopoly/gui/img/propertycards/"+ grid_object[i].getName() +".jpg"));
+                property_cards.put((BuyableGrid)grid_object[i],image);
+            }
         }
     }
     
