@@ -34,6 +34,14 @@ public abstract class Grid {
     /*Calls an appropriate player landing function depending on the type of the grid*/
     abstract void landingFunction(Player player); 
     
+        
+    public String getName() {
+        return this.name;
+    }
+    
+    /* The number of players occupying one grid is kept track of so that players
+    can be properly spaced out on the GUI, when sharing the same grid.
+    */
     public LinkedList<Player> getOccupants() {
        return this.occupants;
     }
@@ -42,14 +50,10 @@ public abstract class Grid {
         occupants.add(p);
     }
     
-    public String getName() {
-        return this.name;
-    }
-    
     public void removeOccupant() {
         try {
             occupants.removeFirst();
         }
-        catch(Exception e) {}
+        catch(Exception e) {} //something went wrong
     }
 }

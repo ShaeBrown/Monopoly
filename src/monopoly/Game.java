@@ -44,12 +44,13 @@ public class Game {
     Deck deck;													//Two stacks representing chance and community chest decks.
     List<Player> player_list;           //ArrayList of Player to represent all the players of the game.
     Board board;
-    Dice dice;
-    DiceController dice_controller;
+    
+    public static Dice dice;
+    public static DiceController dice_controller; 
     public static PlayerController player_controller;
     public static GridController grid_controller;
-
-
+    // should these be static/global?? they are used alot in different classes
+    // please change if this is bad design.
     
     /*Constructor for creating a new game*/
     public Game()
@@ -58,7 +59,6 @@ public class Game {
         player_list = new ArrayList<>();
         deck = new Deck();		// Initialize both chance deck and community chest deck.
         dice = new Dice();
-        initializeGame();
     }
     
     /*insert more methods below*/
@@ -157,6 +157,7 @@ public class Game {
             System.out.println("1 = DOG\n2 = BATTLESHIP\n3 = AUTOMOBILE\n4 = TOPHAT\n5 = THIMBLE\n6 = BOOT\n7 = WHEELBARROW\n8 = CAT\n");
             
             /*Determine which token the player wanted*/
+            
             switch(scanner.nextInt())
             {
                 case(1):
@@ -258,6 +259,7 @@ public class Game {
     private void startGame()
     {
         launchBoard();
+        
         System.out.println("=============");
         System.out.println("GAME STARTED!");
         System.out.println("=============");
@@ -279,27 +281,27 @@ public class Game {
     private void launchBoard() {
         Game.grid_controller = new GridController(board_grids);
         Game.player_controller = new PlayerController(player_list,grid_controller);
-        this.dice_controller = new DiceController(dice);
-        this.board = new Board(dice_controller,player_controller,grid_controller);
+        Game.dice_controller = new DiceController(dice);
+        this.board = new Board();
         board.run();
     }
     
     /*Roll dices for a player, and move the palyer forward that many spots*/
     public int playerRollDiceAndMove(Player player)
     {
-        
+                
+        player_controller.updateMenu(player); 
         System.out.println("It is now " + player.getName() + "'s turn to roll");
-        player_controller.updateMenu(player);
+        // this sets the side menu to show the current player's information
         
         /* The code below waits for the rolling player to click the dice buttons
         Instead of a empty while loop which wasn't working I took a solution from
         http://stackoverflow.com/questions/8409609/java-empty-while-loops
         it works okay for now, but please change it if you have a better solution
         */
-        Object LOCK = new Object(); // just something to lock on
-        dice_controller.addLock(LOCK);
+        Object LOCK = Game.dice_controller.getLock();
         synchronized (LOCK) {
-            while (this.dice_controller.isEnabled()) {
+            while (Game.dice_controller.isEnabled()) {
                 try { LOCK.wait(); }
                 catch (InterruptedException e) {
                 // treat interrupt as exit request
@@ -324,10 +326,13 @@ public class Game {
         player.setLocation(new_location);
         
         Game.player_controller.updatePosition(player);
+        //this moves the player to it's current location on the GUI
+        
         Grid landing_grid = board_grids[player.getLocation()];
         landing_grid.landingFunction(player);
         
-        this.dice_controller.enable();
+        Game.dice_controller.enable();
+        // this enables the dice so it its clickable for the next player's turn
         
         System.out.println("Player " +player.getName() +" rolled " +diceroll +" and is now on grid " +player.getLocation() +" with $" +player.getMoney() +"\n");
         

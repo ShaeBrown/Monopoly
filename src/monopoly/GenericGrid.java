@@ -17,23 +17,25 @@ public class GenericGrid extends Grid
     
     public enum GridType {GO, JAIL, FREEPARKING, GOTOJAIL}
     
-    private GridType grid_type;
+    private final GridType grid_type;
     
     public GenericGrid(GridType grid_type)
     {
         this.grid_type = grid_type;
     }
     
+    @Override
     public void landingFunction(Player player)
     {
         switch(grid_type) {
             case GO:
-            
+            //nothing??
             case JAIL:
-            
+            //just visiting
             case FREEPARKING:
-                
+            
             case GOTOJAIL:
+            //send player to jail
         }
     }
 }

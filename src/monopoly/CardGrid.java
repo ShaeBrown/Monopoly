@@ -22,6 +22,7 @@ public class CardGrid extends Grid
         this.type = type;
     }
     
+    @Override
     public void landingFunction(Player player)
     {
         //here a card will be drawn from the deck and it's action will be performed on the player

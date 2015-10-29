@@ -5,10 +5,8 @@
  */
 package monopoly.gui;
 
-import java.io.PrintStream;
 import javax.swing.JButton;
-
-
+import monopoly.Game;
 
 /**
  *
@@ -16,9 +14,6 @@ import javax.swing.JButton;
  */
 public class Board extends javax.swing.JFrame {
     
-    PlayerController player_controller;
-    DiceController dice_controller;
-    GridController grid_controller;
     
     JButton[] grid_buttons;
     
@@ -26,20 +21,19 @@ public class Board extends javax.swing.JFrame {
     /**
      * Creates new form board
      */
-    public Board(DiceController dc, PlayerController pc, GridController gc) {
+    public Board() {
         
         initComponents();
         makeGridButtonsArray();
-        initDie(dc);
-        initGrid(gc);
-        initPlayers(pc);
+        initDie();
+        initGrid();
+        initPlayers();
     }
     
-    private void initGrid(GridController gc) {
-        this.grid_controller = gc;
+    private void initGrid() {
         makeGridButtonsArray();
-        grid_controller.addButtons(grid_buttons);
-        grid_controller.addLayer(Objects);
+        Game.grid_controller.addButtons(grid_buttons);
+        Game.grid_controller.addObjectLayer(Objects);
         
     }
     private void makeGridButtonsArray() {
@@ -85,21 +79,20 @@ public class Board extends javax.swing.JFrame {
         grid_buttons[38] = LuxuryTax;
         grid_buttons[39] = Boardwalk;
         for (JButton b: grid_buttons) {
-            b.addActionListener(grid_controller);
+            b.addActionListener(Game.grid_controller);
         }
     }
                 
     
-    private void initDie(DiceController dc) {
-        this.dice_controller = dc;
-        dice_controller.addButtons(Die1,Die2);
-        Die1.addActionListener(dice_controller);
-        Die2.addActionListener(dice_controller);
+    private void initDie() {
+        Game.dice_controller.addButtons(Die1,Die2);
+        Die1.addActionListener(Game.dice_controller);
+        Die2.addActionListener(Game.dice_controller);
     }
     
-    private void initPlayers(PlayerController pc) {
-        this.player_controller = pc;
-        this.player_controller.initMenu(Menu);
+    private void initPlayers() {
+        Game.player_controller.initMenu(Menu);
+        Game.player_controller.initPlayers(Objects);
     }
   
     /**
@@ -607,9 +600,7 @@ public class Board extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * @param args the command line arguments
-     */
+
     public void run() {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -623,24 +614,15 @@ public class Board extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Board.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Board.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Board.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Board.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            setVisible(true);
         });
-        player_controller.initPlayers(Objects);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

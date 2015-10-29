@@ -14,6 +14,7 @@ public class RailroadGrid extends BuyableGrid
     
     /*Add more class methods below?*/
     
+    @Override
     public int getRentPrice()
     { 
         /*
@@ -23,12 +24,6 @@ public class RailroadGrid extends BuyableGrid
         */
 
         return 0;
-    }
-    
-    /*Do this when a player lands on this grid*/
-    public void landingFunction(Player landed)
-    {
-        
     }
     
 }

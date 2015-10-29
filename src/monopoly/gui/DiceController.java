@@ -10,14 +10,20 @@ import monopoly.Dice;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-
+/* DiceController
+*   
+*   - Holds an array of ImageIcons for each face of the die
+*   - responds to when the user clicks the die, rolls new pair and sets images
+*   - Hold a object which acts as a lock, to wait for when the next player chooses to roll
+*   - Disables itself when the current player has already rolled once
+*/
 public class DiceController implements ActionListener {
     
     ImageIcon[] die = new ImageIcon[6];
     Dice d;
     public JButton b1,b2;
     public boolean enabled;
-    Object LOCK;
+    final Object LOCK;
     
     public DiceController(Dice d) {
         this.d = d;
@@ -25,11 +31,16 @@ public class DiceController implements ActionListener {
             die[i] = new ImageIcon(getClass().getResource("/monopoly/gui/img/dice/dice" + (i+1) + ".png"));
         }
         enabled = true;
+        LOCK = new Object(); // just something to lock on
     }
     
     public void addButtons(JButton b1, JButton b2) {
         this.b1 = b1;
         this.b2 = b2;
+    }
+    
+    public Object getLock() {
+        return this.LOCK;
     }
     
     @Override
@@ -44,17 +55,13 @@ public class DiceController implements ActionListener {
             }
         }
     }
-    
-    
+  
     public void enable() {
         enabled = true;
     }
     
     public boolean isEnabled() {
         return enabled;
-    }
-    public void addLock(Object LOCK) {
-        this.LOCK = LOCK;
     }
     
     public ImageIcon getDiceImage1(Dice d){

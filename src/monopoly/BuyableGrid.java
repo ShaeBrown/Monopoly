@@ -4,9 +4,6 @@
  * and open the template in the editor.
  */
 package monopoly;
-
-import monopoly.gui.PlayerController;
-
 /**
  *
  * @author Jacob
@@ -29,6 +26,7 @@ public abstract class BuyableGrid extends Grid
         this.property_mortgage = property_mortgage;
     }
     
+    public abstract int getRentPrice();
     /*Add more class methods below?*/
     
     public Player getOwner()
@@ -40,10 +38,12 @@ public abstract class BuyableGrid extends Grid
         return this.owner == null;
     }
     
+    @Override
     public String toString() 
     {
         return this.name;
     }
+    
     public void setOwner(Player owner)
     {
         this.owner = owner;
@@ -77,5 +77,28 @@ public abstract class BuyableGrid extends Grid
     public void setMortgage(int property_mortgage)
     {
         this.property_mortgage = property_mortgage;
+    }
+    
+        /*Do this when a player lands on this grid*/
+    @Override
+    public void landingFunction(Player landed)
+    {
+        if (isBuyable()) {
+            // If player has enough money?
+            Game.player_controller.buyProperty(landed);
+        }
+        else {
+            
+            int rent = getRentPrice();
+            if (landed.getMoney() >= rent)
+            {
+                landed.setMoney(landed.getMoney() -rent);
+                getOwner().setMoney(getOwner().getMoney() + rent);
+            }
+            else
+            {
+                //morgage property??
+            }
+        }
     }
 }
