@@ -36,7 +36,7 @@ public class Game {
 		}
 	
     final int MAXPLAYERS = 8;           //Maximum number of players supported by the game
-    final int BOARDSIZE = 40;           //How many grids are on the board
+    static final int BOARDSIZE = 40;           //How many grids are on the board
     
     //enum GameState {LOBBY, PLAYING, ENDED}      //do we really need this?
     
@@ -57,7 +57,7 @@ public class Game {
     {
         Game.board_grids = new Grid[BOARDSIZE];
         player_list = new ArrayList<>();
-        deck = new Deck();		// Initialize both chance deck and community chest deck.
+        deck = new Deck(player_list);		// Initialize both chance deck and community chest deck.
         dice = new Dice();
     }
     
