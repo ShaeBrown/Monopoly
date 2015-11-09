@@ -6,7 +6,8 @@ public class PropertyGrid extends BuyableGrid
     int houses;               //How many houses are current built on this property? 0 = no houses built; 1-4 = number of houses built; 5 = hotel built
     int hotels;
     int[] property_rent;            //Rent for different number of houses built on the property. This should be an array of precisely 6 elements.
-
+    public final int MAX_NUMBER_HOUSES = 4;
+    
     /*Constructor*/
     public PropertyGrid(PropertyGroup property_group, String property_name, int property_price, int property_mortgage, int[] property_rent)
     {
@@ -38,6 +39,18 @@ public class PropertyGrid extends BuyableGrid
         return this.property_rent[houses];
     }
     
+    public int getHousePrice() {
+    	return this.property_house_unit_cost;
+    }
+    
+    public int getCurrentHouses() {
+    	return this.houses;
+    }
+    
+    public int getCurrentHotels() {
+    	return this.hotels;
+    }
+    
     public void addHouse()
     {
         this.houses++;
@@ -45,9 +58,9 @@ public class PropertyGrid extends BuyableGrid
     
     public void addHotel()
     {
-        if (this.houses >= 4)
+        if (this.houses >= MAX_NUMBER_HOUSES)
         {
-            this.houses -= 4;
+            this.houses -= MAX_NUMBER_HOUSES;
             this.hotels++;
         }
     }

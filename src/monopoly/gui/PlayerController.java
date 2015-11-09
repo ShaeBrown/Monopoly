@@ -7,16 +7,20 @@ package monopoly.gui;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+
 import monopoly.BuyableGrid;
 import monopoly.Game;
-
 import monopoly.Player;
+import monopoly.PropertyGrid;
 
 /** 
  *  PlayerController
@@ -33,13 +37,14 @@ public final class PlayerController implements ListSelectionListener {
     private final List<Player> player_list;
     private JPanel player_menu;
     
+    // The current PropertyGrid that is being displayed (if no property displayed then contains the last property displayed)
+    private PropertyGrid selectedProperty;		
+    
     public PlayerController (List<Player> players, GridController gc) {
         this.player_list = players;
         player_buttons = new HashMap<>();
         menu_components = new HashMap<>();
     }
-    
-    
     
     public void updateMenu(Player p) {
        JLabel name = (JLabel) menu_components.get("Name");
@@ -74,6 +79,7 @@ public final class PlayerController implements ListSelectionListener {
     });
        
        clearPropertyInfo();
+       clearBuyButton();
     }
     
     /* Initializes all the menu compenents, and adds them to a hashtable, where
@@ -104,8 +110,8 @@ public final class PlayerController implements ListSelectionListener {
             JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setViewportView(properties);
         scrollPane.setPreferredSize(new Dimension(250, 200));
-        player_menu.add(scrollPane);
         
+        player_menu.add(scrollPane);
         
         JLabel property_info = new JLabel();
         property_info.setHorizontalTextPosition(JLabel.CENTER);
@@ -113,13 +119,64 @@ public final class PlayerController implements ListSelectionListener {
         
         player_menu.add(property_info);
         
+        JButton buyHouseButton = new JButton();
+        buyHouseButton.setBounds(920,920,100,50);
+        buyHouseButton.setPreferredSize(new java.awt.Dimension(100,50));
+        buyHouseButton.setContentAreaFilled(false);
+        buyHouseButton.setFocusPainted(false); 
+        buyHouseButton.setOpaque(false);  
+        buyHouseButton.setText("Buy House");
+        buyHouseButton.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		buyHouse();
+	        }
+	      });      
+        
+        player_menu.add(buyHouseButton);
+        
         menu_components.put("Money", Money);
         menu_components.put("Name", PlayerName);
         menu_components.put("Property", properties);
         menu_components.put("PropertyInfo", property_info);
-
-        
-        
+        menu_components.put("BuyHouse", buyHouseButton);     
+    }
+    
+    // Displays the buy house button
+    public void setBuyHouse(PropertyGrid g) {
+      JButton button = (JButton) menu_components.get("BuyHouse");
+      button.setVisible(true);
+      selectedProperty = g;
+    }
+    
+//TODO(nick): Implement logic that shows buy hotel when the property has 4 hotels
+    /* Creates a dialogue asking if the player wants to buy a house */
+    public void buyHouse() {
+    	PropertyGrid g = selectedProperty;
+    	Player p = g.getOwner();    	
+    	
+      ImageIcon icon = Game.grid_controller.getPropertyCard(g);
+      String msg = "Would you like to buy a house for " + g.getName() + " for $" + g.getHousePrice() + "?\n";
+      msg += "You currently have " + g.getCurrentHouses();
+      if (g.getCurrentHouses() == 1) 
+      	msg += " house.";
+      else 
+      	msg += " houses.";
+      
+      int buy = JOptionPane.showConfirmDialog(player_menu,  msg, "Buy House",  JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, icon);
+      
+    	// tmp - can remove once I've implemented logic to only display button when necessary
+    	if (g.getOwner() == null)
+    		return;
+      
+      if (buy == JOptionPane.YES_OPTION) {
+        if (p.getMoney() < g.getHousePrice()) {
+        	// Not enough money to buy house
+        } else {
+        	if (g.getCurrentHouses() < g.MAX_NUMBER_HOUSES) {
+        		p.buyHouse(g);
+        	}
+        }
+      }
     }
     
     /* Passed a property image icon and a string,
@@ -215,6 +272,7 @@ public final class PlayerController implements ListSelectionListener {
         JList list = (JList) e.getSource();
         if (list.getSelectedIndex() == -1) { //nothing is selected, clear menu
             clearPropertyInfo();
+            clearBuyButton();
         }
         else {
             assert(list.getSelectedValue() instanceof BuyableGrid);
@@ -227,5 +285,11 @@ public final class PlayerController implements ListSelectionListener {
        JLabel property_info = (JLabel) menu_components.get("PropertyInfo");
        property_info.setText("");
        property_info.setIcon(null);
+    }
+
+    /* Sets the buy houses/hotels button to not be visible */
+    public void clearBuyButton() {
+    	JButton button = (JButton) menu_components.get("BuyHouse");
+      button.setVisible(false);	
     }
 }

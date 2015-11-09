@@ -9,14 +9,19 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.LinkedList;
+
 import javax.swing.ImageIcon;
+
 import monopoly.Grid;
+
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+
 import monopoly.BuyableGrid;
 import monopoly.Game;
 import monopoly.Player;
+import monopoly.PropertyGrid;
 
 /* GridController
     - Maps each button to their grid object
@@ -91,8 +96,18 @@ public final class GridController implements ActionListener {
         }
         else {
             owner = "Owner: " + grid.getOwner().getName();
+            
         }
+        if (grid instanceof PropertyGrid)
+        	displayBuyHouseButton((PropertyGrid) grid);
+
         Game.player_controller.setProperty(i,owner);
+    }
+    
+    /* Display the buy house button if the owner has all the properties in the monopoly */
+    public void displayBuyHouseButton(PropertyGrid grid) {
+//TODO(nick): Implement logic that only displays the button when necessary
+    	Game.player_controller.setBuyHouse(grid);
     }
     
     /* Creates ImageIcons for the property cards and create a mapping from Property to property card */

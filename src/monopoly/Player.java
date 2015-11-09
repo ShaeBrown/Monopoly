@@ -105,4 +105,8 @@ public class Player {
         setMoney(this.money - grid.getPrice());
     }
     
+    public void buyHouse(PropertyGrid grid) {
+    	this.money -= grid.getHousePrice();
+    	grid.addHouse();
+    }
 }
