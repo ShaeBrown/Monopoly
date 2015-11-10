@@ -49,6 +49,7 @@ public class Game {
     public static DiceController dice_controller; 
     public static PlayerController player_controller;
     public static GridController grid_controller;
+    public static Player current_player;
     // should these be static/global?? they are used alot in different classes
     // please change if this is bad design.
     
@@ -289,7 +290,7 @@ public class Game {
     /*Roll dices for a player, and move the palyer forward that many spots*/
     public int playerRollDiceAndMove(Player player)
     {
-                
+        current_player = player;
         player_controller.updateMenu(player); 
         System.out.println("It is now " + player.getName() + "'s turn to roll");
         // this sets the side menu to show the current player's information

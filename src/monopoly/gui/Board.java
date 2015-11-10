@@ -195,6 +195,7 @@ public class Board extends javax.swing.JFrame {
 
         south.setBackground(java.awt.Color.darkGray);
         south.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        south.setName("south"); // NOI18N
         south.setPreferredSize(new java.awt.Dimension(1020, 150));
         south.setLayout(new java.awt.GridBagLayout());
 
@@ -312,6 +313,7 @@ public class Board extends javax.swing.JFrame {
         west.setBackground(java.awt.Color.darkGray);
         west.setBorder(null);
         west.setMaximumSize(new java.awt.Dimension(175, 870));
+        west.setName("west"); // NOI18N
         west.setPreferredSize(new java.awt.Dimension(150, 720));
         west.setLayout(new java.awt.GridBagLayout());
 
@@ -405,6 +407,7 @@ public class Board extends javax.swing.JFrame {
         Board.add(west, java.awt.BorderLayout.WEST);
 
         east.setBackground(java.awt.Color.darkGray);
+        east.setName("east"); // NOI18N
         east.setPreferredSize(new java.awt.Dimension(150, 720));
         east.setRequestFocusEnabled(false);
         east.setLayout(new java.awt.GridBagLayout());
@@ -480,6 +483,7 @@ public class Board extends javax.swing.JFrame {
 
         Board.add(east, java.awt.BorderLayout.LINE_END);
 
+        center.setName("center"); // NOI18N
         center.setLayout(new java.awt.CardLayout());
 
         centerBoard.setIcon(new javax.swing.ImageIcon(getClass().getResource("/monopoly/gui/img/grid/monopoly.jpg"))); // NOI18N
@@ -489,6 +493,7 @@ public class Board extends javax.swing.JFrame {
 
         north.setBackground(java.awt.Color.darkGray);
         north.setBorder(null);
+        north.setName("north"); // NOI18N
         north.setPreferredSize(new java.awt.Dimension(1020, 150));
         north.setLayout(new java.awt.GridBagLayout());
 

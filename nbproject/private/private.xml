@@ -7,15 +7,14 @@
             <file>file:/home/shaebrown/Documents/Monopoly/src/monopoly/GenericGrid.java</file>
             <file>file:/home/shaebrown/Documents/Monopoly/src/monopoly/Game.java</file>
             <file>file:/home/shaebrown/Documents/Monopoly/src/monopoly/gui/GridController.java</file>
-            <file>file:/home/shaebrown/Documents/Monopoly/src/monopoly/Dice.java</file>
             <file>file:/home/shaebrown/Documents/Monopoly/src/monopoly/gui/Board.java</file>
+            <file>file:/home/shaebrown/Documents/Monopoly/src/monopoly/CardGrid.java</file>
             <file>file:/home/shaebrown/Documents/Monopoly/src/monopoly/RailroadGrid.java</file>
-            <file>file:/home/shaebrown/Documents/Monopoly/src/monopoly/Player.java</file>
-            <file>file:/home/shaebrown/Documents/Monopoly/src/monopoly/TaxGrid.java</file>
+            <file>file:/home/shaebrown/Documents/Monopoly/src/monopoly/UtilityGrid.java</file>
             <file>file:/home/shaebrown/Documents/Monopoly/src/monopoly/Grid.java</file>
             <file>file:/home/shaebrown/Documents/Monopoly/src/monopoly/gui/DiceController.java</file>
-            <file>file:/home/shaebrown/Documents/Monopoly/src/monopoly/BuyableGrid.java</file>
             <file>file:/home/shaebrown/Documents/Monopoly/src/monopoly/gui/PlayerController.java</file>
+            <file>file:/home/shaebrown/Documents/Monopoly/src/monopoly/BuyableGrid.java</file>
         </group>
     </open-files>
 </project-private>

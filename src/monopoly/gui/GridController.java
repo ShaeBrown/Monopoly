@@ -37,18 +37,27 @@ public final class GridController implements ActionListener {
     
     final int PANELSIZE = 1020;
     Grid[] grid_object;
-    HashMap<JButton,Grid> grid_buttons;
+    HashMap<JButton, Grid> button_to_grid;
+    HashMap<Grid,JButton> grid_to_button;
+    HashMap<Grid, LinkedList<JButton>> grid_houses;
     HashMap<BuyableGrid, ImageIcon> property_cards;
     JButton[] grid_button;
-    JPanel objects;
+    JPanel object_layer;
+    ImageIcon house_icon,hotel_icon;
     
     
     public GridController(Grid[] g) {
         this.grid_object = g;
-        this.grid_buttons = new HashMap();
+        this.grid_to_button = new HashMap();
+        this.button_to_grid = new HashMap();
         this.property_cards = new HashMap();
+        this.grid_houses = new HashMap();
         setPropertyCards();
-        assert(grid_button.length == grid_object.length);
+        this.house_icon = new ImageIcon(getClass().getResource("/monopoly/gui/img/tokens/house.png"));
+        for (Grid grid : g) {
+            grid_houses.put(grid, new LinkedList<>());
+        }
+
     }
     
     /* Get a grid object from its number */
@@ -63,14 +72,15 @@ public final class GridController implements ActionListener {
     
     /* This class needs the layer where objects lay, in order to move players */
     public void addObjectLayer(JPanel objects) {
-        this.objects = objects;
+        this.object_layer = objects;
     }
     
     /* This class needs the array of buttons from the board, maps them to the grid objects */
     public void addButtons(JButton[] buttons) {
         this.grid_button = buttons;
         for (int i = 0 ; i < buttons.length; i++) {
-            grid_buttons.put(buttons[i],grid_object[i]);
+            button_to_grid.put(buttons[i],grid_object[i]);
+            grid_to_button.put(grid_object[i],buttons[i]);
         }
     }
     
@@ -79,7 +89,7 @@ public final class GridController implements ActionListener {
     public void actionPerformed(ActionEvent event) {
         JButton pressed = (JButton) event.getSource();
         
-        Grid grid = grid_buttons.get(pressed);
+        Grid grid = button_to_grid.get(pressed);
         
         if (grid instanceof BuyableGrid) {
             changeProperty((BuyableGrid) grid);
@@ -89,6 +99,8 @@ public final class GridController implements ActionListener {
     /* Takes a buyable grid, retrieves its property card and displays it
     in the player menu using the player controller */
     public void changeProperty(BuyableGrid grid) {
+        Game.player_controller.clearHouseIcons();
+        Game.player_controller.clearBuyButton();
         ImageIcon i = getPropertyCard(grid);
         String owner;
         if (grid.isBuyable()) {
@@ -98,8 +110,17 @@ public final class GridController implements ActionListener {
             owner = "Owner: " + grid.getOwner().getName();
             
         }
-        if (grid instanceof PropertyGrid)
-        	displayBuyHouseButton((PropertyGrid) grid);
+        if (grid instanceof PropertyGrid) {
+            
+            PropertyGrid property = (PropertyGrid) grid;
+            if (property.getOwner() == Game.current_player) {
+                displayBuyHouseButton(property);
+            }
+            if (property.getCurrentHouses() > 0) {
+                Game.player_controller.setHouseIcons(property.getCurrentHouses());
+            }
+            
+        }
 
         Game.player_controller.setProperty(i,owner);
     }
@@ -125,12 +146,63 @@ public final class GridController implements ActionListener {
         return grid_object[i].getOccupants();
     }
     
+    /*This is used to add a house icon on the corresponding grid on the GUI,
+    
+    */
+    public void addHouseIcon(PropertyGrid grid) {
+        
+        JButton button = grid_to_button.get(grid);
+        boolean vertical = button.getWidth() < button.getHeight();
+        Point corner = SwingUtilities.convertPoint(button.getParent(), button.getLocation(), object_layer);
+        switch (button.getParent().getName()) {
+            case "north":
+                corner.setLocation(corner.getX(), corner.getY() + button.getHeight() - house_icon.getIconHeight());
+                break;
+            case "west":
+                corner.setLocation(corner.getX() + button.getWidth() - house_icon.getIconWidth(), corner.getY());
+                break;
+        }
+        
+        LinkedList<JButton> house_buttons = grid_houses.get(grid);
+        
+
+        double x = corner.getX();
+        double y = corner.getY(); 
+        if (house_buttons.size() == 0) {
+        }
+        else {
+            JButton last_house = house_buttons.getLast();
+            x = last_house.getX();
+            y = last_house.getY();
+            int width = house_icon.getIconWidth();
+            int height = house_icon.getIconHeight();
+            if (vertical) {
+                x += width;
+            }
+            else {
+                y += height;
+            }
+        }
+        JButton house = new JButton();
+        house.setIcon(house_icon);
+        house.setLocation((int)x,(int)y);
+        house.setBounds((int)x,(int)y,house_icon.getIconWidth(),house_icon.getIconHeight());
+        house.setBorderPainted(false);
+        house.setContentAreaFilled(false);
+        house.setFocusPainted(false); 
+        house.setOpaque(false);
+        object_layer.add(house);
+        house_buttons.add(house);  
+        house.setVisible(true);
+        object_layer.repaint();
+    }
+    
     /* Given the grid number, return a point where the player must be placed on the
     object layer, if there is one player on it
     */
     public Point setPlayerPosition(int i) {
         JButton grid = grid_button[i];
-        Point point = SwingUtilities.convertPoint(grid.getParent(),grid.getLocation(),objects);
+        Point point = SwingUtilities.convertPoint(grid.getParent(),grid.getLocation(),object_layer);
         return point;
     }
     
@@ -143,11 +215,11 @@ public final class GridController implements ActionListener {
         LinkedList<Player> occupants = getOccupants(i);
         int height = grid.getHeight();
         int width = grid.getWidth();
-        Point grid_corner = SwingUtilities.convertPoint(grid.getParent(),grid.getLocation(),objects);
+        Point grid_corner = SwingUtilities.convertPoint(grid.getParent(),grid.getLocation(),object_layer);
         Point offset = new Point(grid.getX() + width/(occupants.size()+1), grid.getY() + height/(occupants.size())+1);
-        offset = SwingUtilities.convertPoint(grid.getParent(), offset, objects);
+        offset = SwingUtilities.convertPoint(grid.getParent(), offset, object_layer);
         offset.setLocation(Math.abs(grid_corner.x - offset.x), Math.abs(grid_corner.y - offset.y));
-        Point right_corner = SwingUtilities.convertPoint(grid.getParent(), grid.getX() + width, grid.getY() + height, objects);
+        Point right_corner = SwingUtilities.convertPoint(grid.getParent(), grid.getX() + width, grid.getY() + height, object_layer);
         int x = grid_corner.x;
         int y = grid_corner.y;
         if (occupants.size() > 3) { //if there are more than 3 on a grid move first player a little bit upwards.

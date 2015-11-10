@@ -6,6 +6,7 @@
 package monopoly.gui;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -70,9 +71,9 @@ public final class PlayerController implements ListSelectionListener {
         @Override
         public void run()
         {
+            list.removeAllElements();
             for (BuyableGrid g : p.getProperties()) 
             {
-                list.removeAllElements();
                 list.addElement(g);
             }
         }
@@ -80,6 +81,7 @@ public final class PlayerController implements ListSelectionListener {
        
        clearPropertyInfo();
        clearBuyButton();
+       clearHouseIcons();
     }
     
     /* Initializes all the menu compenents, and adds them to a hashtable, where
@@ -118,6 +120,11 @@ public final class PlayerController implements ListSelectionListener {
         property_info.setVerticalTextPosition(JLabel.TOP);
         
         player_menu.add(property_info);
+      
+        JPanel house_icons = new JPanel(new FlowLayout());
+        house_icons.setOpaque(false);
+        
+        player_menu.add(house_icons);
         
         JButton buyHouseButton = new JButton();
         buyHouseButton.setBounds(920,920,100,50);
@@ -127,6 +134,7 @@ public final class PlayerController implements ListSelectionListener {
         buyHouseButton.setOpaque(false);  
         buyHouseButton.setText("Buy House");
         buyHouseButton.addActionListener(new ActionListener() {
+                @Override
         	public void actionPerformed(ActionEvent e) {
         		buyHouse();
 	        }
@@ -134,11 +142,14 @@ public final class PlayerController implements ListSelectionListener {
         
         player_menu.add(buyHouseButton);
         
+        
+        
         menu_components.put("Money", Money);
         menu_components.put("Name", PlayerName);
         menu_components.put("Property", properties);
         menu_components.put("PropertyInfo", property_info);
-        menu_components.put("BuyHouse", buyHouseButton);     
+        menu_components.put("BuyHouse", buyHouseButton);    
+        menu_components.put("HouseIcons", house_icons);
     }
     
     // Displays the buy house button
@@ -151,6 +162,7 @@ public final class PlayerController implements ListSelectionListener {
 //TODO(nick): Implement logic that shows buy hotel when the property has 4 hotels
     /* Creates a dialogue asking if the player wants to buy a house */
     public void buyHouse() {
+        
     	PropertyGrid g = selectedProperty;
     	Player p = g.getOwner();    	
     	
@@ -174,6 +186,8 @@ public final class PlayerController implements ListSelectionListener {
         } else {
         	if (g.getCurrentHouses() < g.MAX_NUMBER_HOUSES) {
         		p.buyHouse(g);
+                        Game.grid_controller.addHouseIcon(g);
+                        Game.grid_controller.changeProperty(g);
         	}
         }
       }
@@ -186,6 +200,24 @@ public final class PlayerController implements ListSelectionListener {
         JLabel property_info = (JLabel) menu_components.get("PropertyInfo");
         property_info.setIcon(i);
         property_info.setText(name);
+    }
+    
+    /* The number of houses to display under the property card */
+    public void setHouseIcons(int houses) {
+        JPanel panel = (JPanel) menu_components.get("HouseIcons");
+        for (int i = 0; i < houses; i++) {
+            JButton house = new JButton();
+            ImageIcon house_icon = Game.grid_controller.house_icon;
+            house.setIcon(house_icon);
+            house.setBorderPainted(false);
+            house.setContentAreaFilled(false);
+            house.setFocusPainted(false); 
+            house.setOpaque(false);
+            house.setVisible(true);
+            panel.add(house);
+        }
+        panel.repaint();
+        panel.revalidate();
     }
     
     /* Creates a dialogue asking if the player wants to buy the Buyablegrid they
@@ -240,8 +272,7 @@ public final class PlayerController implements ListSelectionListener {
     Initalizes all players on Go when the game starts
     */
     public void initPlayers(JPanel object_layer) {
-        /* netbeans told me to change my for loop to this? */
-        player_list.stream().forEach((p) -> {
+        for (Player p : player_list) {
             JButton button = new JButton();
             button.setBounds(920,920,75,75);
             button.setIcon(getPlayerToken(p));
@@ -250,9 +281,9 @@ public final class PlayerController implements ListSelectionListener {
             button.setContentAreaFilled(false);
             button.setFocusPainted(false); 
             button.setOpaque(false);
-            object_layer.add(button, 1);
+            object_layer.add(button);
             player_buttons.put(p, button);
-        });
+        }
         updatePositions(new LinkedList(player_list));
     }
     
@@ -268,14 +299,13 @@ public final class PlayerController implements ListSelectionListener {
     */
     @Override
     public void valueChanged(ListSelectionEvent e) {
-        
         JList list = (JList) e.getSource();
         if (list.getSelectedIndex() == -1) { //nothing is selected, clear menu
             clearPropertyInfo();
             clearBuyButton();
+            clearHouseIcons();
         }
         else {
-            assert(list.getSelectedValue() instanceof BuyableGrid);
             Game.grid_controller.changeProperty((BuyableGrid)list.getSelectedValue());
         }
     }
@@ -291,5 +321,10 @@ public final class PlayerController implements ListSelectionListener {
     public void clearBuyButton() {
     	JButton button = (JButton) menu_components.get("BuyHouse");
       button.setVisible(false);	
+    }
+    
+    public void clearHouseIcons() {
+        JPanel houses = (JPanel) menu_components.get("HouseIcons");
+        houses.removeAll();
     }
 }
