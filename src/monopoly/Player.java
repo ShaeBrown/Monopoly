@@ -8,9 +8,12 @@ public class Player {
     
     String name;            //What's the player's name?
     PlayerToken token;      //Which game token did the player pick?
-    int money;              //How much money does the player have?
-    int location;           //Which grid is the player on right now?
-    int jail_free_cards;    //How many get-out-of-jail-free cards does this player have?
+    /* These are private because when they are changed, the player controller must change the menu
+    and the tokens on the board as well
+    */
+    private int money;              //How much money does the player have?
+    private int location;           //Which grid is the player on right now?
+    private int jail_free_cards;    //How many get-out-of-jail-free cards does this player have?
     boolean in_jail;       //Is player in jail?
     LinkedList<BuyableGrid> property;
     
@@ -53,11 +56,18 @@ public class Player {
     public void setMoney(int money)
     {
         this.money = money;
+        updateStats();
     }
     
     public void addMoney(int money)
     {
         this.money += money;
+        updateStats();
+    }
+    
+    public void removeMoney(int money) {
+        this.money -= money;
+        updateStats();
     }
     
     public int getLocation()
@@ -72,6 +82,7 @@ public class Player {
         Game.board_grids[this.location].removeOccupant();
         Game.board_grids[location].addOccupant(this);
         this.location = location;
+        Game.player_controller.updatePosition(this);
     }
     
     public int getNumberOfJailFreeCards()
@@ -82,6 +93,12 @@ public class Player {
     public void setNumberOfJailFreeCards(int jail_free_cards)
     {
         this.jail_free_cards = jail_free_cards;
+        updateStats();
+    }
+    
+    public void addJailFreeCard() {
+        this.jail_free_cards ++;
+        updateStats();
     }
     
     public boolean isInJail()
@@ -106,7 +123,13 @@ public class Player {
     }
     
     public void buyHouse(PropertyGrid grid) {
-    	this.money -= grid.getHousePrice();
+    	removeMoney(grid.getHousePrice());
     	grid.addHouse();
+    }
+    
+    /* Changes the menu if the player gained/lost money or get out of jail free card */
+    public void updateStats() {
+        if (this == Game.current_player)
+            Game.player_controller.updateStats(this);
     }
 }

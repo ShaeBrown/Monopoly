@@ -19,9 +19,11 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import monopoly.BuyableGrid;
+import monopoly.CardGrid.CardType;
 import monopoly.Game;
 import monopoly.Player;
 import monopoly.PropertyGrid;
+import monopoly.EventCard.ActionType;
 
 /** 
  *  PlayerController
@@ -29,6 +31,7 @@ import monopoly.PropertyGrid;
  *      - Initializes and updates player menu
  *      - Sets the property card in the menu and acts as a listener for the list of properties on the menu.
  *      - Opens a dialogue to buy properties
+ *      - Controls button to buy houses/hotels
  * 
  */
 public final class PlayerController implements ListSelectionListener {
@@ -37,6 +40,7 @@ public final class PlayerController implements ListSelectionListener {
     private final HashMap<String, Component> menu_components;
     private final List<Player> player_list;
     private JPanel player_menu;
+    ImageIcon moneybags; // image for the chance/community cards.
     
     // The current PropertyGrid that is being displayed (if no property displayed then contains the last property displayed)
     private PropertyGrid selectedProperty;		
@@ -45,6 +49,7 @@ public final class PlayerController implements ListSelectionListener {
         this.player_list = players;
         player_buttons = new HashMap<>();
         menu_components = new HashMap<>();
+        this.moneybags = new ImageIcon(getClass().getResource("/monopoly/gui/img/moneybags.png"));
     }
     
     public void updateMenu(Player p) {
@@ -53,8 +58,7 @@ public final class PlayerController implements ListSelectionListener {
        name.setText(p.getName());
        name.setIcon(player_buttons.get(p).getIcon());
        
-       JLabel money = (JLabel) menu_components.get("Money");
-       money.setText("<html>$" + p.getMoney() + "<br>Get out of Jail Free cards: " + p.getNumberOfJailFreeCards() + "</html>");
+       updateStats(p);
        
        JList properties = (JList) menu_components.get("Property");
        properties.clearSelection();
@@ -82,6 +86,11 @@ public final class PlayerController implements ListSelectionListener {
        clearPropertyInfo();
        clearBuyButton();
        clearHouseIcons();
+    }
+    
+    public void updateStats(Player p) {
+       JLabel money = (JLabel) menu_components.get("Money");
+       money.setText("<html>$" + p.getMoney() + "<br>Get out of Jail Free cards: " + p.getNumberOfJailFreeCards() + "</html>");
     }
     
     /* Initializes all the menu compenents, and adds them to a hashtable, where
@@ -239,6 +248,14 @@ public final class PlayerController implements ListSelectionListener {
         else {
           //auction or nothing?
         }
+    }
+    
+    /* Displays the drawn card, the type is used for the dialog title, and the string is the message */
+    public void displayCard(CardType type, String card) {
+        if (type == CardType.CHANCECARD) 
+            JOptionPane.showMessageDialog(player_menu, card, "CHANCE", JOptionPane.PLAIN_MESSAGE, moneybags);
+        else
+            JOptionPane.showMessageDialog(player_menu, card, "COMMUNITY CHEST", JOptionPane.PLAIN_MESSAGE, moneybags);
     }
 
     /* Sets player on the GUI to their location */

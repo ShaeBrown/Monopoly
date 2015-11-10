@@ -29,7 +29,7 @@ import monopoly.Game.GRIDNUM;
 
 public class EventCard {
     
-    enum ActionType {GAINMONEY, LOSEMONEY, GAINMONEY_FROMEVERYONE, LOSEMONEY_TOEVERYONE, LOSEMONEYPROPERTY, MOVETO, MOVETO_CLOSEST, GOBACK, GOTOJAIL, JAILFREECARD, HOUSEREPAIR}
+    public enum ActionType {GAINMONEY, LOSEMONEY, GAINMONEY_FROMEVERYONE, LOSEMONEY_TOEVERYONE, LOSEMONEYPROPERTY, MOVETO, MOVETO_CLOSEST, GOBACK, GOTOJAIL, JAILFREECARD, HOUSEREPAIR}
     
     ActionType action_type;                 //What kind of action will be performed by this card?
     String title, desc;                     //Title and description of the card
@@ -103,7 +103,7 @@ public class EventCard {
     /*insert more methods below*/
     
     /*Call the correct effect function depending on the action type of this card*/
-    public void useCard(List<Player> playerList, Player player) {
+    public EventCard useCard(List<Player> playerList, Player player) {
         switch(this.action_type)
         {
             /*These cases are left "empty" on purpose. The code under "case GOBACK" will run if action_type is ANY of these cases*/
@@ -144,27 +144,28 @@ public class EventCard {
                 System.out.println("Unexpected error?!");
                 break;
         }
+        return this;
     }
     
     /*What effect does a GAINMONEY card have on a player?*/
     private void gainmoney_effect(Player player) {
-        player.money += this.amount;
+        player.addMoney(this.amount);
     }
     
     /*What effect does a LOSEMONEY card have on a player?*/
     private void losemoney_effect(Player player) {
-        player.money -= this.amount;
+        player.removeMoney(this.amount);
     }
     
     /*What effect does a GAINMONEY_FROMEVERYONE card have on a player?*/
     private void gaminmoney_fromeveryone_effect(List<Player> playerList, Player player) {
     	for (Player p : playerList) {
-    		if (p.money < this.amount) {
+    		if (p.getMoney() < this.amount) {
 // TODO: Remove player p because they're bankrupt
-	      	player.money += p.money;
+	      	player.addMoney(p.getMoney());
     		} else {		
-	    		p.money -= this.amount;
-	      	player.money += this.amount;
+	    		p.removeMoney(this.amount);
+	      	player.addMoney(this.amount);
     		}
     	}    	
     }
@@ -173,17 +174,17 @@ public class EventCard {
     private void losemoney_toeveryone_effect(List<Player> playerList, Player player) {
     	int numPlayers = playerList.size();
     	
-    	if (player.money < (this.amount * numPlayers)) {
+    	if (player.getMoney() < (this.amount * numPlayers)) {
 // TODO: Remove player because they're bankrupt   		
     		// Distribute all the money the player has left
-    		int leftover = player.money / numPlayers;
+    		int leftover = player.getMoney() / numPlayers;
 	    	for (Player p : playerList) {
-	    		p.money += leftover;
+	    		p.addMoney(leftover);
 	    	}  
     	} else {  	
 	    	for (Player p : playerList) {
-	    		p.money += this.amount;
-	    		player.money -= this.amount;
+	    		p.addMoney(this.amount);
+	    		player.removeMoney(this.amount);
 	    	}  
     	}
     }
@@ -193,10 +194,12 @@ public class EventCard {
     }
     
     /*What effect does a MOVETO card have on a player?*/
+    // is this supposed to be relative or absolute??
+    //the advance to GO card moves the player 0 spaces.
     private void moveto_effect(Player player) {
     	// Move player and if they pass go they collect $200
     	int location = player.getLocation() + this.amount;
-      if(amount > (Game.BOARDSIZE - 1)) {
+      if(location > (Game.BOARDSIZE - 1)) {
       	location = location - (Game.BOARDSIZE - 1);
         player.addMoney(200);
       }    
@@ -233,7 +236,7 @@ public class EventCard {
     
     /*What effect does a JAILFREECARD card have on a player?*/
     private void jailfreecard_effect(Player player) {
-        player.jail_free_cards++;
+        player.addJailFreeCard();
     }
     
     /*What effect does a HOUSEREPAIR card have on a player?*/

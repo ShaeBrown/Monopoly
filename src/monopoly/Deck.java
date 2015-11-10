@@ -117,7 +117,7 @@ public class Deck {
 	}
 	
 	// Draw the top card off the chance stack.
-	public void drawChanceCard(Player p) {
+	public EventCard drawChanceCard(Player p) {
 		System.out.println("Drawing chance card.");
 		
 		if (chanceStack.size() <= 0) {
@@ -127,11 +127,13 @@ public class Deck {
 		EventCard c = chanceStack.pop();
 		
 		if (c != null)
-			c.useCard(playerList, p);
+			return c.useCard(playerList, p);
+                
+                return null;
 	}
 	
 	// Draw the top card off the community chest stack.
-	public void drawCommunityChestCard(Player p) {
+	public EventCard drawCommunityChestCard(Player p) {
 		System.out.println("Drawing community chest card.");
 		
 		if (communityChestStack.size() <= 0) {
@@ -141,6 +143,8 @@ public class Deck {
 		EventCard c = communityChestStack.pop();
 		
 		if (c != null)
-			c.useCard(playerList, p);
+			return c.useCard(playerList, p);
+                
+                return null;
 	}
 }

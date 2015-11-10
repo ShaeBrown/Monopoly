@@ -41,10 +41,10 @@ public class Game {
     //enum GameState {LOBBY, PLAYING, ENDED}      //do we really need this?
     
     static Grid[] board_grids;                 //Array of Grid to represent a gameboard
-    Deck deck;													//Two stacks representing chance and community chest decks.
     List<Player> player_list;           //ArrayList of Player to represent all the players of the game.
     Board board;
     
+    public static Deck deck; //Two stacks representing chance and community chest decks.
     public static Dice dice;
     public static DiceController dice_controller; 
     public static PlayerController player_controller;
@@ -326,7 +326,6 @@ public class Game {
         
         player.setLocation(new_location);
         
-        Game.player_controller.updatePosition(player);
         //this moves the player to it's current location on the GUI
         
         Grid landing_grid = board_grids[player.getLocation()];

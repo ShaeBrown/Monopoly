@@ -25,15 +25,16 @@ public class CardGrid extends Grid
     @Override
     public void landingFunction(Player player)
     {
-        //here a card will be drawn from the deck and it's action will be performed on the player
+        EventCard card;
         if (type == CardType.CHANCECARD)
         {
-            
+            card = Game.deck.drawChanceCard(player);
         }
         else
         {
-            
+            card = Game.deck.drawCommunityChestCard(player);
         }
+        Game.player_controller.displayCard(type, card.title + "\n" + card.desc);
     }
 
 }
