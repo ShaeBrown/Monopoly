@@ -14,14 +14,21 @@ public class UtilityGrid extends BuyableGrid
     @Override
     public int getRentPrice()
     {
-        int diceroll = Game.dice.getRoll();
+        int diceroll = Game.dice.getRoll();   
+        
+        if (getOwner().ownsAllType(this))
+            return 10 * diceroll;
+        else
+            return 4 * diceroll;
         /*
         ALGORITHM DESCRIPTION:
             Check if both Electric Company AND Water Works are owned. 
             If yes, return 10*diceroll
             If not, return 4*diceroll
         */
-        return 0;
+        
+        
+        
     }
     
     

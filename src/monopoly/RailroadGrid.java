@@ -23,7 +23,7 @@ public class RailroadGrid extends BuyableGrid
             Then return property_rent_base * 2^Count
         */
 
-        return 0;
+        return property_rent_base * 2^(getOwner().getNumOfOwnedType(this)-1);
     }
     
 }

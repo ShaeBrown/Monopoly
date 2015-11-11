@@ -10,7 +10,15 @@ package monopoly;
  */
 public abstract class BuyableGrid extends Grid
 {
-    public enum PropertyGroup {RED, YELLOW, GREEN, BLUE, BROWN, LIGHTBLUE, MAGENTA, ORANGE, UTILITY, RAILROAD}
+    public enum PropertyGroup {
+        RED(3), YELLOW(3), GREEN(3), BLUE(2), BROWN(2), LIGHTBLUE(3), MAGENTA(3), ORANGE(3), UTILITY(2), RAILROAD(4);
+        final int MAX; //the number of the type in the game, used to check if player has all of the one type
+        PropertyGroup(int max) {
+            this.MAX = max;
+        }
+    
+    }
+    
     
     protected Player owner;                   //Which player owns this?
     protected PropertyGroup property_group;   //Which property group does this belongs to?
@@ -92,8 +100,9 @@ public abstract class BuyableGrid extends Grid
             int rent = getRentPrice();
             if (landed.getMoney() >= rent)
             {
-                landed.setMoney(landed.getMoney() -rent);
-                getOwner().setMoney(getOwner().getMoney() + rent);
+                landed.removeMoney(rent);
+                getOwner().addMoney(rent);
+                Game.player_controller.displayRent(getOwner(), landed, this);
             }
             else
             {

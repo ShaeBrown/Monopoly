@@ -28,6 +28,7 @@ import monopoly.PropertyGrid;
     - Maps each grid to their property card
     - Helps player controller set players location on screen
     - Displays property cards when the grid's button is clicked
+    - must add buttons and the object layer before use
     
     The communication between the player controller and grid controller is kinda
     messy?? Can we improve this??
@@ -128,7 +129,8 @@ public final class GridController implements ActionListener {
     /* Display the buy house button if the owner has all the properties in the monopoly */
     public void displayBuyHouseButton(PropertyGrid grid) {
 //TODO(nick): Implement logic that only displays the button when necessary
-    	Game.player_controller.setBuyHouse(grid);
+        if (Game.current_player.ownsAllType(grid)) 
+            Game.player_controller.setBuyHouse(grid);
     }
     
     /* Creates ImageIcons for the property cards and create a mapping from Property to property card */
@@ -141,7 +143,7 @@ public final class GridController implements ActionListener {
         }
     }
     
-    /* Given the grid's number, return a list on players on it */
+    /* Given the grid's number, return a list of players on it */
     public LinkedList<Player> getOccupants(int i) {
         return grid_object[i].getOccupants();
     }
@@ -154,20 +156,31 @@ public final class GridController implements ActionListener {
         JButton button = grid_to_button.get(grid);
         boolean vertical = button.getWidth() < button.getHeight();
         Point corner = SwingUtilities.convertPoint(button.getParent(), button.getLocation(), object_layer);
+        double x = 0;
+        double y = 0;
         switch (button.getParent().getName()) {
             case "north":
                 corner.setLocation(corner.getX(), corner.getY() + button.getHeight() - house_icon.getIconHeight());
+                x = corner.getX() - 7;
+                y = corner.getY();
                 break;
             case "west":
                 corner.setLocation(corner.getX() + button.getWidth() - house_icon.getIconWidth(), corner.getY());
+                x = corner.getX();
+                y = corner.getY() - 7;
+                break;
+            case "south":
+                x = corner.getX() - 7;
+                y = corner.getY();
+                break;
+            case "east":
+                x = corner.getX();
+                y = corner.getY() - 7;
                 break;
         }
         
         LinkedList<JButton> house_buttons = grid_houses.get(grid);
         
-
-        double x = corner.getX();
-        double y = corner.getY(); 
         if (house_buttons.size() == 0) {
         }
         else {
@@ -177,10 +190,10 @@ public final class GridController implements ActionListener {
             int width = house_icon.getIconWidth();
             int height = house_icon.getIconHeight();
             if (vertical) {
-                x += width;
+                x += width - 7; //allow a overlap of 7 pixels
             }
             else {
-                y += height;
+                y += height - 3; //allow overlap of 3 pixels, when horizontal house icon have more room
             }
         }
         JButton house = new JButton();
@@ -209,6 +222,7 @@ public final class GridController implements ActionListener {
     /* For when there are more than one player on the same grid.
     Given the grid number, and an array of the player's buttons
     set each players position on the screen.
+    THIS NEEDS IMPROVEMENT BUT WORKS FOR NOW
     */
     public void setPlayersPositions(JButton[] buttons, int i) {
         JButton grid = grid_button[i];

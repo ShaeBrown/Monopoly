@@ -7,6 +7,7 @@ package monopoly.gui;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Insets;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -23,7 +24,6 @@ import monopoly.CardGrid.CardType;
 import monopoly.Game;
 import monopoly.Player;
 import monopoly.PropertyGrid;
-import monopoly.EventCard.ActionType;
 
 /** 
  *  PlayerController
@@ -41,6 +41,7 @@ public final class PlayerController implements ListSelectionListener {
     private final List<Player> player_list;
     private JPanel player_menu;
     ImageIcon moneybags; // image for the chance/community cards.
+    ImageIcon arrow;
     
     // The current PropertyGrid that is being displayed (if no property displayed then contains the last property displayed)
     private PropertyGrid selectedProperty;		
@@ -50,6 +51,7 @@ public final class PlayerController implements ListSelectionListener {
         player_buttons = new HashMap<>();
         menu_components = new HashMap<>();
         this.moneybags = new ImageIcon(getClass().getResource("/monopoly/gui/img/moneybags.png"));
+        this.arrow = new ImageIcon(getClass().getResource("/monopoly/gui/img/arrow.png"));
     }
     
     public void updateMenu(Player p) {
@@ -132,15 +134,18 @@ public final class PlayerController implements ListSelectionListener {
       
         JPanel house_icons = new JPanel(new FlowLayout());
         house_icons.setOpaque(false);
+        house_icons.setVisible(false);
         
         player_menu.add(house_icons);
         
         JButton buyHouseButton = new JButton();
-        buyHouseButton.setBounds(920,920,100,50);
-        buyHouseButton.setPreferredSize(new java.awt.Dimension(100,50));
+        buyHouseButton.setBounds(920,920,100,40);
+        buyHouseButton.setPreferredSize(new java.awt.Dimension(100,40));
         buyHouseButton.setContentAreaFilled(false);
         buyHouseButton.setFocusPainted(false); 
         buyHouseButton.setOpaque(false);  
+        buyHouseButton.setFont(new java.awt.Font("Ubuntu", 1, 15));
+        buyHouseButton.setMargin(new Insets(3, 3, 3, 3));
         buyHouseButton.setText("Buy House");
         buyHouseButton.addActionListener(new ActionListener() {
                 @Override
@@ -214,6 +219,7 @@ public final class PlayerController implements ListSelectionListener {
     /* The number of houses to display under the property card */
     public void setHouseIcons(int houses) {
         JPanel panel = (JPanel) menu_components.get("HouseIcons");
+        panel.setVisible(true);
         for (int i = 0; i < houses; i++) {
             JButton house = new JButton();
             ImageIcon house_icon = Game.grid_controller.house_icon;
@@ -256,6 +262,16 @@ public final class PlayerController implements ListSelectionListener {
             JOptionPane.showMessageDialog(player_menu, card, "CHANCE", JOptionPane.PLAIN_MESSAGE, moneybags);
         else
             JOptionPane.showMessageDialog(player_menu, card, "COMMUNITY CHEST", JOptionPane.PLAIN_MESSAGE, moneybags);
+    }
+    
+    public void displayRent(Player owner, Player landed, BuyableGrid grid) {
+        JPanel rentImages = new JPanel();
+        rentImages.add(new JLabel(getPlayerToken(landed)));
+        rentImages.add(new JLabel(arrow));
+        rentImages.add(new JLabel(getPlayerToken(owner)));
+        String msg = "You must pay " + owner.getName() + " $" + grid.getRentPrice() + " for landing on " + grid.getName();
+        rentImages.add(new JLabel(msg));
+        JOptionPane.showMessageDialog(null, rentImages, "PAY RENT", JOptionPane.PLAIN_MESSAGE);
     }
 
     /* Sets player on the GUI to their location */
