@@ -9,7 +9,7 @@ import java.util.*;
 import monopoly.BuyableGrid.PropertyGroup;
 import monopoly.CardGrid.CardType;
 import monopoly.GenericGrid.GridType;
-import monopoly.Player.PlayerToken;
+import monopoly.AbstractPlayer.PlayerToken;
 import monopoly.gui.*;
 
 public class Game {
@@ -41,7 +41,7 @@ public class Game {
     //enum GameState {LOBBY, PLAYING, ENDED}      //do we really need this?
     
     static Grid[] board_grids;                 //Array of Grid to represent a gameboard
-    List<Player> player_list;           //ArrayList of Player to represent all the players of the game.
+    List<AbstractPlayer> player_list;           //ArrayList of Player to represent all the players of the game.
     Board board;
     
     public static Deck deck; //Two stacks representing chance and community chest decks.
@@ -49,7 +49,7 @@ public class Game {
     public static DiceController dice_controller; 
     public static PlayerController player_controller;
     public static GridController grid_controller;
-    public static Player current_player;
+    public static AbstractPlayer current_player;
     // should these be static/global?? they are used alot in different classes
     // please change if this is bad design.
     
@@ -122,7 +122,9 @@ public class Game {
     /*Text based implementation of creating a list of players for the game*/
     private void waitForPlayers()
     {
-       
+        HumanPlayer baseHuman = new HumanPlayer();
+        baseHuman.setMoney(1500);
+        baseHuman.setLocation(0);
         boolean DOG = false, BATTLESHIP= false, AUTOMOBILE = false, TOPHAT = false, THIMBLE = false, BOOT = false, WHEELBARROW = false, CAT = false;    //Keeps track of which token has been used
         Scanner scanner = new Scanner(System.in);                           
         
@@ -248,8 +250,11 @@ public class Game {
             }
             
             /*Create the player object using the new data*/
-            player_list.add(new Player(new_player_name, new_player_token));
-            System.out.println("\nNew player created! Name: " +new_player_name +" Token: " +new_player_token.toString() +"\n");
+            AbstractPlayer newPlayer = baseHuman.clone();
+            newPlayer.setName(new_player_name);
+            newPlayer.setToken(new_player_token);
+            player_list.add(newPlayer);
+            System.out.println("\nNew player created! Name: " +newPlayer.getName() +" Token: " +newPlayer.getToken().toString() +"\n");
         }
         
         /*Start the game, we have enough players*/
@@ -270,7 +275,7 @@ public class Game {
         for(;;)
         {
             /*For each Player in player_list, where rolling_player is the current player, it's rolling_playher's turn to roll the dice*/
-            for(Player rolling_player : player_list)
+            for(AbstractPlayer rolling_player : player_list)
             {
                 playerRollDiceAndMove(rolling_player);
                 
@@ -288,7 +293,7 @@ public class Game {
     }
     
     /*Roll dices for a player, and move the palyer forward that many spots*/
-    public int playerRollDiceAndMove(Player player)
+    public int playerRollDiceAndMove(AbstractPlayer player)
     {
         current_player = player;
         player_controller.updateMenu(player); 

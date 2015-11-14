@@ -14,7 +14,7 @@ public class TaxGrid extends Grid
     }
     
     /*Do this when a player lands on this grid*/
-    public void landingFunction(Player landed)
+    public void landingFunction(AbstractPlayer landed)
     {
         
     }

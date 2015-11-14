@@ -23,7 +23,7 @@ public class CardGrid extends Grid
     }
     
     @Override
-    public void landingFunction(Player player)
+    public void landingFunction(AbstractPlayer player)
     {
         EventCard card;
         if (type == CardType.CHANCECARD)

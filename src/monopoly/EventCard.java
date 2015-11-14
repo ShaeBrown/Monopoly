@@ -103,7 +103,7 @@ public class EventCard {
     /*insert more methods below*/
     
     /*Call the correct effect function depending on the action type of this card*/
-    public EventCard useCard(List<Player> playerList, Player player) {
+    public EventCard useCard(List<AbstractPlayer> playerList, AbstractPlayer player) {
         switch(this.action_type)
         {
             /*These cases are left "empty" on purpose. The code under "case GOBACK" will run if action_type is ANY of these cases*/
@@ -148,18 +148,18 @@ public class EventCard {
     }
     
     /*What effect does a GAINMONEY card have on a player?*/
-    private void gainmoney_effect(Player player) {
+    private void gainmoney_effect(AbstractPlayer player) {
         player.addMoney(this.amount);
     }
     
     /*What effect does a LOSEMONEY card have on a player?*/
-    private void losemoney_effect(Player player) {
+    private void losemoney_effect(AbstractPlayer player) {
         player.removeMoney(this.amount);
     }
     
     /*What effect does a GAINMONEY_FROMEVERYONE card have on a player?*/
-    private void gaminmoney_fromeveryone_effect(List<Player> playerList, Player player) {
-    	for (Player p : playerList) {
+    private void gaminmoney_fromeveryone_effect(List<AbstractPlayer> playerList, AbstractPlayer player) {
+    	for (AbstractPlayer p : playerList) {
     		if (p.getMoney() < this.amount) {
 // TODO: Remove player p because they're bankrupt
 	      	player.addMoney(p.getMoney());
@@ -171,32 +171,32 @@ public class EventCard {
     }
     
     /*What effect does a LOSEMONEY_TOEVERYONE card have on a player?*/
-    private void losemoney_toeveryone_effect(List<Player> playerList, Player player) {
+    private void losemoney_toeveryone_effect(List<AbstractPlayer> playerList, AbstractPlayer player) {
     	int numPlayers = playerList.size();
     	
     	if (player.getMoney() < (this.amount * numPlayers)) {
 // TODO: Remove player because they're bankrupt   		
     		// Distribute all the money the player has left
     		int leftover = player.getMoney() / numPlayers;
-	    	for (Player p : playerList) {
+	    	for (AbstractPlayer p : playerList) {
 	    		p.addMoney(leftover);
 	    	}  
     	} else {  	
-	    	for (Player p : playerList) {
+	    	for (AbstractPlayer p : playerList) {
 	    		p.addMoney(this.amount);
 	    		player.removeMoney(this.amount);
 	    	}  
     	}
     }
     
-    private void losemoney_property(Player player) {
+    private void losemoney_property(AbstractPlayer player) {
     	// I don't think this is actually used? Same as HOUSE_REPAIR
     }
     
     /*What effect does a MOVETO card have on a player?*/
     // is this supposed to be relative or absolute??
     //the advance to GO card moves the player 0 spaces.
-    private void moveto_effect(Player player) {
+    private void moveto_effect(AbstractPlayer player) {
     	// Move player and if they pass go they collect $200
     	int location = player.getLocation() + this.amount;
       if(location > (Game.BOARDSIZE - 1)) {
@@ -207,7 +207,7 @@ public class EventCard {
     }
     
     /*What effect does a MOVETO_CLOSEST card have on a player?*/
-    private void moveto_closest_effect(Player player) {
+    private void moveto_closest_effect(AbstractPlayer player) {
 // TODO: Implement this method
         /*
             for each grid in the gameboard
@@ -218,7 +218,7 @@ public class EventCard {
     }
     
     /*What effect does a GOBACK card have on a player?*/
-    private void goback_effect(Player player) {
+    private void goback_effect(AbstractPlayer player) {
     	int location = player.getLocation();
     	location -= 3;
     	if (location >= 0) {
@@ -229,18 +229,18 @@ public class EventCard {
     }
     
     /*What effect does a GOTOJAIL card have on a player?*/
-    private void gotojail_effect(Player player) {
+    private void gotojail_effect(AbstractPlayer player) {
 // TODO: Add jail effect
     	player.setLocation(GRIDNUM.Jail.getNum());
     }
     
     /*What effect does a JAILFREECARD card have on a player?*/
-    private void jailfreecard_effect(Player player) {
+    private void jailfreecard_effect(AbstractPlayer player) {
         player.addJailFreeCard();
     }
     
     /*What effect does a HOUSEREPAIR card have on a player?*/
-    private void houserepair_effect(Player player) {
+    private void houserepair_effect(AbstractPlayer player) {
 // TODO: Implement this method.
     }  
 }

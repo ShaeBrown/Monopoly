@@ -25,9 +25,9 @@ public class Deck {
 	Stack<EventCard> chanceStack = new Stack<EventCard>();
 	Stack<EventCard> communityChestStack = new Stack<EventCard>();
 	
-	List<Player> playerList;						// Reference to the list of players in the game
+	List<AbstractPlayer> playerList;						// Reference to the list of players in the game
 	
-	public Deck(List<Player> playerList) {
+	public Deck(List<AbstractPlayer> playerList) {
 		this.playerList = playerList;
     chance_cards = new EventCard[CHANCECOUNT];
     comchest_cards = new EventCard[COMCHESTCOUNT];
@@ -117,7 +117,7 @@ public class Deck {
 	}
 	
 	// Draw the top card off the chance stack.
-	public EventCard drawChanceCard(Player p) {
+	public EventCard drawChanceCard(AbstractPlayer p) {
 		System.out.println("Drawing chance card.");
 		
 		if (chanceStack.size() <= 0) {
@@ -133,7 +133,7 @@ public class Deck {
 	}
 	
 	// Draw the top card off the community chest stack.
-	public EventCard drawCommunityChestCard(Player p) {
+	public EventCard drawCommunityChestCard(AbstractPlayer p) {
 		System.out.println("Drawing community chest card.");
 		
 		if (communityChestStack.size() <= 0) {

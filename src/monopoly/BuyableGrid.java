@@ -20,7 +20,7 @@ public abstract class BuyableGrid extends Grid
     }
     
     
-    protected Player owner;                   //Which player owns this?
+    protected AbstractPlayer owner;                   //Which player owns this?
     protected PropertyGroup property_group;   //Which property group does this belongs to?
     protected int property_price;             //Cost to buy the initial property  
     protected int property_mortgage;          //Mortgage value of the property
@@ -37,7 +37,7 @@ public abstract class BuyableGrid extends Grid
     public abstract int getRentPrice();
     /*Add more class methods below?*/
     
-    public Player getOwner()
+    public AbstractPlayer getOwner()
     {
         return this.owner;
     }
@@ -52,7 +52,7 @@ public abstract class BuyableGrid extends Grid
         return this.name;
     }
     
-    public void setOwner(Player owner)
+    public void setOwner(AbstractPlayer owner)
     {
         this.owner = owner;
     }
@@ -89,7 +89,7 @@ public abstract class BuyableGrid extends Grid
     
         /*Do this when a player lands on this grid*/
     @Override
-    public void landingFunction(Player landed)
+    public void landingFunction(AbstractPlayer landed)
     {
         if (isBuyable()) {
             // If player has enough money?

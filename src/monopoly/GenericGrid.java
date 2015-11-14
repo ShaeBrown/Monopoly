@@ -25,7 +25,7 @@ public class GenericGrid extends Grid
     }
     
     @Override
-    public void landingFunction(Player player)
+    public void landingFunction(AbstractPlayer player)
     {
         switch(grid_type) {
             case GO:

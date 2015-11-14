@@ -22,7 +22,7 @@ import javax.swing.event.ListSelectionListener;
 import monopoly.BuyableGrid;
 import monopoly.CardGrid.CardType;
 import monopoly.Game;
-import monopoly.Player;
+import monopoly.AbstractPlayer;
 import monopoly.PropertyGrid;
 
 /** 
@@ -36,9 +36,9 @@ import monopoly.PropertyGrid;
  */
 public final class PlayerController implements ListSelectionListener {
     
-    private final HashMap<Player, JButton> player_buttons;
+    private final HashMap<AbstractPlayer, JButton> player_buttons;
     private final HashMap<String, Component> menu_components;
-    private final List<Player> player_list;
+    private final List<AbstractPlayer> player_list;
     private JPanel player_menu;
     ImageIcon moneybags; // image for the chance/community cards.
     ImageIcon arrow;
@@ -46,7 +46,7 @@ public final class PlayerController implements ListSelectionListener {
     // The current PropertyGrid that is being displayed (if no property displayed then contains the last property displayed)
     private PropertyGrid selectedProperty;		
     
-    public PlayerController (List<Player> players, GridController gc) {
+    public PlayerController (List<AbstractPlayer> players, GridController gc) {
         this.player_list = players;
         player_buttons = new HashMap<>();
         menu_components = new HashMap<>();
@@ -54,7 +54,7 @@ public final class PlayerController implements ListSelectionListener {
         this.arrow = new ImageIcon(getClass().getResource("/monopoly/gui/img/arrow.png"));
     }
     
-    public void updateMenu(Player p) {
+    public void updateMenu(AbstractPlayer p) {
        JLabel name = (JLabel) menu_components.get("Name");
        
        name.setText(p.getName());
@@ -90,7 +90,7 @@ public final class PlayerController implements ListSelectionListener {
        clearHouseIcons();
     }
     
-    public void updateStats(Player p) {
+    public void updateStats(AbstractPlayer p) {
        JLabel money = (JLabel) menu_components.get("Money");
        money.setText("<html>$" + p.getMoney() + "<br>Get out of Jail Free cards: " + p.getNumberOfJailFreeCards() + "</html>");
     }
@@ -178,7 +178,7 @@ public final class PlayerController implements ListSelectionListener {
     public void buyHouse() {
         
     	PropertyGrid g = selectedProperty;
-    	Player p = g.getOwner();    	
+    	AbstractPlayer p = g.getOwner();    	
     	
       ImageIcon icon = Game.grid_controller.getPropertyCard(g);
       String msg = "Would you like to buy a house for " + g.getName() + " for $" + g.getHousePrice() + "?\n";
@@ -238,7 +238,7 @@ public final class PlayerController implements ListSelectionListener {
     /* Creates a dialogue asking if the player wants to buy the Buyablegrid they
     just landed on
     */
-    public void buyProperty(Player p) {
+    public void buyProperty(AbstractPlayer p) {
         assert(Game.grid_controller.getGrid(p.getLocation()) instanceof BuyableGrid);
         BuyableGrid g = (BuyableGrid) Game.grid_controller.getGrid(p.getLocation());
         ImageIcon icon = Game.grid_controller.getPropertyCard(g);
@@ -264,7 +264,7 @@ public final class PlayerController implements ListSelectionListener {
             JOptionPane.showMessageDialog(player_menu, card, "COMMUNITY CHEST", JOptionPane.PLAIN_MESSAGE, moneybags);
     }
     
-    public void displayRent(Player owner, Player landed, BuyableGrid grid) {
+    public void displayRent(AbstractPlayer owner, AbstractPlayer landed, BuyableGrid grid) {
         JPanel rentImages = new JPanel();
         rentImages.add(new JLabel(getPlayerToken(landed)));
         rentImages.add(new JLabel(arrow));
@@ -275,10 +275,10 @@ public final class PlayerController implements ListSelectionListener {
     }
 
     /* Sets player on the GUI to their location */
-    public void updatePosition(Player p) {
+    public void updatePosition(AbstractPlayer p) {
         JButton button = player_buttons.get(p);
         int location = p.getLocation();
-        LinkedList<Player> occupants = Game.grid_controller.getOccupants(location);
+        LinkedList<AbstractPlayer> occupants = Game.grid_controller.getOccupants(location);
         if (occupants.size() == 1) {
             Point point = Game.grid_controller.setPlayerPosition(location);
             button.setLocation(point);
@@ -292,7 +292,7 @@ public final class PlayerController implements ListSelectionListener {
     /* Is called when the players new position is shared by other players
        will use the grid controller to properly space players out
     */
-    private void updatePositions(LinkedList<Player> players) {
+    private void updatePositions(LinkedList<AbstractPlayer> players) {
         JButton[] buttons = new JButton[players.size()];
         assert(players.size() == buttons.length);
         for (int i = 0 ; i < buttons.length; i ++) {
@@ -305,7 +305,7 @@ public final class PlayerController implements ListSelectionListener {
     Initalizes all players on Go when the game starts
     */
     public void initPlayers(JPanel object_layer) {
-        for (Player p : player_list) {
+        for (AbstractPlayer p : player_list) {
             JButton button = new JButton();
             button.setBounds(920,920,75,75);
             button.setIcon(getPlayerToken(p));
@@ -323,7 +323,7 @@ public final class PlayerController implements ListSelectionListener {
     /*
         Returns the appropriate ImageIcon for the players token
     */
-    public ImageIcon getPlayerToken(Player p) {
+    public ImageIcon getPlayerToken(AbstractPlayer p) {
         return new ImageIcon(getClass().getResource("/monopoly/gui/img/tokens/"+ p.getToken() +".png"));
     }
 
