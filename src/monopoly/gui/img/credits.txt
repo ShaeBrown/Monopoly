@@ -1,4 +1,8 @@
-"HASBRO and its logo, the MONOPOLY name and logo, the distinctive design of the game board, the four corner squares, the MR. MONOPOLY name and character, as well as each of the distinctive elements of the board and playing pieces are trademarks of Hasbro for its property trading game and game equipment, © 1935, 2015 Hasbro.  All rights reserved."
+"HASBRO and its logo, the MONOPOLY name and logo, the distinctive design of the 
+game board, the four corner squares, the MR. MONOPOLY name and character, as well 
+as each of the distinctive elements of the board and playing pieces are trademarks 
+of Hasbro for its property trading game and game equipment, © 1935, 2015 Hasbro.  
+All rights reserved."
 
 Monopoly board, property cards:
 	Monopoly Template for Photoshop
@@ -23,3 +27,10 @@ Arrow:
 	Arrow, forward, right icon by By Yannick Lung
 	https://www.iconfinder.com/icons/183254/arrow_forward_right_icon#size=128
 	License: Free for commercial use
+
+Moneybags:
+	By Aha-Soft Team
+	https://www.iconfinder.com/icons/143953/boss_business_businessman_capitalist_client_customer_human_mafia_male_man_monopoly_partner_people_person_profile_user_icon
+	Basic license: https://www.iconfinder.com/licenses/basic
+
+

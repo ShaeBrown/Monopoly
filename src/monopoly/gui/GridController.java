@@ -100,9 +100,12 @@ public final class GridController implements ActionListener {
     /* Takes a buyable grid, retrieves its property card and displays it
     in the player menu using the player controller */
     public void changeProperty(BuyableGrid grid) {
+        
         Game.player_controller.clearHouseIcons();
         Game.player_controller.clearBuyButton();
+        
         ImageIcon i = getPropertyCard(grid);
+        
         String owner;
         if (grid.isBuyable()) {
             owner = "Unowned";

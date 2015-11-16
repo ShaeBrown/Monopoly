@@ -35,7 +35,8 @@ public class GenericGrid extends Grid
             case FREEPARKING:
             
             case GOTOJAIL:
-            //send player to jail
+                player.setJailStatus(true);
+                player.setLocation(Game.GRIDNUM.Jail.getNum());
         }
     }
 }

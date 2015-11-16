@@ -11,6 +11,7 @@ import java.awt.Insets;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -36,7 +37,8 @@ import monopoly.PropertyGrid;
  */
 public final class PlayerController implements ListSelectionListener {
     
-    private final HashMap<Player, JButton> player_buttons;
+    private final HashMap<Player, JButton> player_to_button;
+    private final HashMap<JButton, Player> button_to_player;
     private final HashMap<String, Component> menu_components;
     private final List<Player> player_list;
     private JPanel player_menu;
@@ -48,7 +50,8 @@ public final class PlayerController implements ListSelectionListener {
     
     public PlayerController (List<Player> players, GridController gc) {
         this.player_list = players;
-        player_buttons = new HashMap<>();
+        player_to_button = new HashMap<>();
+        button_to_player = new HashMap<>();
         menu_components = new HashMap<>();
         this.moneybags = new ImageIcon(getClass().getResource("/monopoly/gui/img/moneybags.png"));
         this.arrow = new ImageIcon(getClass().getResource("/monopoly/gui/img/arrow.png"));
@@ -58,7 +61,7 @@ public final class PlayerController implements ListSelectionListener {
        JLabel name = (JLabel) menu_components.get("Name");
        
        name.setText(p.getName());
-       name.setIcon(player_buttons.get(p).getIcon());
+       name.setIcon(player_to_button.get(p).getIcon());
        
        updateStats(p);
        
@@ -78,7 +81,16 @@ public final class PlayerController implements ListSelectionListener {
         public void run()
         {
             list.removeAllElements();
-            for (BuyableGrid g : p.getProperties()) 
+            List<BuyableGrid> properties = p.getProperties();
+            //sorts properties by alphabetically by type
+            properties.sort(new Comparator<BuyableGrid>() 
+            {
+                @Override
+                public int compare(BuyableGrid g1, BuyableGrid g2) {
+                    return g1.property_group.toString().compareTo(g2.property_group.toString());
+                }
+            });
+            for (BuyableGrid g : properties) 
             {
                 list.addElement(g);
             }
@@ -276,7 +288,7 @@ public final class PlayerController implements ListSelectionListener {
 
     /* Sets player on the GUI to their location */
     public void updatePosition(Player p) {
-        JButton button = player_buttons.get(p);
+        JButton button = player_to_button.get(p);
         int location = p.getLocation();
         LinkedList<Player> occupants = Game.grid_controller.getOccupants(location);
         if (occupants.size() == 1) {
@@ -296,7 +308,7 @@ public final class PlayerController implements ListSelectionListener {
         JButton[] buttons = new JButton[players.size()];
         assert(players.size() == buttons.length);
         for (int i = 0 ; i < buttons.length; i ++) {
-            buttons[i] = player_buttons.get(players.get(i));
+            buttons[i] = player_to_button.get(players.get(i));
         }
         Game.grid_controller.setPlayersPositions(buttons, players.get(0).getLocation());
     }
@@ -315,7 +327,8 @@ public final class PlayerController implements ListSelectionListener {
             button.setFocusPainted(false); 
             button.setOpaque(false);
             object_layer.add(button);
-            player_buttons.put(p, button);
+            player_to_button.put(p, button);
+            button_to_player.put(button, p);
         }
         updatePositions(new LinkedList(player_list));
     }

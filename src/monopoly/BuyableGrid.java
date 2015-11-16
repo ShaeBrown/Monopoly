@@ -21,7 +21,7 @@ public abstract class BuyableGrid extends Grid
     
     
     protected Player owner;                   //Which player owns this?
-    protected PropertyGroup property_group;   //Which property group does this belongs to?
+    public PropertyGroup property_group;   //Which property group does this belongs to?
     protected int property_price;             //Cost to buy the initial property  
     protected int property_mortgage;          //Mortgage value of the property
     /*Constructor*/
@@ -95,7 +95,7 @@ public abstract class BuyableGrid extends Grid
             // If player has enough money?
             Game.player_controller.buyProperty(landed);
         }
-        else {
+        else if (!getOccupants().contains(getOwner())) { //if the owner is not currently on the property
             
             int rent = getRentPrice();
             if (landed.getMoney() >= rent)

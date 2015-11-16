@@ -34,7 +34,10 @@ public class CardGrid extends Grid
         {
             card = Game.deck.drawCommunityChestCard(player);
         }
-        Game.player_controller.displayCard(type, card.title + "\n" + card.desc);
+        if (card != null)
+            Game.player_controller.displayCard(type, card.title + "\n" + card.desc);
+        else
+            System.err.println("Drawn card from " + type + " was null");
     }
 
 }
