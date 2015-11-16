@@ -185,9 +185,9 @@ public class Board extends javax.swing.JFrame {
         Objects.add(Die1);
         Die1.setBounds(510, 470, 100, 110);
 
+        Layers.setLayer(Objects, javax.swing.JLayeredPane.PALETTE_LAYER);
         Layers.add(Objects);
         Objects.setBounds(0, 0, 1020, 1020);
-        Layers.setLayer(Objects, javax.swing.JLayeredPane.PALETTE_LAYER);
 
         Board.setMaximumSize(new java.awt.Dimension(1020, 1020));
         Board.setMinimumSize(new java.awt.Dimension(1020, 1020));
@@ -597,7 +597,7 @@ public class Board extends javax.swing.JFrame {
         Menu.setMaximumSize(new java.awt.Dimension(300, 1020));
         Menu.setMinimumSize(new java.awt.Dimension(300, 1020));
         Menu.setPreferredSize(new java.awt.Dimension(300, 1020));
-        java.awt.FlowLayout flowLayout1 = new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 20);
+        java.awt.FlowLayout flowLayout1 = new java.awt.FlowLayout(0, 5, 20);
         flowLayout1.setAlignOnBaseline(true);
         Menu.setLayout(flowLayout1);
         getContentPane().add(Menu, new java.awt.GridBagConstraints());

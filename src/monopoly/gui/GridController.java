@@ -20,7 +20,7 @@ import javax.swing.SwingUtilities;
 
 import monopoly.BuyableGrid;
 import monopoly.Game;
-import monopoly.Player;
+import monopoly.AbstractPlayer;
 import monopoly.PropertyGrid;
 
 /* GridController
@@ -147,7 +147,7 @@ public final class GridController implements ActionListener {
     }
     
     /* Given the grid's number, return a list of players on it */
-    public LinkedList<Player> getOccupants(int i) {
+    public LinkedList<AbstractPlayer> getOccupants(int i) {
         return grid_object[i].getOccupants();
     }
     
@@ -229,7 +229,7 @@ public final class GridController implements ActionListener {
     */
     public void setPlayersPositions(JButton[] buttons, int i) {
         JButton grid = grid_button[i];
-        LinkedList<Player> occupants = getOccupants(i);
+        LinkedList<AbstractPlayer> occupants = getOccupants(i);
         int height = grid.getHeight();
         int width = grid.getWidth();
         Point grid_corner = SwingUtilities.convertPoint(grid.getParent(),grid.getLocation(),object_layer);

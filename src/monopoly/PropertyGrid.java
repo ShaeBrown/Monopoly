@@ -54,6 +54,7 @@ public class PropertyGrid extends BuyableGrid
     public void addHouse()
     {
         this.houses++;
+        Game.grid_controller.addHouseIcon(this);
     }
     
     public void addHotel()

@@ -28,11 +28,11 @@ import java.util.LinkedList;
 public abstract class Grid {
     
     protected String name;
-    LinkedList<Player> occupants = new LinkedList();
+    LinkedList<AbstractPlayer> occupants = new LinkedList();
     /*Add more class methods below?*/
     
     /*Calls an appropriate player landing function depending on the type of the grid*/
-    abstract void landingFunction(Player player); 
+    abstract void landingFunction(AbstractPlayer player); 
     
         
     public String getName() {
@@ -42,11 +42,11 @@ public abstract class Grid {
     /* The number of players occupying one grid is kept track of so that players
     can be properly spaced out on the GUI, when sharing the same grid.
     */
-    public LinkedList<Player> getOccupants() {
+    public LinkedList<AbstractPlayer> getOccupants() {
        return this.occupants;
     }
     
-    public void addOccupant(Player p) {
+    public void addOccupant(AbstractPlayer p) {
         occupants.add(p);
     }
     

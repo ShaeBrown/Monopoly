@@ -25,7 +25,8 @@ public class DiceController implements ActionListener {
     public boolean enabled;
     final Object LOCK;
     
-    public DiceController(Dice d) {
+    public DiceController(Dice d) 
+    {
         this.d = d;
         for (int i = 0; i < die.length; i++) {
             die[i] = new ImageIcon(getClass().getResource("/monopoly/gui/img/dice/dice" + (i+1) + ".png"));
@@ -34,21 +35,23 @@ public class DiceController implements ActionListener {
         LOCK = new Object(); // just something to lock on
     }
     
-    public void addButtons(JButton b1, JButton b2) {
+    public void addButtons(JButton b1, JButton b2) 
+    {
         this.b1 = b1;
         this.b2 = b2;
     }
     
-    public Object getLock() {
+    public Object getLock() 
+    {
         return this.LOCK;
     }
     
     @Override
-    public void actionPerformed(ActionEvent event) {
+    public void actionPerformed(ActionEvent event) 
+    {
         if (enabled) {
             d.newRoll();
-            b1.setIcon(getDiceImage1(d));
-            b2.setIcon(getDiceImage2(d));
+            displayRoll();
             enabled = false;
             synchronized (LOCK) {
                 LOCK.notifyAll();
@@ -60,16 +63,25 @@ public class DiceController implements ActionListener {
         enabled = true;
     }
     
-    public boolean isEnabled() {
+    public boolean isEnabled() 
+    {
         return enabled;
     }
     
-    public ImageIcon getDiceImage1(Dice d){
+    public void displayRoll()
+    {
+        b1.setIcon(getDiceImage1(d));
+        b2.setIcon(getDiceImage2(d));
+    }
+    
+    private ImageIcon getDiceImage1(Dice d)
+    {
         int r = d.getRoll1();
         return die[r-1];
     }
     
-    public ImageIcon getDiceImage2(Dice d){
+    private ImageIcon getDiceImage2(Dice d)
+    {
         int r = d.getRoll2();
         return die[r-1];
     }
