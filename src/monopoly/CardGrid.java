@@ -7,21 +7,36 @@ package monopoly;
 
 
 /**
- *
+ * A Chance or Community Chest grid
  * @author Jacob
  */
 public class CardGrid extends Grid
 {
-    public enum CardType {CHANCECARD, COMCHEST};
+
+    /**
+     * The type of card grid, Chance or Community Chest
+     */
+    public enum CardType { CHANCECARD,  COMCHEST };
     
-    Deck deck; //should be instantiated reference to the deck used in the game
-    CardType type; //indicates the type of card
+
+    /**
+     * The type of card grid, Chance or Community Chest
+     */
+    CardType type;
     
+    /**
+     * Creates a new Chance or Community Chest grid
+     * @param type Chance or CommunityChest grid
+     */
     public CardGrid(CardType type)
     {
         this.type = type;
     }
     
+    /**
+     * Draws a card from the corresponding grid and performs the action
+     * @param player the player that landed on the grid
+     */
     @Override
     public void landingFunction(AbstractPlayer player)
     {

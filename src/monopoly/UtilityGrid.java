@@ -1,9 +1,19 @@
 package monopoly;
 
+/**
+ * The electric and water works grids
+ * 
+ */
 public class UtilityGrid extends BuyableGrid
 {
     
     /*Constructor*/
+
+    /**
+     * Create new Utility grid
+     * @param property_name the name of the utility
+     */
+
     public UtilityGrid(String property_name)
     {
         super(PropertyGroup.UTILITY, property_name, 150, 75);

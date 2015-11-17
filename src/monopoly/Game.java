@@ -12,9 +12,16 @@ import monopoly.GenericGrid.GridType;
 import monopoly.AbstractPlayer.PlayerToken;
 import monopoly.gui.*;
 
+/**
+ * The Game of Monopoly
+ * 
+ */
 public class Game {
     
-		public enum GRIDNUM{
+    /**
+     * The number for each grid
+     */
+    public enum GRIDNUM{
 			GO(0), MediterraneanAve(1), CommunityChest1(2), BalticAve(3), IncomeTax(4),
 			ReadingRailroad(5),	OrientalAve(6),	Chance1(7),	VermontAve(8), Connecticut(9),
 			Jail(10),	StCharlesPlace(11),	ElectricCompany(12), StatesAve(13), VirginiaAve(14),
@@ -30,43 +37,77 @@ public class Game {
 				num = value;
 			}
 			
-			public int getNum() {
-				return num;
-			}
-		}
+        /**
+         * Get the number for the corresponding grid
+         * @return the number for the grid
+         */
+        public int getNum() 
+        {
+            return num;
+	}
+    }
 	
     final int MAXPLAYERS = 8;     
-    final int MINPLAYERS = 2; //Maximum and minimum number of players supported by the game
-    int NUMPLAYERS; //players in the current game
+    final int MINPLAYERS = 2;                   //Maximum and minimum number of players supported by the game
+    int NUMPLAYERS;                             //players in the current game
     static final int BOARDSIZE = 40;           //How many grids are on the board
     
-    //enum GameState {LOBBY, PLAYING, ENDED}      //do we really need this?
     
     static Grid[] board_grids;                 //Array of Grid to represent a gameboard
-    List<AbstractPlayer> player_list;           //ArrayList of Player to represent all the players of the game.
+    List<AbstractPlayer> player_list;          //ArrayList of Player to represent all the players of the game.
     Board board;
     
-    public static Deck deck; //Two stacks representing chance and community chest decks.
+    /**
+     * A copy of two stacks representing chance and community chest decks for the Game.
+     */
+    public static Deck deck; 
+
+    /**
+     * A copy of the Dice for the game.
+     */
     public static Dice dice;
+
+    /**
+     * The copy of the dice controller for the game.
+     * Used for the GUI
+     */
     public static DiceController dice_controller; 
+
+    /**
+     * The copy of the player controller for the game.
+     * Used for the GUI
+     */
     public static PlayerController player_controller;
+
+    /**
+     * The copy of the grid controller for the game.
+     * Used for the GUI
+     */
     public static GridController grid_controller;
+
+    /**
+     * The player whose turn is now
+     */
     public static AbstractPlayer current_player;
-    // should these be static/global?? they are used alot in different classes
-    // please change if this is bad design.
-    
-    /*Constructor for creating a new game*/
+
+
+    /**
+     * Creates a new game
+     */
+
     public Game()
     {
         Game.board_grids = new Grid[BOARDSIZE];
         player_list = new ArrayList<>();
-        deck = new Deck(player_list);		// Initialize both chance deck and community chest deck.
+        deck = new Deck(player_list);		
         dice = new Dice();
     }
-    
-    /*insert more methods below*/
-    
-    /*Sets up all game related tasks*/
+
+
+    /**
+     * Sets up all game related tasks
+     */
+
     public void initializeGame()
     {
         initializeGrids();
@@ -420,31 +461,31 @@ public class Game {
     
     private void launchBoard() {
         Game.grid_controller = new GridController(board_grids);
-        Game.player_controller = new PlayerController(player_list,grid_controller);
+        Game.player_controller = new PlayerController(player_list);
         Game.dice_controller = new DiceController(dice);
         this.board = new Board();
         board.run();
     }
     
 
-    
-    /*Roll dices for a player, and move the palyer forward that many spots*/
+
+    /**
+     * Implements the player's turn.
+     * Roll dices for a player, and moves the player forward that many spots,
+     * performs the appropriate action for the grid landed on
+     * @param player the current player's turn
+     * @return the player's new location
+     */
+
     public int playerRollDiceAndMove(AbstractPlayer player)
     {
-        player.beginTurn();
         System.out.println("It is now " + player.getName() + "'s turn to roll");
         
-        
+        player.beginTurn();
         int diceroll = player.rollDie();
         player.advance(diceroll);
-        
-        //this moves the player to it's current location on the GUI
-        
-        
-        player.getCurrentGrid().landingFunction(player);
-        
+        player.performLandingFunction();
         player.finalizeTurn();
-        // this enables the dice so it its clickable for the next player's turn
         
         System.out.println("Player " +player.getName() +" rolled " +diceroll +" and is now on grid " +player.getLocation() +" with $" +player.getMoney() +"\n");
         

@@ -4,13 +4,26 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 
+/**
+ * A player controlled by a human
+ * 
+ */
 public class HumanPlayer extends AbstractPlayer{
-        /*New Player constructor*/
+ 
+
+    /**
+     * Creates a new player
+     */
+
     public HumanPlayer ()
     {
         super();
     }
     
+    /**
+     * Waits for the player to click the dice buttons
+     * @return the dice roll
+     */
     @Override
     public int rollDie()
     {
@@ -34,12 +47,19 @@ public class HumanPlayer extends AbstractPlayer{
         return Game.dice.getRoll();
     }
     
+    /**
+     * Opens a dialog to ask the player if they want to buy the property
+     */
     @Override
     public void propertyDecision() 
     {
         Game.player_controller.buyProperty(this);
     }
     
+    /**
+     * Clones a human player
+     * @return the newly cloned player
+     */
     public AbstractPlayer clone()
     {
         HumanPlayer p = new HumanPlayer();
@@ -62,9 +82,16 @@ public class HumanPlayer extends AbstractPlayer{
     public void beginTurn() {
         Game.current_player = this;
         Game.player_controller.updateMenu(this); 
+        if (isInJail())
+            jailDecision();
         //this is where we could check for any trading requests,
         //or where we could ask the player to decide what they want to do
         //to get out of jail
+    }
+
+    @Override
+    public void jailDecision() {
+       //Open a dialog
     }
     
 }

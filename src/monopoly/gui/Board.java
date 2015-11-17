@@ -10,7 +10,7 @@ import monopoly.Game;
 
 /**
  *
- * @author shaebrown
+ * The board for the GUI
  */
 public class Board extends javax.swing.JFrame {
     
@@ -605,7 +605,9 @@ public class Board extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-
+    /**
+     *
+     */
     public void run() {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

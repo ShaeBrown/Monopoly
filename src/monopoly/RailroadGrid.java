@@ -1,11 +1,21 @@
 package monopoly;
 
+/**
+ * The railroad grids
+ * 
+ */
 public class RailroadGrid extends BuyableGrid
 {
     
     int property_rent_base; 
     
     /*Constructor*/
+
+    /**
+     * Create a new RailRoad grid
+     * @param property_name the name of the railroad
+     */
+
     public RailroadGrid(String property_name)
     {
         super(PropertyGroup.RAILROAD, property_name, 200, 100);

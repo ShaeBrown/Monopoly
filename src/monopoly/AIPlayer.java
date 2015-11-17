@@ -13,18 +13,29 @@ import java.util.logging.Logger;
 
 
 /**
- *
+ * AI Player
  * @author shaebrown
  */
 public class AIPlayer extends AbstractPlayer {
     
-    final int MINMONEY = 500; // the amount the player must have for them to want to buy properties or houses
     
+    /**
+     *  The amount the AI must have for to want to buy properties or houses
+     */
+    final int MINMONEY = 500; 
+    
+    /**
+     * Creates a new AIPlayer
+     */
     public AIPlayer ()
     {
         super();
     }
 
+    /**
+     * The command to make the AI roll the die, and display the die on the GUI
+     * @return the die roll
+     */
     @Override
     public int rollDie() {
         int diceRoll = Game.dice.newRoll();
@@ -32,14 +43,18 @@ public class AIPlayer extends AbstractPlayer {
         return diceRoll;
     }
 
+    /**
+     * The command for the AI to make a decision to buy the property landed on
+     * If the AI has more money than MINMONEY it will buy any property it lands on
+     */
     @Override
     public void propertyDecision() {
-        /*this is how the AI decides whether or not to buy property when it is landed on
-        A simple strategy is to buy every property which is landed on. This could be made more complex later
-        */
-         BuyableGrid landed = (BuyableGrid) getCurrentGrid();
-        if (getMoney() > MINMONEY && getMoney() >= landed.getPrice())
+        //This could be made more complex later
+        BuyableGrid landed = (BuyableGrid) getCurrentGrid();
+        int remaining_of_type = landed.property_group.MAX - this.getNumOfOwnedType(landed);
+        if (getMoney() >= landed.getPrice())
         {
+            if (getMoney() > MINMONEY || remaining_of_type == 1)
             this.buyProperty(landed);
         }
         //possibly add a notification that the AI bought this property
@@ -58,8 +73,13 @@ public class AIPlayer extends AbstractPlayer {
         return p;
     }
 
+    /**
+     * The AI performs any last tasks before its turn is over, 
+     * such as pausing for a second
+     */
     @Override
     public void finalizeTurn() {
+        Game.dice_controller.enable();
         try {
             //wait a few seconds until proceeding
             Thread.sleep(1000);
@@ -68,6 +88,9 @@ public class AIPlayer extends AbstractPlayer {
         }
     }
     
+    /**
+     * The algorithm to decide which properties the AI should buy houses for
+     */
     private void buyHouseDecision()
     {
         if (getMoney() < MINMONEY) return;
@@ -85,20 +108,30 @@ public class AIPlayer extends AbstractPlayer {
                    if (prop.getCurrentHouses() < least_houses.getCurrentHouses())
                        least_houses = prop;
                }
-               this.buyHouse(least_houses);
+                if (getMoney() > least_houses.getHousePrice())
+                    this.buyHouse(least_houses);
                     
             }
         }
     }
 
+    /**
+     * Tasks to perform when the AI begins its turn,
+     * such as updating the menu, and deciding whether to buy houses
+     */
     @Override
     public void beginTurn() {
+        Game.dice_controller.enabled = false;
         Game.current_player = this;
         Game.player_controller.updateMenu(this); 
-        buyHouseDecision();
-        //this is where the AI player could decide to buy a house??
-        
-    
+        buyHouseDecision();   
+        if (isInJail())
+            jailDecision();
+    }
+
+    @Override
+    public void jailDecision() {
+        //How will AI's decide to get out of jail
     }
     
 }

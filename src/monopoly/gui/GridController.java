@@ -23,16 +23,17 @@ import monopoly.Game;
 import monopoly.AbstractPlayer;
 import monopoly.PropertyGrid;
 
-/* GridController
-    - Maps each button to their grid object
-    - Maps each grid to their property card
-    - Helps player controller set players location on screen
-    - Displays property cards when the grid's button is clicked
-    - must add buttons and the object layer before use
-    
-    The communication between the player controller and grid controller is kinda
-    messy?? Can we improve this??
-*/
+/**
+ * GridController, controls the GUI interaction for the grids <br>
+ *   - Maps each button to their grid object <br>
+ *   - Maps each grid to their property card <br>
+ *   - Helps player controller set players location on screen <br>
+ *   - Displays property cards when the grid's button is clicked <br>
+ *   - must add buttons and the object layer before use <br>
+ *   
+ * @author shaebrown
+ */
+
 
 public final class GridController implements ActionListener {
     
@@ -46,7 +47,10 @@ public final class GridController implements ActionListener {
     JPanel object_layer;
     ImageIcon house_icon,hotel_icon;
     
-    
+    /**
+     * Creates a new grid controller
+     * @param g the list of grid objects for the game
+     */
     public GridController(Grid[] g) {
         this.grid_object = g;
         this.grid_to_button = new HashMap();
@@ -60,23 +64,41 @@ public final class GridController implements ActionListener {
         }
 
     }
-    
-    /* Get a grid object from its number */
+
+    /**
+     * Get a grid object by it's number
+     * @param i the number of grid to get
+     * @return the grid with the corresponding number
+     */
+
     public Grid getGrid(int i) {
         return grid_object[i];
     }
-    
-    /* Get a property card Image Icon from its corresponsing BuyableGrid object */
+
+
+    /**
+     * Get a property card or title deed Image Icon from its corresponding BuyableGrid object
+     * @param g the buyable grid
+     * @return the buyable grid's title deed
+     */
+
     public ImageIcon getPropertyCard(BuyableGrid g) {
         return property_cards.get(g);
     }
-    
-    /* This class needs the layer where objects lay, in order to move players */
+    /**
+     * This class needs the layer where objects lay, in order to move players and add houses
+     * @param objects the layer where objects lay on the GUI
+     */
+
     public void addObjectLayer(JPanel objects) {
         this.object_layer = objects;
     }
     
-    /* This class needs the array of buttons from the board, maps them to the grid objects */
+    /**
+     * This class needs the array of buttons from the board, maps them to their grid objects
+     * @param buttons an array of buttons on the GUI
+     */
+
     public void addButtons(JButton[] buttons) {
         this.grid_button = buttons;
         for (int i = 0 ; i < buttons.length; i++) {
@@ -84,8 +106,11 @@ public final class GridController implements ActionListener {
             grid_to_button.put(grid_object[i],buttons[i]);
         }
     }
-    
-    /* displays the property card when the grid button is clicked */
+
+    /**
+     * Displays the property card when the grid button is clicked
+     * @param event the event
+     */
     @Override
     public void actionPerformed(ActionEvent event) {
         JButton pressed = (JButton) event.getSource();
@@ -96,9 +121,14 @@ public final class GridController implements ActionListener {
             changeProperty((BuyableGrid) grid);
         }
     }
-    
-    /* Takes a buyable grid, retrieves its property card and displays it
-    in the player menu using the player controller */
+
+
+    /**
+     * Takes a Buyable grid, retrieves its property card and displays it
+     * in the player menu using the player controller
+     * @param grid the grid to display
+     */
+
     public void changeProperty(BuyableGrid grid) {
         
         Game.player_controller.clearHouseIcons();
@@ -128,15 +158,23 @@ public final class GridController implements ActionListener {
 
         Game.player_controller.setProperty(i,owner);
     }
-    
-    /* Display the buy house button if the owner has all the properties in the monopoly */
-    public void displayBuyHouseButton(PropertyGrid grid) {
-//TODO(nick): Implement logic that only displays the button when necessary
+
+
+    /**
+     * Display the buy house button under the property in the player menu
+     * if the owner has all the properties in the monopoly
+     * @param grid the grid displayed in the player menu
+     */
+    public void displayBuyHouseButton(PropertyGrid grid)
+    {
         if (Game.current_player.ownsAllType(grid)) 
             Game.player_controller.setBuyHouse(grid);
     }
     
-    /* Creates ImageIcons for the property cards and create a mapping from Property to property card */
+
+    /**
+     * Creates ImageIcons for the property cards and create a mapping from Property to property card
+     */
     public void setPropertyCards(){
         for (Grid grid_object1 : grid_object) {
             if (grid_object1 instanceof BuyableGrid) { //is there a better way to do this?
@@ -145,15 +183,23 @@ public final class GridController implements ActionListener {
             }
         }
     }
-    
-    /* Given the grid's number, return a list of players on it */
+
+    /**
+     * Given the grid's number, return a list of players on it
+     * @param i the number of the grid
+     * @return players currently on the grid
+     */
+
     public LinkedList<AbstractPlayer> getOccupants(int i) {
         return grid_object[i].getOccupants();
     }
     
-    /*This is used to add a house icon on the corresponding grid on the GUI,
-    
-    */
+
+    /**
+     * Add a house icon on the corresponding grid on the GUI,
+     * @param grid the grid to add a house
+     */
+
     public void addHouseIcon(PropertyGrid grid) {
         
         JButton button = grid_to_button.get(grid);
@@ -213,20 +259,30 @@ public final class GridController implements ActionListener {
         object_layer.repaint();
     }
     
-    /* Given the grid number, return a point where the player must be placed on the
-    object layer, if there is one player on it
-    */
+
+
+    /**
+     * Given the grid number, return a point where the player must be placed on the
+     * object layer, if there is a single player on it
+     * @param i the number of the grid
+     * @return the point to move the player
+     */
+
     public Point setPlayerPosition(int i) {
         JButton grid = grid_button[i];
         Point point = SwingUtilities.convertPoint(grid.getParent(),grid.getLocation(),object_layer);
         return point;
     }
     
-    /* For when there are more than one player on the same grid.
-    Given the grid number, and an array of the player's buttons
-    set each players position on the screen.
-    THIS NEEDS IMPROVEMENT BUT WORKS FOR NOW
-    */
+    //NEEDS IMPROVEMENT
+    /**
+     * Arranges players on a grid when there is more than one player occupying the grid.
+     * Given the grid number, and an array of the player's buttons,
+     * set each players position on the screen.
+     * @param buttons the buttons to arrange
+     * @param i the number of the grid
+     */
+
     public void setPlayersPositions(JButton[] buttons, int i) {
         JButton grid = grid_button[i];
         LinkedList<AbstractPlayer> occupants = getOccupants(i);
