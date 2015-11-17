@@ -3,6 +3,7 @@
 */
 
 package monopoly;
+import java.io.IOException;
 import java.util.*;
 
 /*Imports all the custom enum datatypes*/
@@ -11,6 +12,9 @@ import monopoly.CardGrid.CardType;
 import monopoly.GenericGrid.GridType;
 import monopoly.AbstractPlayer.PlayerToken;
 import monopoly.gui.*;
+import monopoly.protobuffer.*;
+import monopoly.protobuffer.PlayerDataProto.PlayerList;
+import monopoly.protobuffer.PlayerDataProto.Player;
 
 /**
  * The Game of Monopoly
@@ -111,8 +115,49 @@ public class Game {
     public void initializeGame()
     {
         initializeGrids();
-        waitForPlayers();
+        
+        initializePlayerData();
+        
+        /*Start the game, we have enough players*/
+        startGame();
     }
+    
+    /* Load player data (i.e. names, token, money, etc.) */
+    private void initializePlayerData() {
+      try {
+      	PlayerList pl = LoadProto.loadPlayerData();
+				if (pl == null) {
+				  waitForPlayers();
+				} else {
+		    	// Ask if they want to load an old game
+					System.out.println("========================================================================");
+					System.out.println("You already have a saved game. Would you like to start a new game?");
+					System.out.println("Enter 'NEW' to start a new game otherwise enter 'START' and the saved game will be loaded");
+					System.out.println("========================================================================");
+
+					Scanner scanner = new Scanner(System.in);
+					if ((scanner.next().toLowerCase()).equals("new")) {
+						LoadProto.createEmptyDataFile();
+						waitForPlayers();
+						return;
+					}
+					scanner.close();
+
+					// Successfully loaded player list
+					int pNum = 1;
+			    for (Player p: pl.getPList()) {
+			    	System.out.println("Player " + pNum++);
+			      System.out.println("Name: " + p.getName() + ", Token: " + p.getToken());
+			      System.out.println();
+			      addPlayerToList(p.getName(), determineToken(p.getToken()));
+			    }
+					System.out.println("Successfully loaded player data");
+				}
+			} catch (IOException e) {
+				 waitForPlayers();
+			}
+    }
+
     
     /*Fill all grids of the board with appropriate play data*/
     private void initializeGrids()
@@ -309,6 +354,12 @@ public class Game {
             newPlayer.setToken(new_player_token);
             player_list.add(newPlayer);
             System.out.println("\nNew player created! Name: " +newPlayer.getName() +" Token: " +newPlayer.getToken().toString() +"\n");
+            
+            try {
+            	SaveProto.savePlayerData(new_player_name, new_player_token.ordinal(), false);
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
         }
         
         while(player_list.size() < NUMPLAYERS)
@@ -430,12 +481,56 @@ public class Game {
             newPlayer.setToken(new_player_token);
             player_list.add(newPlayer);
             System.out.println("\nNew player created! Name: " +newPlayer.getName() +" Token: " +newPlayer.getToken().toString() +"\n");
+            
+            try {
+            	SaveProto.savePlayerData(new_player_name, new_player_token.ordinal(), true);
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
         }
         
         /*Start the game, we have enough players*/
         startGame();
     }
     
+		private PlayerToken determineToken(int tokenNum) {
+      switch(tokenNum) {
+          case(1):
+          	return PlayerToken.DOG;
+          case(2):
+            return PlayerToken.BATTLESHIP;
+          case(3):
+            return PlayerToken.AUTOMOBILE;
+          case(4):
+            return PlayerToken.TOPHAT;
+          case(5):
+            return PlayerToken.THIMBLE;
+          case(6):
+            return PlayerToken.BOOT;
+          case(7):
+            return PlayerToken.WHEELBARROW;
+          case(8):
+            return PlayerToken.CAT;
+          default:
+            System.out.println("Invalid Token loaded");
+            System.exit(-1);
+      }
+			return null;
+		}    
+    
+    // Adds a player to playerList
+		private void addPlayerToList(String new_player_name, PlayerToken new_player_token) {
+			HumanPlayer baseHuman = new HumanPlayer();
+      baseHuman.setMoney(1500);
+      baseHuman.setLocation(0);
+
+			/*Create the player object using the new data*/
+      AbstractPlayer newPlayer = baseHuman.clone();
+      newPlayer.setName(new_player_name);
+      newPlayer.setToken(new_player_token);
+      player_list.add(newPlayer);
+		}			
+		
     /*Start the actual game here*/
     private void startGame()
     {
