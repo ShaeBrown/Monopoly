@@ -1,0 +1,17 @@
+package monopoly.protobuffer;
+
+option java_outer_classname = "PlayerDataProto";
+
+message Player {
+  required string name = 1;
+  required int32 token = 2;
+  required bool ai = 3;
+  required int32 money = 4;
+  required int32 location = 5;
+  required int32 jail_free_cards = 6;
+  required bool in_jail = 7;
+}
+
+message PlayerList {
+  repeated Player p = 1;
+}
