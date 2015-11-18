@@ -221,6 +221,24 @@ public class EventCard {
         return this;
     }
     
+    /**
+    * Retrieves the title of the current card.
+    * @return The title of the card as a string
+    */
+    public String getTitle()
+    {
+        return this.title;
+    }
+    
+    /**
+    * Retrieves the description of the current card.
+    * @return The description of the card as a string
+    */
+    public String getDesc()
+    {
+        return this.desc;
+    }
+    
     /*What effect does a GAINMONEY card have on a player?*/
     private void gainmoney_effect(AbstractPlayer player) {
         player.addMoney(this.amount);
@@ -294,12 +312,13 @@ public class EventCard {
     /*What effect does a GOBACK card have on a player?*/
     private void goback_effect(AbstractPlayer player) {
     	int location = player.getLocation();
-    	location -= 3;
-    	if (location >= 0) {
+    	
+    	if (location >= 0)
+            location -= 3;
+    	else
+            location = (Game.BOARDSIZE - location);
+
         player.setLocation(location);
-    	} else {
-    		location = (Game.BOARDSIZE - location);
-    	}
     }
     
     /*What effect does a GOTOJAIL card have on a player?*/
