@@ -116,10 +116,15 @@ public class Game {
         System.out.println("=============");
 
         /*Start the game, we have enough players*/
-        if (newGame)
+        if (newGame) {
             startGame();
-        else
+        } else {
+            // Refreshes positions so that all players aren't on the same grid as the first player (visual bug)
+            for (AbstractPlayer p : player_list) {
+                Game.player_controller.updatePosition(p);
+            }
             startGame(current_player);
+        }
     }
 
     /* Load player data (i.e. names, token, money, etc.)
@@ -497,8 +502,6 @@ public class Game {
             player_list.add(newPlayer);
             System.out.println("\nNew player created! Name: " + newPlayer.getName() + " Token: " + newPlayer.getToken().toString() + "\n");
         }
-
-        saveGame(player_list);
     }
 
     private PlayerToken determineToken(int tokenNum) {
