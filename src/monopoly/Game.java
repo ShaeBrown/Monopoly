@@ -107,20 +107,34 @@ public class Game {
     public void initializeGame() {
         initializeGrids();
 
-        initializePlayerData();
+        boolean newGame = initializePlayerData();
+
+        launchBoard();
+
+        System.out.println("=============");
+        System.out.println("GAME STARTED!");
+        System.out.println("=============");
 
         /*Start the game, we have enough players*/
-        startGame();
+        if (newGame)
+            startGame();
+        else
+            startGame(current_player);
     }
 
-    /* Load player data (i.e. names, token, money, etc.) */
-    private void initializePlayerData() {
+    /* Load player data (i.e. names, token, money, etc.)
+     * Returns true if starting a new game, otherwise returns false if loading a saved game*/
+    private boolean initializePlayerData() {
         try {
-            PlayerList pl = LoadProto.loadPlayerData();
+            // Attempt to load player list data
+            PlayerList pl = PlayerData.loadPlayerList();
+
             if (pl == null) {
+                // If not found then start new game
                 waitForPlayers();
+                return true;
             } else {
-                // Ask if they want to load an old game
+                // Otherwise, if found then ask if they want to load an old game
                 System.out.println("========================================================================");
                 System.out.println("You already have a saved game. Would you like to start a new game?");
                 System.out.println("Enter 'NEW' to start a new game otherwise enter 'START' and the saved game will be loaded");
@@ -128,24 +142,67 @@ public class Game {
 
                 Scanner scanner = new Scanner(System.in);
                 if ((scanner.next().toLowerCase()).equals("new")) {
-                    LoadProto.createEmptyDataFile();
-                    waitForPlayers();
-                    return;
+                        waitForPlayers();
+                        scanner.close();
+                        return true;
                 }
                 scanner.close();
 
-                // Successfully loaded player list
+                // Load players 1 by 1 into the game
                 int pNum = 1;
-                for (Player p : pl.getPList()) {
-                    System.out.println("Player " + pNum++);
-                    System.out.println("Name: " + p.getName() + ", Token: " + p.getToken());
-                    System.out.println();
-                    addPlayerToList(p.getName(), determineToken(p.getToken()));
+                for (Player p: pl.getPList()) {
+                    System.out.println("Loading player " + (pNum++) + " - Name: " + p.getName() + ", Token: " + p.getToken() + ", Money: " + p.getMoney() + ", Location: " + p.getLocation());
+
+                    HumanPlayer baseHuman = new HumanPlayer();
+                    AIPlayer baseAI = new AIPlayer();
+                    AbstractPlayer newPlayer = null;
+
+                    if (p.getAi()) {
+                        newPlayer = baseAI.clone();
+                    } else {
+                        newPlayer = baseHuman.clone();
+                    }
+
+                    newPlayer.setName(p.getName());
+                    newPlayer.setToken(determineToken(p.getToken()));
+                    newPlayer.setMoney(p.getMoney());
+                    newPlayer.setLocation(p.getLocation());
+                    newPlayer.setNumberOfJailFreeCards(p.getJailFreeCards());
+                    newPlayer.setJailStatus(p.getInJail());
+
+                    if (p.getMyTurn()) {
+                        current_player = newPlayer;
+                    }
+
+                    player_list.add(newPlayer);
                 }
+
                 System.out.println("Successfully loaded player data");
             }
         } catch (IOException e) {
             waitForPlayers();
+            return true;
+        }
+        return false;
+    }
+
+    public static void saveGame(List<AbstractPlayer> player_list) {
+        try {
+            PlayerData.createEmptyDataFile();
+            for (AbstractPlayer p : player_list) {
+                boolean myTurn = false;
+                if (p == current_player) {
+                    myTurn = true;
+                }
+
+                if (p instanceof HumanPlayer) {
+                    PlayerData.savePlayer(p.name, p.token.ordinal(), false, p.money, p.location, p.jail_free_cards, p.isInJail(), myTurn);
+                } else if (p instanceof AIPlayer) {
+                    PlayerData.savePlayer(p.name, p.token.ordinal(), true, p.money, p.location, p.jail_free_cards, p.isInJail(), myTurn);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -329,12 +386,6 @@ public class Game {
             newPlayer.setToken(new_player_token);
             player_list.add(newPlayer);
             System.out.println("\nNew player created! Name: " + newPlayer.getName() + " Token: " + newPlayer.getToken().toString() + "\n");
-
-            try {
-                SaveProto.savePlayerData(new_player_name, new_player_token.ordinal(), false);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
 
         while (player_list.size() < NUMPLAYERS) {
@@ -445,16 +496,9 @@ public class Game {
             newPlayer.setToken(new_player_token);
             player_list.add(newPlayer);
             System.out.println("\nNew player created! Name: " + newPlayer.getName() + " Token: " + newPlayer.getToken().toString() + "\n");
-
-            try {
-                SaveProto.savePlayerData(new_player_name, new_player_token.ordinal(), true);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
 
-        /*Start the game, we have enough players*/
-        startGame();
+        saveGame(player_list);
     }
 
     private PlayerToken determineToken(int tokenNum) {
@@ -482,31 +526,34 @@ public class Game {
         return null;
     }
 
-    // Adds a player to playerList
-    private void addPlayerToList(String new_player_name, PlayerToken new_player_token) {
-        HumanPlayer baseHuman = new HumanPlayer();
-        baseHuman.setMoney(1500);
-        baseHuman.setLocation(0);
+    /* Starts the game with player p taking the first turn */
+    private void startGame(AbstractPlayer p) {
+        int playerNum = 0;
+        for (int i = 0; i < player_list.size(); i++) {
+            AbstractPlayer rolling_player = player_list.get(i);
+            if (p == rolling_player) {
+                playerNum = i;
+                break;
+            }
+        }
 
-        /*Create the player object using the new data*/
-        AbstractPlayer newPlayer = baseHuman.clone();
-        newPlayer.setName(new_player_name);
-        newPlayer.setToken(new_player_token);
-        player_list.add(newPlayer);
+        /*It's rolling_player's turn to roll the dice*/
+        for (int i = playerNum; i < player_list.size(); i++) {
+            AbstractPlayer rolling_player = player_list.get(i);
+            playerRollDiceAndMove(rolling_player);
+        }
+
+        startGame();    // Continue playing game starting with the first player
     }
 
     /*Start the actual game here*/
     private void startGame() {
-        launchBoard();
-
-        System.out.println("=============");
-        System.out.println("GAME STARTED!");
-        System.out.println("=============");
-
         /*The only point of this outer infinite loop is to reset the player iterator*/
-        for (;;) {
+        for(;;)
+        {
             /*For each Player in player_list, where rolling_player is the current player, it's rolling_playher's turn to roll the dice*/
-            for (AbstractPlayer rolling_player : player_list) {
+            for(AbstractPlayer rolling_player : player_list)
+            {
                 playerRollDiceAndMove(rolling_player);
 
             }

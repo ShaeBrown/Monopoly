@@ -79,6 +79,41 @@ public final class PlayerDataProto {
      * <code>required bool in_jail = 7;</code>
      */
     boolean getInJail();
+
+    /**
+     * <code>repeated int32 properties = 8;</code>
+     */
+    java.util.List<java.lang.Integer> getPropertiesList();
+    /**
+     * <code>repeated int32 properties = 8;</code>
+     */
+    int getPropertiesCount();
+    /**
+     * <code>repeated int32 properties = 8;</code>
+     */
+    int getProperties(int index);
+
+    /**
+     * <code>repeated int32 houses = 9;</code>
+     */
+    java.util.List<java.lang.Integer> getHousesList();
+    /**
+     * <code>repeated int32 houses = 9;</code>
+     */
+    int getHousesCount();
+    /**
+     * <code>repeated int32 houses = 9;</code>
+     */
+    int getHouses(int index);
+
+    /**
+     * <code>required bool myTurn = 10;</code>
+     */
+    boolean hasMyTurn();
+    /**
+     * <code>required bool myTurn = 10;</code>
+     */
+    boolean getMyTurn();
   }
   /**
    * Protobuf type {@code monopoly.protobuffer.Player}
@@ -168,6 +203,53 @@ public final class PlayerDataProto {
               inJail_ = input.readBool();
               break;
             }
+            case 64: {
+              if (!((mutable_bitField0_ & 0x00000080) == 0x00000080)) {
+                properties_ = new java.util.ArrayList<java.lang.Integer>();
+                mutable_bitField0_ |= 0x00000080;
+              }
+              properties_.add(input.readInt32());
+              break;
+            }
+            case 66: {
+              int length = input.readRawVarint32();
+              int limit = input.pushLimit(length);
+              if (!((mutable_bitField0_ & 0x00000080) == 0x00000080) && input.getBytesUntilLimit() > 0) {
+                properties_ = new java.util.ArrayList<java.lang.Integer>();
+                mutable_bitField0_ |= 0x00000080;
+              }
+              while (input.getBytesUntilLimit() > 0) {
+                properties_.add(input.readInt32());
+              }
+              input.popLimit(limit);
+              break;
+            }
+            case 72: {
+              if (!((mutable_bitField0_ & 0x00000100) == 0x00000100)) {
+                houses_ = new java.util.ArrayList<java.lang.Integer>();
+                mutable_bitField0_ |= 0x00000100;
+              }
+              houses_.add(input.readInt32());
+              break;
+            }
+            case 74: {
+              int length = input.readRawVarint32();
+              int limit = input.pushLimit(length);
+              if (!((mutable_bitField0_ & 0x00000100) == 0x00000100) && input.getBytesUntilLimit() > 0) {
+                houses_ = new java.util.ArrayList<java.lang.Integer>();
+                mutable_bitField0_ |= 0x00000100;
+              }
+              while (input.getBytesUntilLimit() > 0) {
+                houses_.add(input.readInt32());
+              }
+              input.popLimit(limit);
+              break;
+            }
+            case 80: {
+              bitField0_ |= 0x00000080;
+              myTurn_ = input.readBool();
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -176,6 +258,12 @@ public final class PlayerDataProto {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e.getMessage()).setUnfinishedMessage(this);
       } finally {
+        if (((mutable_bitField0_ & 0x00000080) == 0x00000080)) {
+          properties_ = java.util.Collections.unmodifiableList(properties_);
+        }
+        if (((mutable_bitField0_ & 0x00000100) == 0x00000100)) {
+          houses_ = java.util.Collections.unmodifiableList(houses_);
+        }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
@@ -224,7 +312,7 @@ public final class PlayerDataProto {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         if (bs.isValidUtf8()) {
@@ -240,7 +328,7 @@ public final class PlayerDataProto {
         getNameBytes() {
       java.lang.Object ref = name_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         name_ = b;
@@ -340,6 +428,65 @@ public final class PlayerDataProto {
       return inJail_;
     }
 
+    public static final int PROPERTIES_FIELD_NUMBER = 8;
+    private java.util.List<java.lang.Integer> properties_;
+    /**
+     * <code>repeated int32 properties = 8;</code>
+     */
+    public java.util.List<java.lang.Integer>
+        getPropertiesList() {
+      return properties_;
+    }
+    /**
+     * <code>repeated int32 properties = 8;</code>
+     */
+    public int getPropertiesCount() {
+      return properties_.size();
+    }
+    /**
+     * <code>repeated int32 properties = 8;</code>
+     */
+    public int getProperties(int index) {
+      return properties_.get(index);
+    }
+
+    public static final int HOUSES_FIELD_NUMBER = 9;
+    private java.util.List<java.lang.Integer> houses_;
+    /**
+     * <code>repeated int32 houses = 9;</code>
+     */
+    public java.util.List<java.lang.Integer>
+        getHousesList() {
+      return houses_;
+    }
+    /**
+     * <code>repeated int32 houses = 9;</code>
+     */
+    public int getHousesCount() {
+      return houses_.size();
+    }
+    /**
+     * <code>repeated int32 houses = 9;</code>
+     */
+    public int getHouses(int index) {
+      return houses_.get(index);
+    }
+
+    public static final int MYTURN_FIELD_NUMBER = 10;
+    private boolean myTurn_;
+    /**
+     * <code>required bool myTurn = 10;</code>
+     */
+    public boolean hasMyTurn() {
+      return ((bitField0_ & 0x00000080) == 0x00000080);
+    }
+    /**
+     * <code>required bool myTurn = 10;</code>
+     */
+    public boolean getMyTurn() {
+      return myTurn_;
+    }
+
     private void initFields() {
       name_ = "";
       token_ = 0;
@@ -348,6 +495,9 @@ public final class PlayerDataProto {
       location_ = 0;
       jailFreeCards_ = 0;
       inJail_ = false;
+      properties_ = java.util.Collections.emptyList();
+      houses_ = java.util.Collections.emptyList();
+      myTurn_ = false;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -383,6 +533,10 @@ public final class PlayerDataProto {
         memoizedIsInitialized = 0;
         return false;
       }
+      if (!hasMyTurn()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
       memoizedIsInitialized = 1;
       return true;
     }
@@ -410,6 +564,15 @@ public final class PlayerDataProto {
       }
       if (((bitField0_ & 0x00000040) == 0x00000040)) {
         output.writeBool(7, inJail_);
+      }
+      for (int i = 0; i < properties_.size(); i++) {
+        output.writeInt32(8, properties_.get(i));
+      }
+      for (int i = 0; i < houses_.size(); i++) {
+        output.writeInt32(9, houses_.get(i));
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        output.writeBool(10, myTurn_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -447,6 +610,28 @@ public final class PlayerDataProto {
       if (((bitField0_ & 0x00000040) == 0x00000040)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(7, inJail_);
+      }
+      {
+        int dataSize = 0;
+        for (int i = 0; i < properties_.size(); i++) {
+          dataSize += com.google.protobuf.CodedOutputStream
+            .computeInt32SizeNoTag(properties_.get(i));
+        }
+        size += dataSize;
+        size += 1 * getPropertiesList().size();
+      }
+      {
+        int dataSize = 0;
+        for (int i = 0; i < houses_.size(); i++) {
+          dataSize += com.google.protobuf.CodedOutputStream
+            .computeInt32SizeNoTag(houses_.get(i));
+        }
+        size += dataSize;
+        size += 1 * getHousesList().size();
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(10, myTurn_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -579,6 +764,12 @@ public final class PlayerDataProto {
         bitField0_ = (bitField0_ & ~0x00000020);
         inJail_ = false;
         bitField0_ = (bitField0_ & ~0x00000040);
+        properties_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000080);
+        houses_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000100);
+        myTurn_ = false;
+        bitField0_ = (bitField0_ & ~0x00000200);
         return this;
       }
 
@@ -635,6 +826,20 @@ public final class PlayerDataProto {
           to_bitField0_ |= 0x00000040;
         }
         result.inJail_ = inJail_;
+        if (((bitField0_ & 0x00000080) == 0x00000080)) {
+          properties_ = java.util.Collections.unmodifiableList(properties_);
+          bitField0_ = (bitField0_ & ~0x00000080);
+        }
+        result.properties_ = properties_;
+        if (((bitField0_ & 0x00000100) == 0x00000100)) {
+          houses_ = java.util.Collections.unmodifiableList(houses_);
+          bitField0_ = (bitField0_ & ~0x00000100);
+        }
+        result.houses_ = houses_;
+        if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
+          to_bitField0_ |= 0x00000080;
+        }
+        result.myTurn_ = myTurn_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -674,37 +879,64 @@ public final class PlayerDataProto {
         if (other.hasInJail()) {
           setInJail(other.getInJail());
         }
+        if (!other.properties_.isEmpty()) {
+          if (properties_.isEmpty()) {
+            properties_ = other.properties_;
+            bitField0_ = (bitField0_ & ~0x00000080);
+          } else {
+            ensurePropertiesIsMutable();
+            properties_.addAll(other.properties_);
+          }
+          onChanged();
+        }
+        if (!other.houses_.isEmpty()) {
+          if (houses_.isEmpty()) {
+            houses_ = other.houses_;
+            bitField0_ = (bitField0_ & ~0x00000100);
+          } else {
+            ensureHousesIsMutable();
+            houses_.addAll(other.houses_);
+          }
+          onChanged();
+        }
+        if (other.hasMyTurn()) {
+          setMyTurn(other.getMyTurn());
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
 
       public final boolean isInitialized() {
         if (!hasName()) {
-          
+
           return false;
         }
         if (!hasToken()) {
-          
+
           return false;
         }
         if (!hasAi()) {
-          
+
           return false;
         }
         if (!hasMoney()) {
-          
+
           return false;
         }
         if (!hasLocation()) {
-          
+
           return false;
         }
         if (!hasJailFreeCards()) {
-          
+
           return false;
         }
         if (!hasInJail()) {
-          
+
+          return false;
+        }
+        if (!hasMyTurn()) {
+
           return false;
         }
         return true;
@@ -760,7 +992,7 @@ public final class PlayerDataProto {
           getNameBytes() {
         java.lang.Object ref = name_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           name_ = b;
@@ -997,6 +1229,170 @@ public final class PlayerDataProto {
         return this;
       }
 
+      private java.util.List<java.lang.Integer> properties_ = java.util.Collections.emptyList();
+      private void ensurePropertiesIsMutable() {
+        if (!((bitField0_ & 0x00000080) == 0x00000080)) {
+          properties_ = new java.util.ArrayList<java.lang.Integer>(properties_);
+          bitField0_ |= 0x00000080;
+         }
+      }
+      /**
+       * <code>repeated int32 properties = 8;</code>
+       */
+      public java.util.List<java.lang.Integer>
+          getPropertiesList() {
+        return java.util.Collections.unmodifiableList(properties_);
+      }
+      /**
+       * <code>repeated int32 properties = 8;</code>
+       */
+      public int getPropertiesCount() {
+        return properties_.size();
+      }
+      /**
+       * <code>repeated int32 properties = 8;</code>
+       */
+      public int getProperties(int index) {
+        return properties_.get(index);
+      }
+      /**
+       * <code>repeated int32 properties = 8;</code>
+       */
+      public Builder setProperties(
+          int index, int value) {
+        ensurePropertiesIsMutable();
+        properties_.set(index, value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated int32 properties = 8;</code>
+       */
+      public Builder addProperties(int value) {
+        ensurePropertiesIsMutable();
+        properties_.add(value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated int32 properties = 8;</code>
+       */
+      public Builder addAllProperties(
+          java.lang.Iterable<? extends java.lang.Integer> values) {
+        ensurePropertiesIsMutable();
+        com.google.protobuf.AbstractMessageLite.Builder.addAll(
+            values, properties_);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated int32 properties = 8;</code>
+       */
+      public Builder clearProperties() {
+        properties_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000080);
+        onChanged();
+        return this;
+      }
+
+      private java.util.List<java.lang.Integer> houses_ = java.util.Collections.emptyList();
+      private void ensureHousesIsMutable() {
+        if (!((bitField0_ & 0x00000100) == 0x00000100)) {
+          houses_ = new java.util.ArrayList<java.lang.Integer>(houses_);
+          bitField0_ |= 0x00000100;
+         }
+      }
+      /**
+       * <code>repeated int32 houses = 9;</code>
+       */
+      public java.util.List<java.lang.Integer>
+          getHousesList() {
+        return java.util.Collections.unmodifiableList(houses_);
+      }
+      /**
+       * <code>repeated int32 houses = 9;</code>
+       */
+      public int getHousesCount() {
+        return houses_.size();
+      }
+      /**
+       * <code>repeated int32 houses = 9;</code>
+       */
+      public int getHouses(int index) {
+        return houses_.get(index);
+      }
+      /**
+       * <code>repeated int32 houses = 9;</code>
+       */
+      public Builder setHouses(
+          int index, int value) {
+        ensureHousesIsMutable();
+        houses_.set(index, value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated int32 houses = 9;</code>
+       */
+      public Builder addHouses(int value) {
+        ensureHousesIsMutable();
+        houses_.add(value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated int32 houses = 9;</code>
+       */
+      public Builder addAllHouses(
+          java.lang.Iterable<? extends java.lang.Integer> values) {
+        ensureHousesIsMutable();
+        com.google.protobuf.AbstractMessageLite.Builder.addAll(
+            values, houses_);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated int32 houses = 9;</code>
+       */
+      public Builder clearHouses() {
+        houses_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000100);
+        onChanged();
+        return this;
+      }
+
+      private boolean myTurn_ ;
+      /**
+       * <code>required bool myTurn = 10;</code>
+       */
+      public boolean hasMyTurn() {
+        return ((bitField0_ & 0x00000200) == 0x00000200);
+      }
+      /**
+       * <code>required bool myTurn = 10;</code>
+       */
+      public boolean getMyTurn() {
+        return myTurn_;
+      }
+      /**
+       * <code>required bool myTurn = 10;</code>
+       */
+      public Builder setMyTurn(boolean value) {
+        bitField0_ |= 0x00000200;
+        myTurn_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required bool myTurn = 10;</code>
+       */
+      public Builder clearMyTurn() {
+        bitField0_ = (bitField0_ & ~0x00000200);
+        myTurn_ = false;
+        onChanged();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:monopoly.protobuffer.Player)
     }
 
@@ -1015,7 +1411,7 @@ public final class PlayerDataProto {
     /**
      * <code>repeated .monopoly.protobuffer.Player p = 1;</code>
      */
-    java.util.List<monopoly.protobuffer.PlayerDataProto.Player> 
+    java.util.List<monopoly.protobuffer.PlayerDataProto.Player>
         getPList();
     /**
      * <code>repeated .monopoly.protobuffer.Player p = 1;</code>
@@ -1028,7 +1424,7 @@ public final class PlayerDataProto {
     /**
      * <code>repeated .monopoly.protobuffer.Player p = 1;</code>
      */
-    java.util.List<? extends monopoly.protobuffer.PlayerDataProto.PlayerOrBuilder> 
+    java.util.List<? extends monopoly.protobuffer.PlayerDataProto.PlayerOrBuilder>
         getPOrBuilderList();
     /**
      * <code>repeated .monopoly.protobuffer.Player p = 1;</code>
@@ -1149,7 +1545,7 @@ public final class PlayerDataProto {
     /**
      * <code>repeated .monopoly.protobuffer.Player p = 1;</code>
      */
-    public java.util.List<? extends monopoly.protobuffer.PlayerDataProto.PlayerOrBuilder> 
+    public java.util.List<? extends monopoly.protobuffer.PlayerDataProto.PlayerOrBuilder>
         getPOrBuilderList() {
       return p_;
     }
@@ -1404,7 +1800,7 @@ public final class PlayerDataProto {
               pBuilder_ = null;
               p_ = other.p_;
               bitField0_ = (bitField0_ & ~0x00000001);
-              pBuilder_ = 
+              pBuilder_ =
                 com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
                    getPFieldBuilder() : null;
             } else {
@@ -1419,7 +1815,7 @@ public final class PlayerDataProto {
       public final boolean isInitialized() {
         for (int i = 0; i < getPCount(); i++) {
           if (!getP(i).isInitialized()) {
-            
+
             return false;
           }
         }
@@ -1640,7 +2036,7 @@ public final class PlayerDataProto {
       /**
        * <code>repeated .monopoly.protobuffer.Player p = 1;</code>
        */
-      public java.util.List<? extends monopoly.protobuffer.PlayerDataProto.PlayerOrBuilder> 
+      public java.util.List<? extends monopoly.protobuffer.PlayerDataProto.PlayerOrBuilder>
            getPOrBuilderList() {
         if (pBuilder_ != null) {
           return pBuilder_.getMessageOrBuilderList();
@@ -1666,12 +2062,12 @@ public final class PlayerDataProto {
       /**
        * <code>repeated .monopoly.protobuffer.Player p = 1;</code>
        */
-      public java.util.List<monopoly.protobuffer.PlayerDataProto.Player.Builder> 
+      public java.util.List<monopoly.protobuffer.PlayerDataProto.Player.Builder>
            getPBuilderList() {
         return getPFieldBuilder().getBuilderList();
       }
       private com.google.protobuf.RepeatedFieldBuilder<
-          monopoly.protobuffer.PlayerDataProto.Player, monopoly.protobuffer.PlayerDataProto.Player.Builder, monopoly.protobuffer.PlayerDataProto.PlayerOrBuilder> 
+          monopoly.protobuffer.PlayerDataProto.Player, monopoly.protobuffer.PlayerDataProto.Player.Builder, monopoly.protobuffer.PlayerDataProto.PlayerOrBuilder>
           getPFieldBuilder() {
         if (pBuilder_ == null) {
           pBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
@@ -1716,11 +2112,13 @@ public final class PlayerDataProto {
   static {
     java.lang.String[] descriptorData = {
       "\n\020playerdata.proto\022\024monopoly.protobuffer" +
-      "\"|\n\006Player\022\014\n\004name\030\001 \002(\t\022\r\n\005token\030\002 \002(\005\022" +
-      "\n\n\002ai\030\003 \002(\010\022\r\n\005money\030\004 \002(\005\022\020\n\010location\030\005" +
-      " \002(\005\022\027\n\017jail_free_cards\030\006 \002(\005\022\017\n\007in_jail" +
-      "\030\007 \002(\010\"5\n\nPlayerList\022\'\n\001p\030\001 \003(\0132\034.monopo" +
-      "ly.protobuffer.PlayerB\021B\017PlayerDataProto"
+      "\"\260\001\n\006Player\022\014\n\004name\030\001 \002(\t\022\r\n\005token\030\002 \002(\005" +
+      "\022\n\n\002ai\030\003 \002(\010\022\r\n\005money\030\004 \002(\005\022\020\n\010location\030" +
+      "\005 \002(\005\022\027\n\017jail_free_cards\030\006 \002(\005\022\017\n\007in_jai" +
+      "l\030\007 \002(\010\022\022\n\nproperties\030\010 \003(\005\022\016\n\006houses\030\t " +
+      "\003(\005\022\016\n\006myTurn\030\n \002(\010\"5\n\nPlayerList\022\'\n\001p\030\001" +
+      " \003(\0132\034.monopoly.protobuffer.PlayerB\021B\017Pl" +
+      "ayerDataProto"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -1739,7 +2137,7 @@ public final class PlayerDataProto {
     internal_static_monopoly_protobuffer_Player_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_monopoly_protobuffer_Player_descriptor,
-        new java.lang.String[] { "Name", "Token", "Ai", "Money", "Location", "JailFreeCards", "InJail", });
+        new java.lang.String[] { "Name", "Token", "Ai", "Money", "Location", "JailFreeCards", "InJail", "Properties", "Houses", "MyTurn", });
     internal_static_monopoly_protobuffer_PlayerList_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_monopoly_protobuffer_PlayerList_fieldAccessorTable = new

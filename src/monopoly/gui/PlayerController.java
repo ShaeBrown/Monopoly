@@ -83,7 +83,7 @@ public final class PlayerController implements ListSelectionListener {
 
         DefaultListModel list = (DefaultListModel) properties.getModel();
 
-        /* Was getting an exception, I was thinking it was from remove all elements from 
+        /* Was getting an exception, I was thinking it was from remove all elements from
        the list when the list was being accessed.
        Putting it in it's own thread which will run when all others events are finished
        such as accessing a property in the list, will provent that, Hopefully???? */
@@ -156,6 +156,25 @@ public final class PlayerController implements ListSelectionListener {
         scrollPane.setPreferredSize(new Dimension(250, 200));
 
         player_menu.add(scrollPane);
+
+        JButton saveGameButton = new JButton();
+        saveGameButton.setBounds(920, 920, 100, 40);
+        saveGameButton.setPreferredSize(new java.awt.Dimension(100, 40));
+        saveGameButton.setContentAreaFilled(false);
+        saveGameButton.setFocusPainted(false);
+        saveGameButton.setOpaque(false);
+        saveGameButton.setFont(new java.awt.Font("Ubuntu", 1, 15));
+        saveGameButton.setMargin(new Insets(3, 3, 3, 3));
+        saveGameButton.setText("Save Game");
+        saveGameButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Game.saveGame(player_list);
+                JOptionPane.showMessageDialog(null, "The game has been saved.");
+            }
+        });
+
+        player_menu.add(saveGameButton);
 
         JLabel property_info = new JLabel();
         property_info.setHorizontalTextPosition(JLabel.CENTER);
@@ -254,7 +273,7 @@ public final class PlayerController implements ListSelectionListener {
         property_info.setText(owner);
     }
 
-    /** 
+    /**
      * Sets the number of houses to display under the property card on the player menu
      * @param houses
      */
@@ -299,7 +318,7 @@ public final class PlayerController implements ListSelectionListener {
 
     /**
      * Displays the drawn chance or community card
-     * 
+     *
      * @param type type of card
      * @param card the description of the card
      */
@@ -347,7 +366,7 @@ public final class PlayerController implements ListSelectionListener {
 
     /**
      * Called when players share a grid and need to be spaced out
-     * @param players the players on the grid 
+     * @param players the players on the grid
      */
     private void updatePositions(LinkedList<AbstractPlayer> players) {
         JButton[] buttons = new JButton[players.size()];
@@ -417,7 +436,7 @@ public final class PlayerController implements ListSelectionListener {
     }
 
     /**
-     * Sets the buy houses/hotels button to not be visible 
+     * Sets the buy houses/hotels button to not be visible
      */
     public void clearBuyButton() {
         JButton button = (JButton) menu_components.get("BuyHouse");
