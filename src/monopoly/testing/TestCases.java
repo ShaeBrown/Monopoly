@@ -133,7 +133,7 @@ public class TestCases
             
             //Make sure both dices generates values within the correct range
             assertTrue(d.getRoll1() >= 1 && d.getRoll1() <= 6);
-            assertTrue(d.getRoll2() >= 1 && d.getRoll1() <= 6);
+            assertTrue(d.getRoll2() >= 1 && d.getRoll2() <= 6);
             
             //Testing "doubles"
             assertTrue((d.isDoubles() && (d.getRoll1() == d.getRoll2())) ||
