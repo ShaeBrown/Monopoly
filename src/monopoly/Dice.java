@@ -73,4 +73,12 @@ public class Dice {
     public int getRoll2() {
         return roll2;
     }
+     /**
+     * Did both dices resulted in the same rolled value?
+     * @return if both dies are equal
+     */
+    public boolean isDoubles()
+    {
+        return this.doubles;
+    }
 }

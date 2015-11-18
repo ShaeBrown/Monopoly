@@ -10,7 +10,7 @@ import java.util.List;
  */
 public abstract class AbstractPlayer {
     
-    enum PlayerToken{DOG, BATTLESHIP, AUTOMOBILE, TOPHAT, THIMBLE, BOOT, WHEELBARROW, CAT}
+    public enum PlayerToken{DOG, BATTLESHIP, AUTOMOBILE, TOPHAT, THIMBLE, BOOT, WHEELBARROW, CAT}
     
     /**
      *  The player's name
