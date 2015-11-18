@@ -1,0 +1,22 @@
+****************************
+*       Requirements       *
+****************************
+
+- Java JDK 1.8
+- Ant or Netbeans/Other Java IDE
+
+****************************
+*       Instructions       *
+****************************
+
+From the command line:
+
+-cd <project root folder>
+-ant
+-cd dist
+-java -jar "Monopoly.jar"
+
+In netbeans/other Java IDE:
+
+- File->Open Project
+- Run
