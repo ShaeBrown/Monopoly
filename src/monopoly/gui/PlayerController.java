@@ -25,6 +25,7 @@ import monopoly.BuyableGrid;
 import monopoly.CardGrid.CardType;
 import monopoly.Game;
 import monopoly.AbstractPlayer;
+import monopoly.GenericGrid;
 import monopoly.PropertyGrid;
 
 /**
@@ -244,7 +245,7 @@ public final class PlayerController implements ListSelectionListener {
             msg += " houses.";
         }
 
-        int buy = JOptionPane.showConfirmDialog(player_menu, msg, "Buy House", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, icon);
+        int buy = JOptionPane.showConfirmDialog(null, msg, "Buy House", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, icon);
 
         // tmp - can remove once I've implemented logic to only display button when necessary
         if (g.getOwner() == null) {
@@ -304,7 +305,7 @@ public final class PlayerController implements ListSelectionListener {
         assert (Game.grid_controller.getGrid(p.getLocation()) instanceof BuyableGrid);
         BuyableGrid g = (BuyableGrid) Game.grid_controller.getGrid(p.getLocation());
         ImageIcon icon = Game.grid_controller.getPropertyCard(g);
-        int buy = JOptionPane.showConfirmDialog(player_menu, "Would you like to buy " + g.getName() + " for $" + g.getPrice() + "?", "Buy Property", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, icon);
+        int buy = JOptionPane.showConfirmDialog(null, "Would you like to buy " + g.getName() + " for $" + g.getPrice() + "?", "Buy Property", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, icon);
         if (buy == JOptionPane.YES_OPTION) {
             if (p.getMoney() < g.getPrice()) {
 
@@ -324,9 +325,9 @@ public final class PlayerController implements ListSelectionListener {
      */
     public void displayCard(CardType type, String card) {
         if (type == CardType.CHANCECARD) {
-            JOptionPane.showMessageDialog(player_menu, card, "CHANCE", JOptionPane.PLAIN_MESSAGE, moneybags);
+            JOptionPane.showMessageDialog(null, card, "CHANCE", JOptionPane.PLAIN_MESSAGE, moneybags);
         } else {
-            JOptionPane.showMessageDialog(player_menu, card, "COMMUNITY CHEST", JOptionPane.PLAIN_MESSAGE, moneybags);
+            JOptionPane.showMessageDialog(null, card, "COMMUNITY CHEST", JOptionPane.PLAIN_MESSAGE, moneybags);
         }
     }
 
@@ -425,7 +426,71 @@ public final class PlayerController implements ListSelectionListener {
             Game.grid_controller.changeProperty((BuyableGrid) list.getSelectedValue());
         }
     }
-
+    
+    /**
+     * Display a message to the player
+     * @param msg the msg to show
+     */
+    public void displayMessage(String msg)
+    {
+        JOptionPane.showMessageDialog(null, msg);
+    }
+    
+    /**
+     * Prompts the player to choose how they want to leave jail.
+     * Use Jail Free Card, pay bail, or roll for doubles
+     * @param p the player is jail
+     * @return can the player leave jail
+     */
+    public boolean displayJailChoice(AbstractPlayer p)
+    {
+        //
+        Object[] options;
+        int type_option;
+        if (p.getNumberOfJailFreeCards() == 0) {
+            options = new String[]{"Pay Bail", "Try to roll doubles"};
+            type_option = JOptionPane.YES_NO_OPTION;
+        }
+        else {
+            options = new String[]{ //YES
+                "Pay Bail", //NO
+                "Try to roll doubles",
+                "Use Jail Free Card"}; //CANCEL
+            type_option = JOptionPane.YES_NO_CANCEL_OPTION;
+        }
+        int answer = JOptionPane.showOptionDialog(null,
+        "How will you get out of jail?",
+        "You are in Jail",
+        type_option,
+        JOptionPane.QUESTION_MESSAGE,
+        null,
+        options,
+        options[0]);
+        switch (answer) {
+        //Pay Bail
+            case JOptionPane.YES_OPTION:
+                p.removeMoney(50);
+                GenericGrid freeparking = (GenericGrid)Game.board_grids[Game.GRIDNUM.FreeParking.getNum()];
+                freeparking.addToJackPot(50);
+                return true;
+        //Roll doubles
+            case JOptionPane.NO_OPTION:
+                p.rollDie();
+                if (Game.dice.isDoubles()) {
+                    Game.dice_controller.enable();
+                    return true;
+                }
+                else
+                    return false;
+        //Use jail free card
+            case JOptionPane.CANCEL_OPTION:
+                p.useJailFreeCard();
+                return true;
+            default:
+                //Something went wrong
+                return false;
+        }
+    }
     /**
      * Clears the property info on the menu
      */

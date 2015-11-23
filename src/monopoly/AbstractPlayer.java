@@ -49,6 +49,11 @@ public abstract class AbstractPlayer {
     protected LinkedList<BuyableGrid> property;
 
     /**
+     * The number of times the player has rolled a double
+     */
+    protected int doubles;
+    
+    /**
      * The key is the property group (BLUE, UTILITY, ETC..) and the value is
      * how many of that type the player currently owns
      */
@@ -214,6 +219,7 @@ public abstract class AbstractPlayer {
      */
     public void advance(int amount)
     {
+        if (isInJail()) return;
         int new_location = getLocation() + amount;
         
         /*Did the rolling player "overflow" and passed GO?*/
@@ -282,6 +288,11 @@ public abstract class AbstractPlayer {
      */
     public void addJailFreeCard() {
         this.jail_free_cards ++;
+        updateStats();
+    }
+    
+    public void useJailFreeCard() {
+        this.jail_free_cards--;
         updateStats();
     }
     
@@ -403,5 +414,17 @@ public abstract class AbstractPlayer {
     public void performLandingFunction()
     {
         getCurrentGrid().landingFunction(this);
+    }
+    
+    public void takeTurn()
+    {
+        beginTurn();
+        if (!isInJail())
+        {
+            int diceroll = rollDie();
+            advance(diceroll);
+            performLandingFunction();
+        }
+        finalizeTurn();
     }
 }

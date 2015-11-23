@@ -43,7 +43,17 @@ public class HumanPlayer extends AbstractPlayer{
                 }
             }
         }
-        
+        if (Game.dice.isDoubles() && !this.isInJail())
+            doubles++;
+        else
+            doubles = 0;
+        if (doubles == 3)
+        {
+            Game.player_controller.displayMessage("You rolled three doubles in a row. You must go to jail");
+            setLocation(Game.GRIDNUM.Jail.getNum());
+            setJailStatus(true);
+            doubles = 0;
+        }
         return Game.dice.getRoll();
     }
     
@@ -76,6 +86,11 @@ public class HumanPlayer extends AbstractPlayer{
     @Override
     public void finalizeTurn() {
         Game.dice_controller.enable();
+        if (doubles > 0 && !isInJail())
+        {
+            Game.player_controller.displayMessage("You rolled doubles, take another turn");
+            takeTurn();
+        }
     }
 
     @Override
@@ -91,7 +106,10 @@ public class HumanPlayer extends AbstractPlayer{
 
     @Override
     public void jailDecision() {
-       //Open a dialog
+       boolean can_leave = Game.player_controller.displayJailChoice(this);
+       if (can_leave)
+           setJailStatus(false);
+       
     }
     
 }

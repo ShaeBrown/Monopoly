@@ -40,6 +40,16 @@ public class AIPlayer extends AbstractPlayer {
     public int rollDie() {
         int diceRoll = Game.dice.newRoll();
         Game.dice_controller.displayRoll();
+        if (Game.dice.isDoubles())
+            doubles++;
+        else
+            doubles = 0;
+        if (doubles == 3)
+        {
+            setLocation(Game.GRIDNUM.Jail.getNum());
+            setJailStatus(true);
+            doubles = 0;
+        }
         return diceRoll;
     }
 
@@ -80,6 +90,8 @@ public class AIPlayer extends AbstractPlayer {
     @Override
     public void finalizeTurn() {
         Game.dice_controller.enable();
+        if (doubles > 0) //roll again if doubles
+            takeTurn();
         try {
             //wait a few seconds until proceeding
             Thread.sleep(1000);
@@ -131,7 +143,20 @@ public class AIPlayer extends AbstractPlayer {
 
     @Override
     public void jailDecision() {
-        //How will AI's decide to get out of jail
+       if (getNumberOfJailFreeCards() > 0)
+       {
+           useJailFreeCard();
+           setJailStatus(false);
+       }
+       else
+       {
+           //Pay Bail
+           removeMoney(50);
+           GenericGrid freeparking = (GenericGrid)Game.board_grids[Game.GRIDNUM.FreeParking.getNum()];
+           freeparking.addToJackPot(50);
+           setJailStatus(false);
+            
+       }
     }
     
 }

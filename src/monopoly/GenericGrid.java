@@ -18,19 +18,19 @@ public class GenericGrid extends Grid
     /**
      * Is the corner grid Go, Jail, FreeParking, or GoToJail
      */
-    public enum GridType { GO, JAIL, FREEPARKING, GOTOJAIL}
+    public enum GenericType { GO, JAIL, FREEPARKING, GOTOJAIL}
     
-    private final GridType grid_type;
+    private final GenericType grid_type;
     private int jackpot;
     
     /**
      * Creates a new generic (corner) grid
      * @param grid_type the type of corner
      */
-    public GenericGrid(GridType grid_type)
+    public GenericGrid(GenericType grid_type)
     {
         this.grid_type = grid_type;
-        if (grid_type == GridType.FREEPARKING)
+        if (grid_type == GenericType.FREEPARKING)
             jackpot = 0;
     }
     
@@ -40,6 +40,7 @@ public class GenericGrid extends Grid
      */
     public void addToJackPot(int amount)
     {
+        if (grid_type != GenericType.FREEPARKING) return;
         jackpot += amount;
     }
     
@@ -57,12 +58,15 @@ public class GenericGrid extends Grid
             case JAIL:
                 break;
             case FREEPARKING:
-                //notification
                 player.addMoney(jackpot);
+                Game.player_controller.displayMessage("Congratulations you won the jackpot of $" + jackpot);
                 jackpot = 0;
+                break;
             case GOTOJAIL:
+                Game.player_controller.displayMessage("You must go to jail");
                 player.setJailStatus(true);
                 player.setLocation(Game.GRIDNUM.Jail.getNum());
+                break;
         }
     }
 }

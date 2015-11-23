@@ -9,7 +9,7 @@ import java.util.*;
 /*Imports all the custom enum datatypes*/
 import monopoly.BuyableGrid.PropertyGroup;
 import monopoly.CardGrid.CardType;
-import monopoly.GenericGrid.GridType;
+import monopoly.GenericGrid.GenericType;
 import monopoly.AbstractPlayer.PlayerToken;
 import monopoly.gui.*;
 import monopoly.protobuffer.*;
@@ -56,7 +56,7 @@ public class Game {
     int NUMPLAYERS;                             //players in the current game
     static final int BOARDSIZE = 40;           //How many grids are on the board
 
-    static Grid[] board_grids;                 //Array of Grid to represent a gameboard
+    public static Grid[] board_grids;                 //Array of Grid to represent a gameboard
     List<AbstractPlayer> player_list;          //ArrayList of Player to represent all the players of the game.
     Board board;
 
@@ -215,7 +215,7 @@ public class Game {
     private void initializeGrids() {
         /*http://ecx.images-amazon.com/images/I/81oC5pYhh2L._SL1500_.jpg
         https://en.wikibooks.org/wiki/Monopoly/Official_Rules*/
-        board_grids[0] = new GenericGrid(GridType.GO);
+        board_grids[0] = new GenericGrid(GenericType.GO);
         board_grids[1] = new PropertyGrid(PropertyGroup.BROWN, "Mediterranean Ave", 60, 30, (new int[]{2, 10, 30, 90, 160, 250}));
         board_grids[2] = new CardGrid(CardType.COMCHEST);
         board_grids[3] = new PropertyGrid(PropertyGroup.BROWN, "Baltic Ave", 60, 30, (new int[]{4, 20, 60, 180, 320, 450}));
@@ -225,7 +225,7 @@ public class Game {
         board_grids[7] = new CardGrid(CardType.CHANCECARD);
         board_grids[8] = new PropertyGrid(PropertyGroup.LIGHTBLUE, "Vermont Avenue", 100, 50, (new int[]{6, 30, 90, 270, 400, 550}));
         board_grids[9] = new PropertyGrid(PropertyGroup.LIGHTBLUE, "Connecticut Avenue", 120, 60, (new int[]{8, 40, 100, 300, 450, 600}));
-        board_grids[10] = new GenericGrid(GridType.JAIL);
+        board_grids[10] = new GenericGrid(GenericType.JAIL);
         board_grids[11] = new PropertyGrid(PropertyGroup.MAGENTA, "St. Charles Place", 140, 70, (new int[]{10, 50, 150, 450, 625, 750}));
         board_grids[12] = new UtilityGrid("Electric Company");
         board_grids[13] = new PropertyGrid(PropertyGroup.MAGENTA, "States Avenue", 140, 70, (new int[]{10, 50, 150, 450, 625, 750}));
@@ -235,7 +235,7 @@ public class Game {
         board_grids[17] = new CardGrid(CardType.COMCHEST);
         board_grids[18] = new PropertyGrid(PropertyGroup.ORANGE, "Tennessee Avenue", 180, 90, (new int[]{14, 70, 200, 550, 750, 950}));
         board_grids[19] = new PropertyGrid(PropertyGroup.ORANGE, "New York Avenue", 200, 100, (new int[]{16, 80, 220, 600, 800, 1000}));
-        board_grids[20] = new GenericGrid(GridType.FREEPARKING);
+        board_grids[20] = new GenericGrid(GenericType.FREEPARKING);
         board_grids[21] = new PropertyGrid(PropertyGroup.RED, "Kentucky Avenue", 220, 110, (new int[]{18, 90, 250, 700, 875, 1050}));
         board_grids[22] = new CardGrid(CardType.CHANCECARD);
         board_grids[23] = new PropertyGrid(PropertyGroup.RED, "Indiana Avenue", 220, 110, (new int[]{18, 90, 250, 700, 875, 1050}));
@@ -245,7 +245,7 @@ public class Game {
         board_grids[27] = new PropertyGrid(PropertyGroup.YELLOW, "Ventnor Avenue", 260, 130, (new int[]{22, 110, 330, 800, 975, 1150}));
         board_grids[28] = new UtilityGrid("Water Works");
         board_grids[29] = new PropertyGrid(PropertyGroup.YELLOW, "Marvin Gardens", 280, 140, (new int[]{24, 120, 360, 850, 1025, 1200}));
-        board_grids[30] = new GenericGrid(GridType.GOTOJAIL);
+        board_grids[30] = new GenericGrid(GenericType.GOTOJAIL);
         board_grids[31] = new PropertyGrid(PropertyGroup.GREEN, "Pacific Avenue", 300, 150, (new int[]{26, 130, 390, 900, 1100, 1275}));
         board_grids[32] = new PropertyGrid(PropertyGroup.GREEN, "North Carolina Avenue", 300, 150, (new int[]{26, 130, 390, 900, 1100, 1275}));
         board_grids[33] = new CardGrid(CardType.COMCHEST);
@@ -583,13 +583,9 @@ public class Game {
     public int playerRollDiceAndMove(AbstractPlayer player) {
         System.out.println("It is now " + player.getName() + "'s turn to roll");
 
-        player.beginTurn();
-        int diceroll = player.rollDie();
-        player.advance(diceroll);
-        player.performLandingFunction();
-        player.finalizeTurn();
+        player.takeTurn();
 
-        System.out.println("Player " + player.getName() + " rolled " + diceroll + " and is now on grid " + player.getLocation() + " with $" + player.getMoney() + "\n");
+        System.out.println("Player " + player.getName() + " rolled " + dice.getRoll() + " and is now on grid " + player.getLocation() + " with $" + player.getMoney() + "\n");
 
         /*Return the player's new grid location*/
         return player.getLocation();
