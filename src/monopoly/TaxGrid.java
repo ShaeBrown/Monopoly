@@ -35,6 +35,6 @@ public class TaxGrid extends Grid
         landed.removeMoney(tax_amount);
         GenericGrid freeparking = (GenericGrid)Game.board_grids[Game.GRIDNUM.FreeParking.getNum()];
         freeparking.addToJackPot(tax_amount);
-        Game.player_controller.displayMessage("You must pay $" + tax_amount + " of taxes.");
+        Game.dialog_controller.displayMessage("You must pay $" + tax_amount + " of taxes.");
     }
 }

@@ -59,11 +59,11 @@ public class GenericGrid extends Grid
                 break;
             case FREEPARKING:
                 player.addMoney(jackpot);
-                Game.player_controller.displayMessage("Congratulations you won the jackpot of $" + jackpot);
+                Game.dialog_controller.displayMessage("Congratulations you won the jackpot of $" + jackpot);
                 jackpot = 0;
                 break;
             case GOTOJAIL:
-                Game.player_controller.displayMessage("You must go to jail");
+                Game.dialog_controller.displayMessage("You must go to jail");
                 player.setJailStatus(true);
                 player.setLocation(Game.GRIDNUM.Jail.getNum());
                 break;

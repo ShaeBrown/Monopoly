@@ -57,7 +57,7 @@ public class Game {
     static final int BOARDSIZE = 40;           //How many grids are on the board
 
     public static Grid[] board_grids;                 //Array of Grid to represent a gameboard
-    List<AbstractPlayer> player_list;          //ArrayList of Player to represent all the players of the game.
+    static List<AbstractPlayer> player_list;          //ArrayList of Player to represent all the players of the game.
     Board board;
 
     /**
@@ -79,12 +79,16 @@ public class Game {
     /**
      * The copy of the player controller for the game. Used for the GUI
      */
-    public static PlayerController player_controller;
+    public static PlayerMenuController menu_controller;
 
     /**
      * The copy of the grid controller for the game. Used for the GUI
      */
     public static GridController grid_controller;
+    
+    public static DialogController dialog_controller;
+    
+    public static ObjectLayerController object_controller;
 
     /**
      * The player whose turn is now
@@ -121,7 +125,7 @@ public class Game {
         } else {
             // Refreshes positions so that all players aren't on the same grid as the first player (visual bug)
             for (AbstractPlayer p : player_list) {
-                Game.player_controller.updatePosition(p);
+                Game.object_controller.updatePlayerPosition(p);
             }
             startGame(current_player);
         }
@@ -191,7 +195,7 @@ public class Game {
         return false;
     }
 
-    public static void saveGame(List<AbstractPlayer> player_list) {
+    public static void saveGame() {
         try {
             PlayerData.createEmptyDataFile();
             for (AbstractPlayer p : player_list) {
@@ -565,9 +569,11 @@ public class Game {
     }
 
     private void launchBoard() {
-        Game.grid_controller = new GridController(board_grids);
-        Game.player_controller = new PlayerController(player_list);
+        Game.object_controller = new ObjectLayerController(player_list);
+        Game.menu_controller = new PlayerMenuController();
         Game.dice_controller = new DiceController(dice);
+        Game.dialog_controller = new DialogController();
+        Game.grid_controller = new GridController(board_grids);
         this.board = new Board();
         board.run();
     }

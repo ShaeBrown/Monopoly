@@ -88,7 +88,7 @@ public class PropertyGrid extends BuyableGrid
     public void addHouse()
     {
         this.houses++;
-        Game.grid_controller.addHouseIcon(this);
+        Game.object_controller.addHouseIcon(this);
     }
     
     /**

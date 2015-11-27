@@ -232,7 +232,7 @@ public abstract class BuyableGrid extends Grid
             {
                 landed.removeMoney(rent);
                 getOwner().addMoney(rent);
-                Game.player_controller.displayRent(getOwner(), landed, this);
+                Game.dialog_controller.displayRent(getOwner(), landed, this);
             }
             else
             {

@@ -135,7 +135,7 @@ public class AIPlayer extends AbstractPlayer {
     public void beginTurn() {
         Game.dice_controller.enabled = false;
         Game.current_player = this;
-        Game.player_controller.updateMenu(this); 
+        Game.menu_controller.updateMenu(this); 
         buyHouseDecision();   
         if (isInJail())
             jailDecision();

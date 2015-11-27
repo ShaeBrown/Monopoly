@@ -54,6 +54,11 @@ public abstract class AbstractPlayer {
     protected int doubles;
     
     /**
+     * A list of pending trading requests for the player
+     */
+    protected List<TradeRequest> requests;
+    
+    /**
      * The key is the property group (BLUE, UTILITY, ETC..) and the value is
      * how many of that type the player currently owns
      */
@@ -243,8 +248,8 @@ public abstract class AbstractPlayer {
         Game.board_grids[this.location].removeOccupant();
         Game.board_grids[location].addOccupant(this);
         this.location = location;
-        if (Game.player_controller != null){
-            Game.player_controller.updatePosition(this);
+        if (Game.object_controller != null){
+            Game.object_controller.updatePlayerPosition(this);
         }
     }
     
@@ -405,7 +410,7 @@ public abstract class AbstractPlayer {
 
     public void updateStats() {
         if (this == Game.current_player)
-            Game.player_controller.updateStats(this);
+            Game.menu_controller.updateStats(this);
     }
     
     /**

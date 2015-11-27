@@ -15,7 +15,7 @@ import monopoly.Game;
 public class Board extends javax.swing.JFrame {
     
     
-    JButton[] grid_buttons;
+    public JButton[] grid_buttons;
     
     final int BOARDSIZE = 40;
     /**
@@ -26,14 +26,15 @@ public class Board extends javax.swing.JFrame {
         initComponents();
         makeGridButtonsArray();
         initDie();
-        initGrid();
-        initPlayers();
+        initBoard();
+        initMenu();
     }
     
-    private void initGrid() {
+    private void initBoard() {
         makeGridButtonsArray();
         Game.grid_controller.addButtons(grid_buttons);
-        Game.grid_controller.addObjectLayer(Objects);
+        Game.object_controller.addObjectLayer(Objects);
+        Game.object_controller.initPlayers();
         
     }
     private void makeGridButtonsArray() {
@@ -90,9 +91,8 @@ public class Board extends javax.swing.JFrame {
         Die2.addActionListener(Game.dice_controller);
     }
     
-    private void initPlayers() {
-        Game.player_controller.initMenu(Menu);
-        Game.player_controller.initPlayers(Objects);
+    private void initMenu() {
+        Game.menu_controller.initMenu(Menu);
     }
   
     /**

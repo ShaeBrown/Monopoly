@@ -1,7 +1,6 @@
 package monopoly;
 
-import java.util.HashMap;
-import java.util.HashSet;
+
 import java.util.LinkedList;
 
 /**
@@ -49,7 +48,7 @@ public class HumanPlayer extends AbstractPlayer{
             doubles = 0;
         if (doubles == 3)
         {
-            Game.player_controller.displayMessage("You rolled three doubles in a row. You must go to jail");
+            Game.dialog_controller.displayMessage("You rolled three doubles in a row. You must go to jail");
             setLocation(Game.GRIDNUM.Jail.getNum());
             setJailStatus(true);
             doubles = 0;
@@ -63,7 +62,7 @@ public class HumanPlayer extends AbstractPlayer{
     @Override
     public void propertyDecision() 
     {
-        Game.player_controller.buyProperty(this);
+        Game.dialog_controller.buyProperty(this);
     }
     
     /**
@@ -88,7 +87,7 @@ public class HumanPlayer extends AbstractPlayer{
         Game.dice_controller.enable();
         if (doubles > 0 && !isInJail())
         {
-            Game.player_controller.displayMessage("You rolled doubles, take another turn");
+            Game.dialog_controller.displayMessage("You rolled doubles, take another turn");
             takeTurn();
         }
     }
@@ -96,7 +95,7 @@ public class HumanPlayer extends AbstractPlayer{
     @Override
     public void beginTurn() {
         Game.current_player = this;
-        Game.player_controller.updateMenu(this); 
+        Game.menu_controller.updateMenu(this); 
         if (isInJail())
             jailDecision();
         //this is where we could check for any trading requests,
@@ -106,7 +105,7 @@ public class HumanPlayer extends AbstractPlayer{
 
     @Override
     public void jailDecision() {
-       boolean can_leave = Game.player_controller.displayJailChoice(this);
+       boolean can_leave = Game.dialog_controller.displayJailChoice(this);
        if (can_leave)
            setJailStatus(false);
        
