@@ -139,6 +139,8 @@ public class AIPlayer extends AbstractPlayer {
         buyHouseDecision();   
         if (isInJail())
             jailDecision();
+        if (!requests.isEmpty())
+            tradeDecision();
     }
 
     @Override
@@ -158,5 +160,11 @@ public class AIPlayer extends AbstractPlayer {
             
        }
     }
-    
+
+    @Override
+    public void tradeDecision() {
+        for (TradeRequest trade : requests)
+            //algorithm to decide if they should accept
+            trade.decline();
+    }
 }

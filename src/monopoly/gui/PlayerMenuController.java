@@ -26,30 +26,37 @@ import monopoly.PropertyGrid;
 
 
 /**
- * PlayerController, manages the players, player decisions, and player menu on
- * the GUI. <br>
+ * PlayerController, manages the components on the player menu. <br>
  * <br>
  * - Initializes and updates player menu <br>
  * - Sets the property card in the menu and acts as a listener for the list of
- * properties on the menu. <br>
- * - Opens a dialogue to buy properties <br>
- * - Controls button to buy houses/hotels <br>
+ *   properties on the menu. <br>
+ * 
  *
  */
 public final class PlayerMenuController implements ListSelectionListener {
 
     
     private final HashMap<String, Component> menu_components;
+    
     private JPanel player_menu;
 
 
     // The current PropertyGrid that is being displayed (if no property displayed then contains the last property displayed)
+
+    /**
+     * The last property grid selected on the menu
+     */
     public PropertyGrid selectedProperty;
 
     /**
+     * The grid selected on the menu
+     */
+    public BuyableGrid selectedGrid;
+    
+    /**
      * Creates a new player controller
      *
-     * @param players the players in the game
      */
     public PlayerMenuController() {
         
@@ -74,10 +81,6 @@ public final class PlayerMenuController implements ListSelectionListener {
 
         DefaultListModel list = (DefaultListModel) properties.getModel();
 
-        /* Was getting an exception, I was thinking it was from remove all elements from
-       the list when the list was being accessed.
-       Putting it in it's own thread which will run when all others events are finished
-       such as accessing a property in the list, will provent that, Hopefully???? */
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -210,7 +213,7 @@ public final class PlayerMenuController implements ListSelectionListener {
         trade.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Game.dialog_controller.createTradeRequest(Game.current_player, selectedProperty.getOwner(), selectedProperty);
+                Game.dialog_controller.createTradeRequest(Game.current_player, selectedGrid.getOwner(), selectedGrid);
             }
         });
 
@@ -236,6 +239,9 @@ public final class PlayerMenuController implements ListSelectionListener {
         selectedProperty = g;
     }
     
+    /**
+     * Shows the button to open a trade dialog
+     */
     public void showTradeButton()
     {
         menu_components.get("Trade").setVisible(true);
@@ -244,8 +250,7 @@ public final class PlayerMenuController implements ListSelectionListener {
 
     /**
      * Displays a title deed and the owner on the player menu
-     * @param i the title deed image icon
-     * @param owner the owner of the property
+     * @param grid
      */
     public void setProperty(BuyableGrid grid) {
         
@@ -264,17 +269,21 @@ public final class PlayerMenuController implements ListSelectionListener {
             owner = "Owner: " + grid.getOwner().getName();
             
         }
+        
+        Game.menu_controller.selectedGrid = grid;
+        
+        if (grid.getOwner() != null && grid.getOwner() != Game.current_player)
+                menu_components.get("Trade").setVisible(true);
+        
         if (grid instanceof PropertyGrid) {
             
             PropertyGrid property = (PropertyGrid) grid;
-            Game.menu_controller.selectedProperty = property;
-            if (property.getOwner() == Game.current_player) {
-                displayBuyHouseButton(property);
+            if (property.getOwner() == Game.current_player && Game.current_player.ownsAllType(grid)) {
+                setBuyHouse(property);
             }
             if (property.getCurrentHouses() > 0) {
                 Game.menu_controller.setHouseIcons(property.getCurrentHouses());
             }
-            displayTradeButton(property);
             
         }
         
@@ -283,22 +292,6 @@ public final class PlayerMenuController implements ListSelectionListener {
         property_info.setText(owner);
     }
     
-        /**
-     * Display the buy house button under the property in the player menu
-     * if the owner has all the properties in the monopoly
-     * @param grid the grid displayed in the player menu
-     */
-    public void displayBuyHouseButton(PropertyGrid grid)
-    {
-        if (Game.current_player.ownsAllType(grid)) 
-            Game.menu_controller.setBuyHouse(grid);
-    }
-    
-    public void displayTradeButton(PropertyGrid grid)
-    {
-        if (Game.current_player != grid.getOwner() || grid.getOwner() != null)
-            Game.menu_controller.showTradeButton();
-    }
 
     /**
      * Sets the number of houses to display under the property card on the player menu
@@ -321,13 +314,6 @@ public final class PlayerMenuController implements ListSelectionListener {
         panel.repaint();
         panel.revalidate();
     }
-
-    /**
-     * Sets player on the GUI to their location.
-     * If there is players already occupying the grid, a method is called to reorganize
-     * and space out the players
-     * @param p the player to be moved
-     */
 
     /**
      * Changes the property shown on the player menu to be the property selected on
@@ -363,7 +349,10 @@ public final class PlayerMenuController implements ListSelectionListener {
         button.setVisible(false);
     }
     
-     public void clearTradeButton() {
+    /**
+     * Clears the trade button
+     */
+    public void clearTradeButton() {
         JButton button = (JButton) menu_components.get("Trade");
         button.setVisible(false);
     }

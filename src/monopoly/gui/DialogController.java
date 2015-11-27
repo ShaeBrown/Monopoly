@@ -6,6 +6,7 @@
 package monopoly.gui;
 
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
@@ -14,6 +15,7 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import monopoly.AbstractPlayer;
@@ -25,16 +27,19 @@ import monopoly.PropertyGrid;
 import monopoly.TradeRequest;
 
 /**
- * Controller for all dialogs
+ * Controller for all dialogs for player decisions and notifications
  *
- * @author shaebrown
+ * 
  */
 public class DialogController {
 
     ImageIcon moneybags; // image for the chance/community cards.
-    ImageIcon arrow;   
-    List<BuyableGrid> trade;
+    ImageIcon arrow;   //image for transfer
+    List<BuyableGrid> trade; //selected properties to trade
     
+    /**
+     * Creates a new Dialog Controller
+     */
     public DialogController() {
         
         this.moneybags = new ImageIcon(getClass().getResource("/monopoly/gui/img/moneybags.png"));
@@ -193,10 +198,22 @@ public class DialogController {
         }
     }
     
+    /**
+     * Opens a dialog for a player to open a trade request.
+     * Can choose to offer money and/or multiple properties
+     * @param requester the player making the request
+     * @param requestee the player the trade is directed too
+     * @param requested the BuyableGrid the requester wants
+     */
     public void createTradeRequest(AbstractPlayer requester, AbstractPlayer requestee, BuyableGrid requested)
     {
         JPanel choices = new JPanel();
         
+        choices.setPreferredSize(new Dimension(300, 300));
+        choices.setLayout(new FlowLayout());
+        choices.add(new JLabel("Make an offer for " + requestee.getName() + "'s " + requested + "\n"));
+        
+        choices.add(new JLabel("Choose properties to trade"));
         DefaultListModel property_list = new DefaultListModel();
         
         for (BuyableGrid g : requester.getProperties()) {
@@ -210,7 +227,11 @@ public class DialogController {
                 JList list = (JList) e.getSource();
                 if (list.getSelectedIndex() != -1) {
                     List<BuyableGrid> selected = list.getSelectedValuesList();
-                    trade = selected;
+                    Game.dialog_controller.trade = selected;
+                }
+                else
+                {
+                    Game.dialog_controller.trade = null;
                 }
             }
         });
@@ -221,13 +242,75 @@ public class DialogController {
 
         choices.add(scrollPane);
         
+        choices.add(new JLabel("Optionally choose to add money to the offer\n"));
+        
+        JTextField money_input = new JTextField(3);
+        
+        
+        choices.add(money_input);
+
         int choice = JOptionPane.showConfirmDialog(null, choices, "Trade", JOptionPane.OK_CANCEL_OPTION);
+        
+        int money;
+        
+        try {
+            money = Integer.parseInt(money_input.getText());
+        }
+        catch(NumberFormatException e) {
+            money = 0;
+        }
         
         if (choice == JOptionPane.OK_OPTION)
         {
-            TradeRequest request = new TradeRequest(requested, trade, 0);
+            TradeRequest request = new TradeRequest(requester, requested, trade, money);
             request.send();
         }
+    }
+    
+    /**
+     * Opens a dialog for a player to accept or decline a trade
+     * @param request the trade request object
+     */
+    public void openTradeRequest(TradeRequest request)
+    {
+
+        AbstractPlayer requester = request.getRequester();
+        List<BuyableGrid> offer = request.getPropertyOffer();
+        int money_offer = request.getMoneyOffer();
+        BuyableGrid requested = request.getRequestedProperty();
+        
+        JPanel trade = new JPanel();
+        trade.add(new JLabel(Game.object_controller.getPlayerIcon(requester)));
+        trade.add(new JLabel(arrow));
+        trade.add(new JLabel(Game.object_controller.getPlayerIcon(Game.current_player)));
+        trade.setSize(300, 300);
+        
+        String money = "";
+        String properties = "";
+        
+        if (money_offer > 0)
+            money = ( offer!=null && offer.size() > 0  ? " and $" + money_offer : "$"+ money_offer);
+        
+        //if the trade is only money
+        if (offer != null) {
+            for (BuyableGrid grid : offer)
+            {
+            if (offer.get(offer.size()-1) != grid)
+                properties += grid + ", ";
+            else
+                properties += (offer.size() > 1 ? "and " + grid : grid);
+            }
+        }
+        
+        
+        String text_offer = requester.getName() + " is wanting to trade " + properties + money + " for your " + requested;
+        trade.add(new JLabel(text_offer));
+        
+        int choice = JOptionPane.showConfirmDialog(null, trade , "Trade", JOptionPane.YES_NO_OPTION);
+        if (choice == JOptionPane.YES_OPTION)
+            request.accept();
+        else if (choice == JOptionPane.NO_OPTION)
+            request.decline();
     }
     
 }

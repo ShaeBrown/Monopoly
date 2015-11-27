@@ -98,9 +98,9 @@ public class HumanPlayer extends AbstractPlayer{
         Game.menu_controller.updateMenu(this); 
         if (isInJail())
             jailDecision();
-        //this is where we could check for any trading requests,
-        //or where we could ask the player to decide what they want to do
-        //to get out of jail
+        if (!requests.isEmpty())
+            tradeDecision();
+        
     }
 
     @Override
@@ -109,6 +109,12 @@ public class HumanPlayer extends AbstractPlayer{
        if (can_leave)
            setJailStatus(false);
        
+    }
+
+    @Override
+    public void tradeDecision() {
+        for (TradeRequest trade : requests)
+            Game.dialog_controller.openTradeRequest(trade);
     }
     
 }

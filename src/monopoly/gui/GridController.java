@@ -18,8 +18,12 @@ import monopoly.Game;
 import monopoly.Grid;
 
 /**
- *
- * @author shaebrown
+ *    Grid Controller, maps the grid objects to the button on the GUI.<br>
+ * <br>
+ *   - Maps each button to their grid object <br>
+ *   - Maps each grid to their property card <br>
+ *   - If a grid is clicked, it is shown on the player menu <br>
+ * 
  */
 public class GridController implements ActionListener {
     

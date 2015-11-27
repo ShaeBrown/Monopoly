@@ -25,14 +25,12 @@ import monopoly.AbstractPlayer;
 import monopoly.PropertyGrid;
 
 /**
- * GridController, controls the GUI interaction for the grids <br>
- *   - Maps each button to their grid object <br>
- *   - Maps each grid to their property card <br>
- *   - Helps player controller set players location on screen <br>
- *   - Displays property cards when the grid's button is clicked <br>
- *   - must add buttons and the object layer before use <br>
+ * GridController, controls the GUI interaction for all the objects on the Object Layer. <br>
+ *   <br>
+ *   - Set players location on screen <br>
+ *   - Arranges the house tokens on the grid <br>
  *   
- * @author shaebrown
+ * 
  */
 
 
@@ -48,7 +46,6 @@ public final class ObjectLayerController {
     
     /**
      * Creates a new grid controller
-     * @param g the list of grid objects for the game
      * @param players the list of players in the game
      */
     public ObjectLayerController(List<AbstractPlayer> players) {     
@@ -57,6 +54,9 @@ public final class ObjectLayerController {
         button_to_player = new HashMap<>();
     }
     
+    /**
+     * Initializes all the players onto the board
+     */
     public void initPlayers() {
         for (AbstractPlayer p : players) {
             JButton button = new JButton();
@@ -83,6 +83,11 @@ public final class ObjectLayerController {
         return new ImageIcon(getClass().getResource("/monopoly/gui/img/tokens/" + p.getToken() + ".png"));
     }
     
+    /**
+     *
+     * @param p
+     * @return
+     */
     public Icon getPlayerIcon(AbstractPlayer p)
     {
         return player_to_button.get(p).getIcon();

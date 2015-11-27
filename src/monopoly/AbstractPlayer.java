@@ -93,6 +93,9 @@ public abstract class AbstractPlayer {
     public abstract void finalizeTurn(); 
     
     
+    public abstract void tradeDecision();
+    
+    
     /*New Player constructor*/
 
     /**
@@ -108,6 +111,7 @@ public abstract class AbstractPlayer {
         this.jail_free_cards = 0;
         this.in_jail = false;
         this.property = new LinkedList<>();
+        this.requests = new LinkedList<>();
         Game.board_grids[0].addOccupant(this);
         num_of_owned_type = new HashMap<>();
         for (BuyableGrid.PropertyGroup group: BuyableGrid.PropertyGroup.values()) {
@@ -431,5 +435,19 @@ public abstract class AbstractPlayer {
             performLandingFunction();
         }
         finalizeTurn();
+    }
+    
+    public void addProperty(BuyableGrid grid)
+    {
+        property.add(grid);
+        if (Game.current_player == this  && Game.menu_controller != null)
+            Game.menu_controller.updateMenu(this);
+    }
+    
+    public void removeProperty(BuyableGrid grid)
+    {
+        property.remove(grid);
+        if (Game.current_player == this && Game.menu_controller != null)
+            Game.menu_controller.updateMenu(this);
     }
 }
