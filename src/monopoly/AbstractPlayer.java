@@ -366,6 +366,16 @@ public abstract class AbstractPlayer {
         }
         num_of_owned_type.put(group, count+1);
     }
+    
+    private void decrementType(BuyableGrid grid) {
+        BuyableGrid.PropertyGroup group = grid.property_group;
+        Integer count = num_of_owned_type.get(group);
+        if (count == null)
+        {
+            count = 0;
+        }
+        num_of_owned_type.put(group, count-1);
+    }
 
 
     /**
@@ -402,9 +412,12 @@ public abstract class AbstractPlayer {
      * Buy house on that grid
      * @param grid the grid to buy the house for
      */
-    public void buyHouse(PropertyGrid grid) {
+    public void buyHouseorHotel(PropertyGrid grid) {
     	removeMoney(grid.getHousePrice());
-    	grid.addHouse();
+        if (grid.getCurrentHouses() == grid.MAX_NUMBER_HOUSES)
+            grid.addHotel();
+        else
+            grid.addHouse();
     }
 
     /**
@@ -440,6 +453,8 @@ public abstract class AbstractPlayer {
     public void addProperty(BuyableGrid grid)
     {
         property.add(grid);
+        grid.setOwner(this);
+        incrementType(grid);
         if (Game.current_player == this  && Game.menu_controller != null)
             Game.menu_controller.updateMenu(this);
     }
@@ -447,6 +462,7 @@ public abstract class AbstractPlayer {
     public void removeProperty(BuyableGrid grid)
     {
         property.remove(grid);
+        decrementType(grid);
         if (Game.current_player == this && Game.menu_controller != null)
             Game.menu_controller.updateMenu(this);
     }

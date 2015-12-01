@@ -16,6 +16,8 @@ public class PropertyGrid extends BuyableGrid
      */
     public final int MAX_NUMBER_HOUSES = 4;
     
+    public final int MAX_NUMBER_HOTELS = 1;
+    
     /*Constructor*/
 
     /**
@@ -88,7 +90,7 @@ public class PropertyGrid extends BuyableGrid
     public void addHouse()
     {
         this.houses++;
-        Game.object_controller.addHouseIcon(this);
+        Game.object_controller.addHouseorHotelIcon(this);
     }
     
     /**
@@ -96,10 +98,11 @@ public class PropertyGrid extends BuyableGrid
      */
     public void addHotel()
     {
-        if (this.houses >= MAX_NUMBER_HOUSES)
+        if (this.houses >= MAX_NUMBER_HOUSES && this.hotels < MAX_NUMBER_HOTELS)
         {
             this.houses -= MAX_NUMBER_HOUSES;
             this.hotels++;
+            Game.object_controller.addHouseorHotelIcon(this);
         }
     }
 }

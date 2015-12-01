@@ -237,6 +237,10 @@ public final class PlayerMenuController implements ListSelectionListener {
         JButton button = (JButton) menu_components.get("BuyHouse");
         button.setVisible(true);
         selectedProperty = g;
+        if (g.getCurrentHouses() == g.MAX_NUMBER_HOUSES)
+            button.setText("Buy Hotel");
+        else
+            button.setText("Buy House");
     }
     
     /**
@@ -278,11 +282,13 @@ public final class PlayerMenuController implements ListSelectionListener {
         if (grid instanceof PropertyGrid) {
             
             PropertyGrid property = (PropertyGrid) grid;
-            if (property.getOwner() == Game.current_player && Game.current_player.ownsAllType(grid)) {
+            if (property.getOwner() == Game.current_player && 
+                    Game.current_player.ownsAllType(property) && 
+                    property.getCurrentHotels() != property.MAX_NUMBER_HOTELS) {
                 setBuyHouse(property);
             }
-            if (property.getCurrentHouses() > 0) {
-                Game.menu_controller.setHouseIcons(property.getCurrentHouses());
+            if (property.getCurrentHouses() > 0 || property.getCurrentHotels() > 0) {
+                Game.menu_controller.setHouseorHotelIcons(property);
             }
             
         }
@@ -297,7 +303,10 @@ public final class PlayerMenuController implements ListSelectionListener {
      * Sets the number of houses to display under the property card on the player menu
      * @param houses
      */
-    public void setHouseIcons(int houses) {
+    public void setHouseorHotelIcons(PropertyGrid property) {
+        int houses = property.getCurrentHouses();
+        int hotels = property.getCurrentHotels();
+        
         JPanel panel = (JPanel) menu_components.get("HouseIcons");
         panel.setVisible(true);
         for (int i = 0; i < houses; i++) {
@@ -310,6 +319,18 @@ public final class PlayerMenuController implements ListSelectionListener {
             house.setOpaque(false);
             house.setVisible(true);
             panel.add(house);
+        }
+        for (int i = 0; i < hotels; i++)
+        {
+            JButton hotel = new JButton();
+            ImageIcon hotel_icon = Game.object_controller.hotel_icon;
+            hotel.setIcon(hotel_icon);
+            hotel.setBorderPainted(false);
+            hotel.setContentAreaFilled(false);
+            hotel.setFocusPainted(false);
+            hotel.setOpaque(false);
+            hotel.setVisible(true);
+            panel.add(hotel);
         }
         panel.repaint();
         panel.revalidate();

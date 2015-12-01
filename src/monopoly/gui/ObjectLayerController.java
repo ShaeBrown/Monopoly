@@ -4,56 +4,61 @@
  * and open the template in the editor.
  */
 package monopoly.gui;
+
 import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.lang.reflect.InvocationTargetException;
+
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.Icon;
 
 import javax.swing.ImageIcon;
 
-
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-
 
 import monopoly.Game;
 import monopoly.AbstractPlayer;
 import monopoly.PropertyGrid;
 
 /**
- * GridController, controls the GUI interaction for all the objects on the Object Layer. <br>
- *   <br>
- *   - Set players location on screen <br>
- *   - Arranges the house tokens on the grid <br>
- *   
- * 
+ * GridController, controls the GUI interaction for all the objects on the
+ * Object Layer. <br>
+ * <br>
+ * - Set players location on screen <br>
+ * - Arranges the house tokens on the grid <br>
+ *
+ *
  */
-
-
 public final class ObjectLayerController {
-    
+
     final int PANELSIZE = 1020;
 
     JPanel object_layer;
-    ImageIcon house_icon,hotel_icon;
+    ImageIcon house_icon, hotel_icon;
     List<AbstractPlayer> players;
     private final HashMap<AbstractPlayer, JButton> player_to_button;
     private final HashMap<JButton, AbstractPlayer> button_to_player;
-    
+
     /**
      * Creates a new grid controller
+     *
      * @param players the list of players in the game
      */
-    public ObjectLayerController(List<AbstractPlayer> players) {     
+    public ObjectLayerController(List<AbstractPlayer> players) {
         this.players = players;
         player_to_button = new HashMap<>();
         button_to_player = new HashMap<>();
+        this.house_icon = new ImageIcon(getClass().getResource("/monopoly/gui/img/tokens/house.png"));
+        this.hotel_icon = new ImageIcon(getClass().getResource("/monopoly/gui/img/tokens/hotel.png"));
     }
-    
+
     /**
      * Initializes all the players onto the board
      */
@@ -73,51 +78,51 @@ public final class ObjectLayerController {
         }
         updatePlayersPositions(new LinkedList(players));
     }
-    
+
     /**
      * Returns the appropriate ImageIcon for the players token
+     *
      * @param p the player
      * @return their token
      */
     private ImageIcon createPlayerToken(AbstractPlayer p) {
         return new ImageIcon(getClass().getResource("/monopoly/gui/img/tokens/" + p.getToken() + ".png"));
     }
-    
+
     /**
      *
      * @param p
      * @return
      */
-    public Icon getPlayerIcon(AbstractPlayer p)
-    {
+    public Icon getPlayerIcon(AbstractPlayer p) {
         return player_to_button.get(p).getIcon();
     }
 
-
-
     /**
-     * This class needs the layer where objects lay, in order to move players and add houses
+     * This class needs the layer where objects lay, in order to move players
+     * and add houses
+     *
      * @param objects the layer where objects lay on the GUI
      */
-
     public void addObjectLayer(JPanel objects) {
         this.object_layer = objects;
     }
-    
-    
 
     /**
      * Add a house icon on the corresponding grid on the GUI,
+     *
      * @param grid the grid to add a house
      */
+    public void addHouseorHotelIcon(PropertyGrid grid) {
 
-    public void addHouseIcon(PropertyGrid grid) {
-        
         JButton button = Game.grid_controller.grid_to_button.get(grid);
         boolean vertical = button.getWidth() < button.getHeight();
         Point corner = SwingUtilities.convertPoint(button.getParent(), button.getLocation(), object_layer);
         double x = 0;
         double y = 0;
+
+        boolean hotel = grid.getCurrentHotels() > 0;
+
         switch (button.getParent().getName()) {
             case "north":
                 corner.setLocation(corner.getX(), corner.getY() + button.getHeight() - house_icon.getIconHeight());
@@ -138,12 +143,22 @@ public final class ObjectLayerController {
                 y = corner.getY() - 7;
                 break;
         }
-        
+
         LinkedList<JButton> house_buttons = Game.grid_controller.getHouses(grid);
+
+        if (hotel) {
+                    ListIterator<JButton> iter = house_buttons.listIterator();
+                    while (iter.hasNext()) {
+                        JButton house = iter.next();
+                        house.setVisible(false);
+                        iter.remove();
+                        object_layer.remove(house);
+                    }
+                }
         
+
         if (house_buttons.isEmpty()) {
-        }
-        else {
+        } else {
             JButton last_house = house_buttons.getLast();
             x = last_house.getX();
             y = last_house.getY();
@@ -151,30 +166,33 @@ public final class ObjectLayerController {
             int height = house_icon.getIconHeight();
             if (vertical) {
                 x += width - 7; //allow a overlap of 7 pixels
-            }
-            else {
+            } else {
                 y += height - 3; //allow overlap of 3 pixels, when horizontal house icon have more room
             }
         }
+
+        ImageIcon icon = hotel ? hotel_icon : house_icon;
+
         JButton house = new JButton();
-        house.setIcon(house_icon);
-        house.setLocation((int)x,(int)y);
-        house.setBounds((int)x,(int)y,house_icon.getIconWidth(),house_icon.getIconHeight());
+        house.setIcon(icon);
+        house.setLocation((int) x, (int) y);
+        house.setBounds((int) x, (int) y, icon.getIconWidth(), icon.getIconHeight());
         house.setBorderPainted(false);
         house.setContentAreaFilled(false);
-        house.setFocusPainted(false); 
+        house.setFocusPainted(false);
         house.setOpaque(false);
+
+        house_buttons.add(house);
         object_layer.add(house);
-        house_buttons.add(house);  
         house.setVisible(true);
         object_layer.repaint();
+        object_layer.revalidate();
     }
-    
-
 
     /**
-     * Given the grid number, return a point where the player must be placed on the
-     * object layer, if there is a single player on it
+     * Given the grid number, return a point where the player must be placed on
+     * the object layer, if there is a single player on it
+     *
      * @param p
      */
     public void updatePlayerPosition(AbstractPlayer p) {
@@ -183,20 +201,19 @@ public final class ObjectLayerController {
         LinkedList<AbstractPlayer> occupants = Game.grid_controller.getOccupants(location);
         if (occupants.size() == 1) {
             JButton grid = Game.grid_controller.getButton(location);
-            Point point = SwingUtilities.convertPoint(grid.getParent(),grid.getLocation(),object_layer);
+            Point point = SwingUtilities.convertPoint(grid.getParent(), grid.getLocation(), object_layer);
             button.setLocation(point);
-        } 
-        else {
+        } else {
             updatePlayersPositions(occupants);
         }
     }
 
-    
     //NEEDS IMPROVEMENT
     /**
-     * Arranges players on a grid when there is more than one player occupying the grid.
-     * Given the grid number, and an array of the player's buttons,
+     * Arranges players on a grid when there is more than one player occupying
+     * the grid. Given the grid number, and an array of the player's buttons,
      * set each players position on the screen.
+     *
      * @param buttons the buttons to arrange
      * @param i the number of the grid
      */
@@ -210,28 +227,28 @@ public final class ObjectLayerController {
         LinkedList<AbstractPlayer> occupants = Game.grid_controller.getOccupants(location);
         int height = grid.getHeight();
         int width = grid.getWidth();
-        Point grid_corner = SwingUtilities.convertPoint(grid.getParent(),grid.getLocation(),object_layer);
-        Point offset = new Point(grid.getX() + width/(occupants.size()+1), grid.getY() + height/(occupants.size())+1);
+        Point grid_corner = SwingUtilities.convertPoint(grid.getParent(), grid.getLocation(), object_layer);
+        Point offset = new Point(grid.getX() + width / (occupants.size() + 1), grid.getY() + height / (occupants.size()) + 1);
         offset = SwingUtilities.convertPoint(grid.getParent(), offset, object_layer);
         offset.setLocation(Math.abs(grid_corner.x - offset.x), Math.abs(grid_corner.y - offset.y));
         Point right_corner = SwingUtilities.convertPoint(grid.getParent(), grid.getX() + width, grid.getY() + height, object_layer);
         int x = grid_corner.x;
         int y = grid_corner.y;
         if (occupants.size() > 3) { //if there are more than 3 on a grid move first player a little bit upwards.
-            x -= offset.x/2;
-            y -= offset.y/2;
-            grid_corner.setLocation(x,y);
+            x -= offset.x / 2;
+            y -= offset.y / 2;
+            grid_corner.setLocation(x, y);
         }
         for (JButton b : buttons) {
             b.setLocation(grid_corner);
-            if (x + offset.x < right_corner.x - b.getWidth()/1.3) { // lets token only side off the grid by a bit
+            if (x + offset.x < right_corner.x - b.getWidth() / 1.3) { // lets token only side off the grid by a bit
                 x += offset.x;
             }
-            if (y + offset.y < right_corner.y - b.getHeight()/1.3) {
+            if (y + offset.y < right_corner.y - b.getHeight() / 1.3) {
                 y += offset.y;
             }
-            grid_corner.setLocation(x,y);
+            grid_corner.setLocation(x, y);
         }
     }
-    
+
 }

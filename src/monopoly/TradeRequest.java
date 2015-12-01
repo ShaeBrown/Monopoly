@@ -42,6 +42,7 @@ public class TradeRequest {
     {
         requester.addProperty(request);
         requestee.removeProperty(request);
+        
         if (offer != null) {
             for (BuyableGrid g : offer)
             {

@@ -55,32 +55,34 @@ public class DialogController {
 
         PropertyGrid g = Game.menu_controller.selectedProperty;
         AbstractPlayer p = g.getOwner();
-
+        boolean house = g.getCurrentHouses() < g.MAX_NUMBER_HOUSES;
         ImageIcon icon = Game.grid_controller.getPropertyCard(g);
-        String msg = "Would you like to buy a house for " + g.getName() + " for $" + g.getHousePrice() + "?\n";
-        msg += "You currently have " + g.getCurrentHouses();
-        if (g.getCurrentHouses() == 1) {
-            msg += " house.";
-        } else {
-            msg += " houses.";
+        
+        String msg = "Would you like to buy a " + (house ? "house" : "hotel") + " for " + g.getName() + " for $" + g.getHousePrice() + "?\n";
+        
+        if (house)
+        {
+            msg += "You currently have " + g.getCurrentHouses();
+            if (g.getCurrentHouses() == 1) {
+                msg += " house.";
+            } else {
+                msg += " houses.";
+            }
         }
 
-        int buy = JOptionPane.showConfirmDialog(null, msg, "Buy House", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, icon);
+        int buy = JOptionPane.showConfirmDialog(null, msg, "Buy " + (house ? "House" : "Hotel") , JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, icon);
 
-        // tmp - can remove once I've implemented logic to only display button when necessary
-        if (g.getOwner() == null) {
-            return;
-        }
 
         if (buy == JOptionPane.YES_OPTION) {
             if (p.getMoney() < g.getHousePrice()) {
-                // Not enough money to buy house
-            } else if (g.getCurrentHouses() < g.MAX_NUMBER_HOUSES) {
-                p.buyHouse(g);
+                displayMessage("You only have $" + p.getMoney() + ". You need $" + g.getHousePrice() + " to buy a " + (house ? "house." : "hotel."));
+            } else {
+                p.buyHouseorHotel(g);
                 Game.menu_controller.setProperty(g);
             }
         }
     }
+    
     
     /**
      * Opens a dialog asking if the player wants to buy the BuyableGrid they

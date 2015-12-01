@@ -9,7 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import monopoly.AbstractPlayer;

@@ -121,7 +121,7 @@ public class AIPlayer extends AbstractPlayer {
                        least_houses = prop;
                }
                 if (getMoney() > least_houses.getHousePrice())
-                    this.buyHouse(least_houses);
+                    this.buyHouseorHotel(least_houses);
                     
             }
         }

@@ -1,9 +1,3 @@
-"HASBRO and its logo, the MONOPOLY name and logo, the distinctive design of the 
-game board, the four corner squares, the MR. MONOPOLY name and character, as well 
-as each of the distinctive elements of the board and playing pieces are trademarks 
-of Hasbro for its property trading game and game equipment, © 1935, 2015 Hasbro.  
-All rights reserved."
-
 Monopoly board, property cards:
 	Monopoly Template for Photoshop
 	by Brad Frost
@@ -20,8 +14,9 @@ Die:
 	http://creativecommons.org/licenses/by-sa/3.0/
 	http://opengameart.org/content/dice-1
 
-House token:
-	
+House/Hotel tokens:
+	Courtesy of The Strong, Rochester, New York
+	http://www.museumofplay.org/press/kits/monopoly-american-icon-dec-2010
 
 Arrow:
 	Arrow, forward, right icon by By Yannick Lung
