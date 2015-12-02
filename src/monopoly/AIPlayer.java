@@ -5,7 +5,6 @@
  */
 package monopoly;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -166,5 +165,10 @@ public class AIPlayer extends AbstractPlayer {
         for (TradeRequest trade : requests)
             //algorithm to decide if they should accept
             trade.decline();
+    }
+
+    @Override
+    public void mortgageDecision() {
+        //algorithm to decide how to morgage the AI's property
     }
 }

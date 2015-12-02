@@ -6,15 +6,10 @@
 package monopoly.gui;
 
 import java.awt.Point;
-import java.lang.reflect.InvocationTargetException;
-
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.Icon;
 
 import javax.swing.ImageIcon;

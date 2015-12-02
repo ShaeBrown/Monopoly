@@ -82,6 +82,8 @@ public abstract class AbstractPlayer {
      */
     public abstract void propertyDecision();
     
+    public abstract void mortgageDecision();
+    
     /**
      * How will the player decide to pay, use get out of jail free card, or try to roll doubles?
      */
@@ -199,8 +201,10 @@ public abstract class AbstractPlayer {
      * Decrement to the player's money
      * @param money the amount of money to take from the player
      */
-    public void removeMoney(int money) {
+    public void removeMoney(int money) {    
         this.money -= money;
+        if (getMoney() < 0)
+            mortgageDecision();
         updateStats();
     }
     

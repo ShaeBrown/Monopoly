@@ -116,5 +116,10 @@ public class HumanPlayer extends AbstractPlayer{
         for (TradeRequest trade : requests)
             Game.dialog_controller.openTradeRequest(trade);
     }
+
+    @Override
+    public void mortgageDecision() {
+        Game.dialog_controller.mortgage(this);
+    }
     
 }
